@@ -165,7 +165,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   SizedBox(
                                       height: isLargerScreen
-                                          ? screenHeight * 0.012
+                                          ? screenHeight * 0.018
                                           : screenHeight * 0.01),
                                   const Text('Name', style: kTextFieldTextStyle),
                                   TextField(
@@ -179,7 +179,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     },
                                     style: kTextFieldTextStyle,
                                     decoration: kTextFieldDecoration.copyWith(
-                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10),
+                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,height: 0.1),
                                       isDense: isLargerScreen ? false : true,
                                       errorText: _validateUsername
                                           ? _usernameErrorText
@@ -189,7 +189,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   SizedBox(
                                       height: isLargerScreen
-                                          ? screenHeight * 0.010
+                                          ? screenHeight * 0.011
                                           : screenHeight * 0.008),
                                   const Text('Email', style: kTextFieldTextStyle),
                                   TextField(
@@ -203,7 +203,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     },
                                     style: kTextFieldTextStyle,
                                     decoration: kTextFieldDecoration.copyWith(
-                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10),
+                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,height: 0.1),
                                       isDense: isLargerScreen ? false : true,
                                       errorText: _validateEmail ? _emailErrorText : null,
                                       hintText: 'Enter email address...',
@@ -211,7 +211,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   SizedBox(
                                       height: isLargerScreen
-                                          ? screenHeight * 0.010
+                                          ? screenHeight * 0.011
                                           : screenHeight * 0.008),
                                   const Text('Password', style: kTextFieldTextStyle),
                                   TextField(
@@ -225,7 +225,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     },
                                     style: kTextFieldTextStyle,
                                     decoration: kTextFieldDecoration.copyWith(
-                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10),
+                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,height: 0.1),
                                       isDense: isLargerScreen ? false : true,
                                       suffixIconConstraints: BoxConstraints(
                                           maxHeight: isLargerScreen ? 40 : 30, maxWidth: 50),
@@ -249,7 +249,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   SizedBox(
                                       height: isLargerScreen
-                                          ? screenHeight * 0.010
+                                          ? screenHeight * 0.011
                                           : screenHeight * 0.008),
                                   const Text('Confirm password', style: kTextFieldTextStyle),
                                   TextField(
@@ -263,7 +263,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                     },
                                     style: kTextFieldTextStyle,
                                     decoration: kTextFieldDecoration.copyWith(
-                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10),
+                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,height: 0.1),
                                       isDense: isLargerScreen ? false : true,
                                       suffixIconConstraints: BoxConstraints(
                                           maxHeight: isLargerScreen ? 40 : 30, maxWidth: 50),
@@ -411,7 +411,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   SizedBox(
                                       height: isLargerScreen
-                                          ? screenHeight * 0.01
+                                          ? screenHeight * 0.017
                                           : screenHeight * 0.012),
                                   const Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -441,7 +441,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                   SizedBox(
                                       height: isLargerScreen
-                                          ? screenHeight * 0.010
+                                          ? screenHeight * 0.012
                                           : screenHeight * 0.012),
 
                                   getPlatformInfo()?    Row(

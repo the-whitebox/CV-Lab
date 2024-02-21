@@ -32,8 +32,6 @@ class BottomBarState extends State<BottomBar> {
         child: _buildPage(_currentIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-selectedFontSize: 00,
-        unselectedFontSize: 00,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         backgroundColor: const Color(0xFFFFFAFA),
@@ -85,7 +83,6 @@ selectedFontSize: 00,
           ),
         ],
       ),
-
     );
   }
 
