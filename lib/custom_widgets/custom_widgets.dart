@@ -547,7 +547,7 @@ class _CustomEditableTextState extends State<CustomEditableText> {
                       },
                       maxLength:widget.maxLength,
                       controller: widget.controller,
-                      decoration: null,
+                      decoration:null,
                       minLines: null,
                       maxLines: null,
                       expands: true,
@@ -608,8 +608,12 @@ class _CustomEditableTextState extends State<CustomEditableText> {
           ),
           borderRadius: BorderRadius.circular(_borderRadius),
         ),
-        child: Text(
+        child:widget.controller.text.isNotEmpty? Text(
           widget.controller.text,
+          style: widget.style,
+          textAlign: widget.textAlign,
+        ): Text(
+         'Please enter text',
           style: widget.style,
           textAlign: widget.textAlign,
         ),
@@ -725,7 +729,6 @@ class ReferenceWidget extends StatelessWidget {
   }
 }
 
-
 class ProjectWidget extends StatelessWidget {
   const ProjectWidget({
     super.key,
@@ -787,8 +790,6 @@ class ProjectWidget extends StatelessWidget {
     );
   }
 }
-
-
 
 class SkillCircullarWidget extends StatelessWidget {
   const SkillCircullarWidget({
