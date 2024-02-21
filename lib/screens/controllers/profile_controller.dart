@@ -5,100 +5,98 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import '../../utils/constants.dart';
 
+Future<void> updateProfile(
+  String token,
+  String firstName,
+  String lastName,
+  XFile? profilePic,
+  int? avatarIndex,
+) async {
+  try {
+    final uri = Uri.parse('$baseUrl/accounts/api/profile/update/');
+    var request = http.MultipartRequest('PATCH', uri)
+      ..headers['Authorization'] = 'Bearer $token';
+    // ..fields['first_name'] = firstName
+    // ..fields['last_name'] = lastName;
 
-
-
-  Future<void> updateProfile(
-      String token,
-      String firstName,
-      String lastName,
-      XFile? profilePic,
-      int? avatarIndex,
-      ) async {
-    try {
-      final uri = Uri.parse('$baseUrl/accounts/api/profile/update/');
-      var request = http.MultipartRequest('PATCH', uri)
-        ..headers['Authorization'] = 'Bearer $token';
-        // ..fields['first_name'] = firstName
-        // ..fields['last_name'] = lastName;
-
-      if (profilePic != null) {
-        var stream = http.ByteStream(Stream.castFrom(profilePic.openRead()));
-        var length = await profilePic.length();
-        print("Profile Pic");
-        var multipartFile = http.MultipartFile(
-          'profile_pic',
-          stream,
-          length,
-          filename: basename(profilePic.path),
-          contentType: MediaType('image', 'jpeg'),
-        );
-        print("jUST Image....................");
-
-        request.files.add(multipartFile);
-        request.fields['first_name'] = firstName;
-        request.fields['last_name'] = lastName;
-        request.fields['avatar_url'] = '';
-      } else if (avatarIndex != null && avatarIndex!=0) {
-        print("Avatar Index");
-        request.fields['first_name'] = firstName;
-        request.fields['last_name'] = lastName;
-        request.fields['avatar_url'] = avatarIndex.toString();
-        request.fields['profile_pic'] = '';
-      }else{
-        print("jUST namesssss");
-        request.fields['first_name'] = firstName;
-        request.fields['last_name'] = lastName;
-      }
-
-      final response = await request.send();
-
-      if (response.statusCode == 200) {
-        print('Profile updated successfully');
-      } else {
-        print('Error updating profile: ${response.reasonPhrase}');
-      }
-    } catch (e) {
-      print('Error during profile update: $e');
-    }
-  }
-
-  Future<Map<String, dynamic>> retrieveProfile(String token) async {
-    try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/accounts/api/profile/'),
-        headers: {'Authorization': 'Bearer $token'},
+    if (profilePic != null) {
+      var stream = http.ByteStream(Stream.castFrom(profilePic.openRead()));
+      var length = await profilePic.length();
+      print("Profile Pic");
+      var multipartFile = http.MultipartFile(
+        'profile_pic',
+        stream,
+        length,
+        filename: basename(profilePic.path),
+        contentType: MediaType('image', 'jpeg'),
       );
+      print("jUST Image....................");
 
-      if (response.statusCode == 200) {
-        final decodedData = jsonDecode(response.body);
-        print("$decodedData");
-        return decodedData;
-      } else {
-        print('Error retrieving profile: ${response.reasonPhrase}');
-        throw Exception('Failed to load profile');
-      }
-    } catch (error) {
-      print('Error retrieving profile: $error');
-      throw error;
+      request.files.add(multipartFile);
+      request.fields['first_name'] = firstName;
+      request.fields['last_name'] = lastName;
+      request.fields['avatar_url'] = '';
+    } else if (avatarIndex != null && avatarIndex != 0) {
+      print("Avatar Index");
+      request.fields['first_name'] = firstName;
+      request.fields['last_name'] = lastName;
+      request.fields['avatar_url'] = avatarIndex.toString();
+      request.fields['profile_pic'] = '';
+    } else {
+      print("jUST namesssss");
+      request.fields['first_name'] = firstName;
+      request.fields['last_name'] = lastName;
     }
-  }
 
-  Future<Map<String, dynamic>> fetchProfile(String token) async {
-    try {
-      final Map<String, dynamic> response = await retrieveProfile(token);
-      return response;
-    } catch (e) {
-      print('Error retrieving profile: $e');
-      return {};
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      print('Profile updated successfully');
+    } else {
+      print('Error updating profile: ${response.reasonPhrase}');
     }
+  } catch (e) {
+    print('Error during profile update: $e');
   }
+}
 
+Future<Map<String, dynamic>> retrieveProfile(String token) async {
+  try {
+    final response = await http.get(
+      Uri.parse('$baseUrl/accounts/api/profile/'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
 
+    if (response.statusCode == 200) {
+      final decodedData = jsonDecode(response.body);
+      print("$decodedData");
+      return decodedData;
+    } else {
+      print('Error retrieving profile: ${response.reasonPhrase}');
+      throw Exception('Failed to load profile');
+    }
+  } catch (error) {
+    print('Error retrieving profile: $error');
+    throw error;
+  }
+}
+
+Future<Map<String, dynamic>> fetchProfile(String token) async {
+  try {
+    final Map<String, dynamic> response = await retrieveProfile(token);
+    return response;
+  } catch (e) {
+    print('Error retrieving profile: $e');
+    return {};
+  }
+}
 
 Future<String> uploadDataAndImage(
-   XFile imageToUpload, String token, String template, String userId,
-    ) async {
+  XFile imageToUpload,
+  String token,
+  String template,
+  String userId,
+) async {
   try {
     List<int> imageBytes = await imageToUpload.readAsBytes();
 
@@ -145,5 +143,3 @@ Future<String> uploadDataAndImage(
     return "null";
   }
 }
-
-

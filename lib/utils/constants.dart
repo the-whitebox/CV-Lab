@@ -111,11 +111,8 @@ const TextStyle kFont14 = TextStyle(
   fontSize: 14,
   color: Colors.white,
 );
-const TextStyle kFont14black600 = TextStyle(
-  fontSize: 14,
-  color: Colors.black,
-  fontWeight: FontWeight.w600
-);
+const TextStyle kFont14black600 =
+    TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.w600);
 const TextStyle kFont24Username = TextStyle(
   fontSize: 24,
   color: kHighlightedColor,
