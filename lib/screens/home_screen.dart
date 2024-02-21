@@ -153,29 +153,32 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            height: MediaQuery.of(context).size.height*0.02,
+                            height: MediaQuery.of(context).size.height * 0.02,
                           ),
                           Expanded(
                             flex: 20,
                             child: Center(
                               child: Column(
-
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
                                       SizedBox(
-                                        width: MediaQuery.of(context).size.width*0.47,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.47,
                                         child: Card(
                                           color: Colors.white,
                                           elevation: 3,
                                           shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(5)),
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
@@ -186,13 +189,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ),
                                                     Text(
                                                       'Upload',
-                                                      style: kFont14black600.copyWith(color: kPurple),
+                                                      style: kFont14black600
+                                                          .copyWith(
+                                                              color: kPurple),
                                                     )
                                                   ],
                                                 ),
                                                 Text(
                                                   'Upload your current CV\nor used a saved one.',
-                                                  style: kFont12.copyWith(color: Colors.black),
+                                                  style: kFont12.copyWith(
+                                                      color: Colors.black),
                                                 )
                                               ],
                                             ),
@@ -200,16 +206,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width: MediaQuery.of(context).size.width*0.47,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.47,
                                         child: Card(
                                           color: Colors.white,
                                           elevation: 3,
                                           shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(5)),
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
@@ -219,14 +229,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       height: 25,
                                                     ),
                                                     const Text(
-                                                      'Job description',
-                                                      style: kFont14black600
-                                                    )
+                                                        'Job description',
+                                                        style: kFont14black600)
                                                   ],
                                                 ),
                                                 Text(
                                                   'Copy and paste the job\ndescription',
-                                                  style: kFont12.copyWith(color: Colors.black),
+                                                  style: kFont12.copyWith(
+                                                      color: Colors.black),
                                                 )
                                               ],
                                             ),
@@ -236,19 +246,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
                                     children: [
                                       SizedBox(
-                                        width: MediaQuery.of(context).size.width*0.47,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.47,
                                         child: Card(
                                           color: Colors.white,
                                           elevation: 3,
                                           shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(5)),
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(7.0),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
@@ -259,13 +274,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ),
                                                     Text(
                                                       'Choose template',
-                                                      style: kFont14black600.copyWith(color: kHighlightedColor),
+                                                      style: kFont14black600
+                                                          .copyWith(
+                                                              color:
+                                                                  kHighlightedColor),
                                                     )
                                                   ],
                                                 ),
                                                 Text(
                                                   'Review your new CV and\nchoose a template',
-                                                  style: kFont12.copyWith(color: Colors.black),
+                                                  style: kFont12.copyWith(
+                                                      color: Colors.black),
                                                 )
                                               ],
                                             ),
@@ -273,17 +292,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width: MediaQuery.of(context).size.width*0.47,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.47,
                                         child: Card(
                                           color: Colors.white,
                                           elevation: 3,
-
                                           shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(5)),
+                                              borderRadius:
+                                                  BorderRadius.circular(5)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(7.0),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
@@ -292,15 +314,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       width: 25,
                                                       height: 25,
                                                     ),
-                                                     Text(
-                                                        'Download',
-                                                        style: kFont14black600.copyWith(color: kBlue)
-                                                    )
+                                                    Text('Download',
+                                                        style: kFont14black600
+                                                            .copyWith(
+                                                                color: kBlue))
                                                   ],
                                                 ),
                                                 Text(
                                                   'Now you can save or\ndownload it!',
-                                                  style: kFont12.copyWith(color: Colors.black),
+                                                  style: kFont12.copyWith(
+                                                      color: Colors.black),
                                                 )
                                               ],
                                             ),
@@ -324,17 +347,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Padding(
                                       padding: const EdgeInsets.only(top: 10.0),
                                       child: Container(
-                                        margin:
-                                            const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 13),
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 10, vertical: 13),
                                         decoration: BoxDecoration(
                                           color: kLightPurple,
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
                                         child: Text(
                                           'Do you want to upload a CV to customise it for a new role?',
-                                          style: kFont10.copyWith(color: Colors.black),
+                                          style: kFont10.copyWith(
+                                              color: Colors.black),
                                         ),
                                       ),
                                     ),
@@ -344,7 +369,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Align(
                                       alignment: Alignment.topLeft,
                                       child: Padding(
-                                        padding: const EdgeInsets.only(left: 4, top: 4),
+                                        padding: const EdgeInsets.only(
+                                            left: 4, top: 4),
                                         child: Image.asset(
                                           'assets/images/avatars/dogDP.png',
                                           height: 25,
@@ -364,7 +390,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: kInitialChatButton,
                                   child: Text(
                                     'Upload CV',
-                                    style: kFont10.copyWith(color: Colors.black),
+                                    style:
+                                        kFont10.copyWith(color: Colors.black),
                                   ),
                                 ),
                               ),
@@ -389,7 +416,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: kInitialChatButton,
                                   child: Text(
                                     'Use My Saved CV\'s',
-                                    style: kFont10.copyWith(color: Colors.black),
+                                    style:
+                                        kFont10.copyWith(color: Colors.black),
                                   ),
                                 ),
                               ),
@@ -442,7 +470,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             print('API Messages: $messagesFromAPI');
                           },
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 11),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 11),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -454,7 +483,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const SizedBox(width: 2),
                                 const Text(
                                   'New Topic',
-                                  style: TextStyle(fontSize: 8, color: Colors.white),
+                                  style: TextStyle(
+                                      fontSize: 8, color: Colors.white),
                                 )
                               ],
                             ),
@@ -472,22 +502,28 @@ class _HomeScreenState extends State<HomeScreen> {
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
-                              hintStyle: const TextStyle(color: Color(0xFF95969D), fontSize: 12),
+                              hintStyle: const TextStyle(
+                                  color: Color(0xFF95969D), fontSize: 12),
                               hintText: 'Hello, how can I help you...',
                               contentPadding: const EdgeInsets.symmetric(
                                 vertical: 0,
                                 horizontal: 10,
                               ),
                               border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0)),
                               ),
                               enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Color(0xFFF1F1F1), width: 1.0),
-                                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFF1F1F1), width: 1.0),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0)),
                               ),
                               focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Color(0xFFEBEBEB), width: 1.0),
-                                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                borderSide: BorderSide(
+                                    color: Color(0xFFEBEBEB), width: 1.0),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0)),
                               ),
                               suffixIcon: GestureDetector(
                                 onTap: () {
@@ -495,7 +531,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                   ///todo:chatAPI
                                   _messageController.text.isNotEmpty
-                                      ? _chatApi(cvObj, jobDescription, message, token)
+                                      ? _chatApi(
+                                          cvObj, jobDescription, message, token)
                                       : '';
                                   if (message.isNotEmpty) {
                                     // _chatApi(cvObj, jobDescription, message, token);
@@ -505,8 +542,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       _messageController.clear();
                                     });
                                     _scrollController.animateTo(
-                                      _scrollController.position.maxScrollExtent,
-                                      duration: const Duration(milliseconds: 300),
+                                      _scrollController
+                                          .position.maxScrollExtent,
+                                      duration:
+                                          const Duration(milliseconds: 300),
                                       curve: Curves.easeOut,
                                     );
                                   }
@@ -531,17 +570,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           elevation: 2.0,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(50),
-                            onTap: speechToText.isListening ? stopListening : startListening,
+                            onTap: speechToText.isListening
+                                ? stopListening
+                                : startListening,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: speechToText.isListening
                                     ? Colors.redAccent
-                                    : Colors.transparent, // Change color when recording
+                                    : Colors
+                                        .transparent, // Change color when recording
                                 boxShadow: speechToText.isListening
                                     ? [
                                         BoxShadow(
-                                          color: Colors.redAccent.withOpacity(0.5),
+                                          color:
+                                              Colors.redAccent.withOpacity(0.5),
                                           spreadRadius: 5,
                                           blurRadius: 10,
                                         ),
@@ -583,8 +626,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _chatApi(
-      Map<String, dynamic> cvObj, String jobDescription, String userQuery, String token) async {
+  Future<void> _chatApi(Map<String, dynamic> cvObj, String jobDescription,
+      String userQuery, String token) async {
     final chatApiUrl = Uri.parse('https://api-cvlab.crewdog.ai/api/chat/');
     final client = http.Client();
 
@@ -631,10 +674,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Add personal info
     formattedMessage.writeln('Personal Info:');
-    formattedMessage.writeln('Name: ${response['personal_information']['name']}');
-    formattedMessage.writeln('Email: ${response['personal_information']['email']}');
-    formattedMessage.writeln('Phone: ${response['personal_information']['phone']}');
-    formattedMessage.writeln('Address: ${response['personal_information']['address']}');
+    formattedMessage
+        .writeln('Name: ${response['personal_information']['name']}');
+    formattedMessage
+        .writeln('Email: ${response['personal_information']['email']}');
+    formattedMessage
+        .writeln('Phone: ${response['personal_information']['phone']}');
+    formattedMessage
+        .writeln('Address: ${response['personal_information']['address']}');
     formattedMessage.writeln();
 
     // Add skills
@@ -709,7 +756,8 @@ class UploadCVDialogState extends State<UploadCVDialog> {
   bool _isJobDescriptionEmpty = false;
   bool _isLoading = false;
 
-  final TextEditingController _jobDescriptionControllerForUploadCV = TextEditingController();
+  final TextEditingController _jobDescriptionControllerForUploadCV =
+      TextEditingController();
 
   void _updateProgress() async {
     for (int i = 0; i <= 100; i += 10) {
@@ -868,7 +916,8 @@ class UploadCVDialogState extends State<UploadCVDialog> {
                           minHeight: 1.5,
                           value: _progress,
                           backgroundColor: Colors.grey,
-                          valueColor: const AlwaysStoppedAnimation<Color>(kPurple),
+                          valueColor:
+                              const AlwaysStoppedAnimation<Color>(kPurple),
                         ),
                       ),
                       Flexible(
@@ -927,7 +976,9 @@ class UploadCVDialogState extends State<UploadCVDialog> {
                   fontSize: 10,
                   color: Colors.red,
                 ),
-                errorText: _isJobDescriptionEmpty ? 'Job description can\'t be empty' : null,
+                errorText: _isJobDescriptionEmpty
+                    ? 'Job description can\'t be empty'
+                    : null,
               ),
               onChanged: (value) {
                 setState(() {
@@ -963,7 +1014,8 @@ class UploadCVDialogState extends State<UploadCVDialog> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      _isJobDescriptionEmpty = _jobDescriptionControllerForUploadCV.text.isEmpty;
+                      _isJobDescriptionEmpty =
+                          _jobDescriptionControllerForUploadCV.text.isEmpty;
                       if (!_isJobDescriptionEmpty) {
                         setState(() {
                           _isJobDescriptionEmpty = false;
@@ -1040,7 +1092,8 @@ class UploadCVDialogState extends State<UploadCVDialog> {
           file.path,
         ),
       );
-      request.fields['job_description'] = _jobDescriptionControllerForUploadCV.text;
+      request.fields['job_description'] =
+          _jobDescriptionControllerForUploadCV.text;
 
       var response = await request.send();
 
@@ -1054,16 +1107,18 @@ class UploadCVDialogState extends State<UploadCVDialog> {
         cvObj = jsonResponse['cv_obj'];
         String summary = cvObj['personal_information']['summary'];
 
-        List<Map<String, dynamic>> skillsList =
-            (cvObj['skills'] as List).map((skill) => Map<String, dynamic>.from(skill)).toList();
+        List<Map<String, dynamic>> skillsList = (cvObj['skills'] as List)
+            .map((skill) => Map<String, dynamic>.from(skill))
+            .toList();
 
         List<Map<String, dynamic>> educationList = (cvObj['education'] as List)
             .map((education) => Map<String, dynamic>.from(education))
             .toList();
 
-        List<Map<String, dynamic>> employmentHistoryList = (cvObj['employment_history'] as List)
-            .map((employment) => Map<String, dynamic>.from(employment))
-            .toList();
+        List<Map<String, dynamic>> employmentHistoryList =
+            (cvObj['employment_history'] as List)
+                .map((employment) => Map<String, dynamic>.from(employment))
+                .toList();
 
         List<Map<String, dynamic>> projectsList = (cvObj['projects'] as List)
             .map((project) => Map<String, dynamic>.from(project))
@@ -1073,8 +1128,8 @@ class UploadCVDialogState extends State<UploadCVDialog> {
           jobDescription = jsonResponse['job_description'];
         });
 
-        String formattedMessage = _formatMessage(
-            summary, cvObj, skillsList, educationList, employmentHistoryList, projectsList);
+        String formattedMessage = _formatMessage(summary, cvObj, skillsList,
+            educationList, employmentHistoryList, projectsList);
         print(formattedMessage);
 
         setState(() {
@@ -1082,7 +1137,8 @@ class UploadCVDialogState extends State<UploadCVDialog> {
           updateMessages();
         });
       } else {
-        print('API call failed with status code ${response.statusCode} and response $response');
+        print(
+            'API call failed with status code ${response.statusCode} and response $response');
         print(await response.stream.bytesToString());
       }
     } catch (e) {
@@ -1105,9 +1161,12 @@ class UploadCVDialogState extends State<UploadCVDialog> {
 
     formattedMessage.writeln('Personal Info:');
     formattedMessage.writeln('Name: ${cvObj['personal_information']['name']}');
-    formattedMessage.writeln('Email: ${cvObj['personal_information']['email']}');
-    formattedMessage.writeln('Phone: ${cvObj['personal_information']['phone']}');
-    formattedMessage.writeln('Address: ${cvObj['personal_information']['address']}');
+    formattedMessage
+        .writeln('Email: ${cvObj['personal_information']['email']}');
+    formattedMessage
+        .writeln('Phone: ${cvObj['personal_information']['phone']}');
+    formattedMessage
+        .writeln('Address: ${cvObj['personal_information']['address']}');
     formattedMessage.writeln();
 
     formattedMessage.writeln('Skills:');
@@ -1190,8 +1249,10 @@ class MessageBubble extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
                   decoration: BoxDecoration(
                     color: isUser ? kLightOrange : kLightPurple,
                     borderRadius: BorderRadius.circular(12),
@@ -1208,7 +1269,9 @@ class MessageBubble extends StatelessWidget {
               child: Align(
                 alignment: isUser ? Alignment.topRight : Alignment.topLeft,
                 child: Image.asset(
-                  isUser ? 'assets/images/avatar.png' : 'assets/images/avatars/dogDP.png',
+                  isUser
+                      ? 'assets/images/avatar.png'
+                      : 'assets/images/avatars/dogDP.png',
                   height: 30,
                   width: 30,
                 ),
@@ -1229,7 +1292,8 @@ class UseSaveCVDialog extends StatefulWidget {
 }
 
 class UseSaveCVDialogState extends State<UseSaveCVDialog> {
-  final TextEditingController _jobDescriptionControllerForSavedCV = TextEditingController();
+  final TextEditingController _jobDescriptionControllerForSavedCV =
+      TextEditingController();
   bool _isJobDescriptionForSavedCVEmpty = false;
 
   int? tappedIndex;
@@ -1289,7 +1353,8 @@ class UseSaveCVDialogState extends State<UseSaveCVDialog> {
                       : GridView.builder(
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             childAspectRatio: 1.4,
                             crossAxisCount: 1,
                             crossAxisSpacing: 8.0,
@@ -1297,12 +1362,15 @@ class UseSaveCVDialogState extends State<UseSaveCVDialog> {
                           ),
                           itemCount: cvList.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final templateName = cvList[index]['template']['name'];
-                            final lastDigit =
-                                int.tryParse(templateName.substring(templateName.length - 1)) ?? 1;
+                            final templateName =
+                                cvList[index]['template']['name'];
+                            final lastDigit = int.tryParse(templateName
+                                    .substring(templateName.length - 1)) ??
+                                1;
                             final templateIndex = lastDigit - 1;
 
-                            if (templateIndex >= 0 && templateIndex < pdfImages.length) {
+                            if (templateIndex >= 0 &&
+                                templateIndex < pdfImages.length) {
                               return GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -1313,9 +1381,11 @@ class UseSaveCVDialogState extends State<UseSaveCVDialog> {
                                   children: [
                                     Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                         image: DecorationImage(
-                                          image: AssetImage(pdfImages[templateIndex]),
+                                          image: AssetImage(
+                                              pdfImages[templateIndex]),
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -1329,7 +1399,8 @@ class UseSaveCVDialogState extends State<UseSaveCVDialog> {
                                           style: kElevatedButtonPrimaryBG,
                                           child: const Text(
                                             'Select',
-                                            style: TextStyle(color: Colors.white),
+                                            style:
+                                                TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ),
@@ -1385,8 +1456,9 @@ class UseSaveCVDialogState extends State<UseSaveCVDialog> {
                       fontSize: 10,
                       color: Colors.red,
                     ),
-                    errorText:
-                        _isJobDescriptionForSavedCVEmpty ? 'Job description can\'t be empty' : null,
+                    errorText: _isJobDescriptionForSavedCVEmpty
+                        ? 'Job description can\'t be empty'
+                        : null,
                   ),
                   onChanged: (value) {
                     setState(() {
@@ -1452,7 +1524,8 @@ class UseSaveCVDialogState extends State<UseSaveCVDialog> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          if (_jobDescriptionControllerForSavedCV.text.isEmpty) {
+                          if (_jobDescriptionControllerForSavedCV
+                              .text.isEmpty) {
                             return;
                           }
                           Navigator.pop(context);
@@ -1493,8 +1566,10 @@ Widget buildAdditionalColumn() {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 13),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 13),
                           decoration: BoxDecoration(
                             color: kLightPurple,
                             borderRadius: BorderRadius.circular(12),
