@@ -163,7 +163,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-
                                     children: [
                                       SizedBox(
                                         width: MediaQuery.of(context).size.width*0.47,
