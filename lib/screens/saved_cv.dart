@@ -600,17 +600,19 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                 ),
               ),
               Align(
-                alignment: const Alignment(0.0, 1.15),
+                alignment: const Alignment(0.0, 1.35),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
                       'Title: ',
                     ),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],

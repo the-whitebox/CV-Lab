@@ -181,9 +181,8 @@ class _SigninScreenState extends State<SigninScreen> {
                                     decoration: kTextFieldDecoration.copyWith(
                                       isDense: isLargerScreen ? false : true,
                                       errorText: _validateEmail ? _emailErrorText : null,
-                                      errorMaxLines: 2,
                                       hintText: 'Enter email address...',
-                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10),
+                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,height: 0.1),
                                     ),
                                   ),
                                   SizedBox(
@@ -206,7 +205,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                     decoration: kTextFieldDecoration.copyWith(
                                       isDense: isLargerScreen ? false : true,
                                       errorText: _validatePassword ? _passwordErrorText : null,
-                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,),
+                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,height: 0.1),
                                       hintText: 'Enter password...',
                                       errorMaxLines: 2,
                                       suffixIconConstraints: BoxConstraints(
@@ -282,7 +281,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                         setState(() {
                                           _validatePassword = true;
                                           _passwordErrorText =
-                                              'Password must be at least 6 characters here';
+                                              'Password must be at least 6 characters';
                                         });
                                         return;
                                       } else if (!passwordContainsAlphabeticAndSpecial

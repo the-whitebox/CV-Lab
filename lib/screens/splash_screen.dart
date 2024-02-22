@@ -18,9 +18,6 @@ class _SplashScreenState extends State<SplashScreen> {
     _checkLoginStatus();
   }
 
-
-
-
   Future<void> _checkLoginStatus() async {
     await Future.delayed(const Duration(seconds: 3));
 
@@ -29,10 +26,11 @@ class _SplashScreenState extends State<SplashScreen> {
     if (token.isEmpty) {
       Get.offAllNamed(AppRoutes.welcome);
     } else if (token.isNotEmpty) {
+      print("token:: $token");
       var responseData = await fetchProfile(token);
       var profilePic = responseData['profile_pic'];
-      if(profilePic!=null) {
-        print("Profile Pic Stored");
+      if (profilePic != null) {
+        print("token:: $token");
         storeProfilePic(profilePic);
       }
       Get.offAllNamed(AppRoutes.bottomBar);
@@ -65,9 +63,11 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(),
             const SizedBox(),
             Image.asset('assets/images/cv_lab.png',
-                width: isLargerScreen ? screenWidth * 0.65 : screenWidth * 0.55),
+                width:
+                    isLargerScreen ? screenWidth * 0.65 : screenWidth * 0.55),
             Image.asset('assets/images/dog_email_container.png',
-                height: isLargerScreen ? screenHeight * 0.18 : screenHeight * 0.15),
+                height:
+                    isLargerScreen ? screenHeight * 0.18 : screenHeight * 0.15),
           ],
         ),
       ),
