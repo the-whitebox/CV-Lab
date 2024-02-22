@@ -192,6 +192,7 @@ class TempController extends GetxController {
 
       if (response.statusCode == 201) {
         print('CV saved successfully: ${response.body}');
+        Get.back();
         appSuccessSnackBar('Success', 'CV saved successfully');
       } else {
         print('Failed to save CV. Status code: ${response.statusCode}');
@@ -237,7 +238,9 @@ class TempController extends GetxController {
       );
 
       if (response.statusCode == 200) {
+
         print('CV Updated successfully: ${response.body}');
+        Get.back();
         appSuccessSnackBar('Success', 'CV Updated successfully');
       } else {
         print('Failed to Update CV. Status code: ${response.statusCode}');
@@ -248,7 +251,152 @@ class TempController extends GetxController {
     }
   }
 
+
+  Future<Map<String, dynamic>?> fetchCvObjectFromBackend(int cvId, String templateId) async {
+
+    try {
+      final response = await http.get(
+        Uri.parse('https://api-cvlab.crewdog.ai/api/getCv/?cv_id=$cvId&template_id=$templateId'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        final Map<String, dynamic> cvData = responseData['cv']['cv'];
+        print('CV Object updated with data from backend');
+        return cvData;
+      } else {
+        print('Failed to fetch data. Status code: ${response.statusCode}');
+        print('Response: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
+    return null;
+  }
+
+  Future<void> fillControllerFromCvObject(Map<String, dynamic> cvData) async {
+
+    final Map<String, dynamic> personalData = cvData['personal_information'];
+    nameController.text = personalData['name'] ?? '';
+    mailController.text = personalData['email'] ?? '';
+    contactController.text = personalData['number'] ?? '';
+    addressController.text = personalData['address'] ?? '';
+    designationController.text = personalData['job_title'] ?? '';
+    personalInformation.text = personalData['summary'] ?? '';
+    cvImagePath = personalData['profile_pic'] ?? '';
+    // profilePicState = responseData['cv']['profile_pic_state'] ?? true;
+    // saveCvId = cvId;
+
+    final List<dynamic> skillsDataList = cvData['skills'] ?? [];
+    skills.clear();
+    for (var skill in skillsDataList) {
+      final TextEditingController controller = TextEditingController(text: skill['name'] ?? '');
+      final double level = skill['level'] ?? 0;
+      skills.add({controller: level});
+    }
+
+    final List<dynamic> referenceDataList = cvData['reference'] ?? [];
+    reference.clear();
+    for (var ref in referenceDataList) {
+      final TextEditingController personNameController =
+      TextEditingController(text: ref['person_name'] ?? '');
+      final TextEditingController contactNumberController =
+      TextEditingController(text: ref['contact_number'] ?? '');
+      final TextEditingController referenceTextController =
+      TextEditingController(text: ref['reference_text'] ?? '');
+      final GlobalKey key = GlobalKey();
+      reference.add(References(
+        personName: personNameController,
+        contactNumber: contactNumberController,
+        referenceText: referenceTextController,
+        keyController: key,
+      ));
+    }
+
+
+    final List<dynamic> projectsDataList = cvData['projects'] ?? [];
+    projects.clear();
+    for (var pro in projectsDataList) {
+      final TextEditingController title =
+      TextEditingController(text: pro['title'] ?? '');
+      final TextEditingController description =
+      TextEditingController(text: pro['description'] ?? '');
+      final GlobalKey key = GlobalKey();
+      projects.add(
+          Projects(title: title, description: description,keyController: key));
+    }
+
+    final List<dynamic> educationDataList = cvData['education'] ?? [];
+    education.clear();
+    for (var edu in educationDataList) {
+      final TextEditingController fieldOfStudyController =
+      TextEditingController(text: edu['field_of_study'] ?? '');
+      final TextEditingController descriptionController =
+      TextEditingController(text: edu['description'] ?? '');
+      final TextEditingController endDateController =
+      TextEditingController(text: edu['end_date'] ?? '');
+      final TextEditingController startDateController =
+      TextEditingController(text: edu['start_date'] ?? '');
+      final TextEditingController cityController =
+      TextEditingController(text: edu['city'] ?? '');
+      final TextEditingController countryController =
+      TextEditingController(text: edu['country'] ?? '');
+      final TextEditingController instituteNameController =
+      TextEditingController(text: edu['institute_name'] ?? '');
+      final GlobalKey key = GlobalKey();
+      education.add(EducationHistory(
+        fieldOfStudy: fieldOfStudyController,
+        description: descriptionController,
+        endDate: endDateController,
+        startDate: startDateController,
+        city: cityController,
+        country: countryController,
+        instituteName: instituteNameController,
+        keyController: key,
+      ));
+    }
+
+    final List<dynamic> employmentDataList = cvData['employment_history'] ?? [];
+    employmentHistory.clear();
+    for (var employment in employmentDataList) {
+      final TextEditingController jobTitleController =
+      TextEditingController(text: employment['job_title'] ?? '');
+      final TextEditingController descriptionController =
+      TextEditingController(text: employment['description'] ?? '');
+      final TextEditingController endDateController =
+      TextEditingController(text: employment['end_date'] ?? '');
+      final TextEditingController startDateController =
+      TextEditingController(text: employment['start_date'] ?? '');
+      final TextEditingController cityController =
+      TextEditingController(text: employment['city'] ?? '');
+      final TextEditingController countryController =
+      TextEditingController(text: employment['country'] ?? '');
+      final TextEditingController companyNameController =
+      TextEditingController(text: employment['company_name'] ?? '');
+      final GlobalKey key = GlobalKey();
+      employmentHistory.add(EmploymentHistory(
+        jobTitle: jobTitleController,
+        description: descriptionController,
+        endDate: endDateController,
+        startDate: startDateController,
+        city: cityController,
+        country: countryController,
+        companyName: companyNameController,
+        keyController: key,
+      ));
+    }
+
+    update();
+
+  }
+
   Future<void> fetchDataFromBackend(int cvId, String templateId) async {
+
     try {
       final response = await http.get(
         Uri.parse('https://api-cvlab.crewdog.ai/api/getCv/?cv_id=$cvId&template_id=$templateId'),
@@ -385,6 +533,7 @@ class TempController extends GetxController {
   }
 
   void refreshController() {
+    print("Controller Refreshed");
     profilePicState = true;
     profileImage = getProfilePic();
     if (profileImage.contains("https://api-cvlab.crewdog.ai")) {
@@ -464,6 +613,8 @@ class TempController extends GetxController {
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text';
     }
   }
+
+
 }
 
 class EmploymentHistory {

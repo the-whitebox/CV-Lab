@@ -120,9 +120,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       } else {
         final Map<String, dynamic> errorData = jsonDecode(response.body);
         if (errorData['detail'] != "") {
-          appSnackBar("Error", "${errorData['detail']}");
+          appSnackBar(" Error", " ${errorData['detail']}");
         } else {
-          appSnackBar("Error", 'Failed to change password. Status code: ${response.statusCode}');
+          appSnackBar(" Error", 'Failed to change password. Status code: ${response.statusCode}');
         }
       }
     } else {
@@ -661,7 +661,6 @@ storeProfilePic("");
             children: [
               ElevatedButton(
                 onPressed: () async {
-                  selectedAvatarIndex=0;
                   tempImage = null;
                   _fileUploaded = false;
                   setState(() {
@@ -731,7 +730,7 @@ storeProfilePic("");
                     selectedAvatarIndex,
                   );
                   setState(() {
-                    _profileFuture = fetchProfile(token);
+                    _profileFuture = retrieveProfile(token);
                     _isMyProfile = true;
                     _isEditProfile = false;
                     _isChangePassword = false;
@@ -973,14 +972,13 @@ storeProfilePic("");
                 return;
               }
 
-             else if (_newPasswordConfirmTextController.text.isEmpty) {
+              if (_newPasswordConfirmTextController.text.isEmpty) {
                 setState(() {
                   _validateConfirmPassword = true;
                   _confirmPasswordErrorText = 'Confirm password can\'t be empty';
                 });
                 return;
-              }
-              else if (_newPasswordConfirmTextController.text !=
+              } else if (_newPasswordConfirmTextController.text !=
                   _newPasswordTextController.text) {
                 setState(() {
                   _validateConfirmPassword = true;
@@ -1092,6 +1090,7 @@ storeProfilePic("");
                           for (int buttonIndex = 0; buttonIndex < 2; buttonIndex++) {
                             if (buttonIndex == index) {
                               isPictureSelected[buttonIndex] = true;
+
                               selectedAvatarIndex = 0;
                               isFirstIndex = false;
                               isSecondIndex = true;
@@ -1283,7 +1282,15 @@ storeProfilePic("");
                       ),
                        Align(
                         alignment: Alignment.centerRight,
-                        child:_fileUploaded? const SizedBox(): const Text(
+                        child:_fileUploaded? GestureDetector(
+                          onTap: () {
+                            state(() {
+                              tempImage = null;
+                              _fileUploaded = false;
+                            });
+                          },
+                          child: const Icon(Icons.cancel_outlined,size:14 ),
+                        ): const Text(
                           'JPG or PNG',
                           style: kFont8Black,
                         ),
@@ -1302,33 +1309,12 @@ storeProfilePic("");
                               style: kFont8.copyWith(color: Colors.black),
                             ),
                             const SizedBox(height: 2),
-                            Row(
-                              children: [
-                                Flexible(
-                                  flex:15,
-                                  child: LinearProgressIndicator(
-                                    minHeight: 1.5,
-                                    value: _progress,
-                                    backgroundColor: kPurple,
-                                    valueColor: const AlwaysStoppedAnimation<Color>(kHighlightedColor),
-                                  ),
-                                ),
-                                const SizedBox(width: 5),
-                                Flexible(
-                                    flex: 1,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      state(() {
-                                        tempImage = null;
-                                        _fileUploaded = false;
-                                      });
-                                    },
-                                    child: const Icon(Icons.cancel_outlined,size:14 ),
-                                  ),
-                                ),
-                              ],
+                            LinearProgressIndicator(
+                              minHeight: 1.5,
+                              value: _progress,
+                              backgroundColor: kPurple,
+                              valueColor: const AlwaysStoppedAnimation<Color>(kHighlightedColor),
                             ),
-
 
                             const SizedBox(height: 2.0),
                             Text(
