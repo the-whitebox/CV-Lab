@@ -24,6 +24,7 @@ class _V102State extends State<V102> {
 
   final controller = Get.put(TempController());
 
+
   File? selectedImage;
 
   @override
@@ -376,6 +377,7 @@ class _V102State extends State<V102> {
                                         Row(
                                           children: [
                                             EducationHistoryWidget(
+                                              isRemovable: controller.education.length>1,
                                               description: controller.education[i].description,
                                               title: controller.education[i].fieldOfStudy,
                                               from: controller.education[i].startDate,
@@ -476,6 +478,7 @@ class _V102State extends State<V102> {
                                     child: Row(
                                       children: [
                                         EmploymentHistoryWidget(
+                                          isRemovable: controller.employmentHistory.length>1,
                                           description: controller.employmentHistory[i].description,
                                           title: controller.employmentHistory[i].jobTitle,
                                           from: controller.employmentHistory[i].startDate,
@@ -537,6 +540,7 @@ class _V102State extends State<V102> {
                                     ),
                                     itemBuilder: (context, index) {
                                       return SkillCircullarWidget(leftPadding: 0,
+                                        isRemovable: controller.skills.length>1,
                                         skill: controller.skills[index].keys.first,
                                         onButtonTap: () {
                                           setState(() {
@@ -591,6 +595,7 @@ class _V102State extends State<V102> {
                                     children: [
                                       for (int i = 0; i < controller.projects.length; i++)
                                         ProjectWidget(
+                                          isRemovable: controller.projects.length>1,
                                           title: controller.projects[i].title,
                                           description: controller.projects[i].description,
                                           onRemoveTap: () {
@@ -624,7 +629,7 @@ class _V102State extends State<V102> {
                                       ),
                                       const SizedBox(height: 5),
                                       CvAddButton(
-                                        buttonText: controller.reference.isNotEmpty ?"Add":"Add Reference",
+                                        buttonText: controller.reference.isNotEmpty ?"Add":"Add\nReference",
                                         onTap: () {
                                           setState(() {
                                             controller.reference.add(References(

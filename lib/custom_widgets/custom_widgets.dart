@@ -11,7 +11,7 @@ class SaveDownloadButtonsRow extends StatelessWidget {
     super.key,
     required this.onSavePressed,
     required this.onDownloadPressed,
-     this.isUpdateCV=false,
+    this.isUpdateCV = false,
   });
 
   @override
@@ -27,15 +27,17 @@ class SaveDownloadButtonsRow extends StatelessWidget {
                 side: const MaterialStatePropertyAll(BorderSide(color: kHighlightedColor)),
                 backgroundColor: const MaterialStatePropertyAll(Colors.white),
               ),
-              child:isUpdateCV? const Text(
-                'Update',
-                style:
-                TextStyle(color: Color(0xFFFF5E59), fontWeight: FontWeight.w500, fontSize: 16),
-              ):const Text(
-                'Save',
-                style:
-                    TextStyle(color: Color(0xFFFF5E59), fontWeight: FontWeight.w500, fontSize: 16),
-              ),
+              child: isUpdateCV
+                  ? const Text(
+                      'Update',
+                      style: TextStyle(
+                          color: Color(0xFFFF5E59), fontWeight: FontWeight.w500, fontSize: 16),
+                    )
+                  : const Text(
+                      'Save',
+                      style: TextStyle(
+                          color: Color(0xFFFF5E59), fontWeight: FontWeight.w500, fontSize: 16),
+                    ),
             ),
             const SizedBox(width: 20.0),
             ElevatedButton(
@@ -85,6 +87,7 @@ class EmploymentHistoryWidget extends StatelessWidget {
   final double durationFontSize;
   final Color backgroundColor;
   final VoidCallback onRemoveTap;
+  final bool isRemovable;
 
   const EmploymentHistoryWidget({
     super.key,
@@ -99,6 +102,7 @@ class EmploymentHistoryWidget extends StatelessWidget {
     required this.city,
     required this.country,
     required this.companyName,
+    this.isRemovable = true,
   });
 
   @override
@@ -127,12 +131,15 @@ class EmploymentHistoryWidget extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(" at ",style: TextStyle(
-                      color: const Color(0xFF4E4949),
-                      fontSize: titleFontSize,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),),
+                    Text(
+                      " at ",
+                      style: TextStyle(
+                        color: const Color(0xFF4E4949),
+                        fontSize: titleFontSize,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     CustomEditableText(
                       horizontalPadding: 0,
                       rightMargin: 0,
@@ -145,12 +152,16 @@ class EmploymentHistoryWidget extends StatelessWidget {
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
                       ),
-                    ),Text(", ",style: TextStyle(
-                      color: const Color(0xFF4E4949),
-                      fontSize: titleFontSize,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),),
+                    ),
+                    Text(
+                      ", ",
+                      style: TextStyle(
+                        color: const Color(0xFF4E4949),
+                        fontSize: titleFontSize,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     CustomEditableText(
                       horizontalPadding: 0,
                       rightMargin: 0,
@@ -164,12 +175,15 @@ class EmploymentHistoryWidget extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(", ",style: TextStyle(
-                      color: const Color(0xFF4E4949),
-                      fontSize: titleFontSize,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),),
+                    Text(
+                      ", ",
+                      style: TextStyle(
+                        color: const Color(0xFF4E4949),
+                        fontSize: titleFontSize,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     CustomEditableText(
                       horizontalPadding: 0,
                       rightMargin: 0,
@@ -186,16 +200,24 @@ class EmploymentHistoryWidget extends StatelessWidget {
                   ],
                 ),
               ),
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: onRemoveTap,
-                  child: const Icon(
-                    Icons.remove_circle_outline,
-                    size: 12,
-                    color: Color(0XFFFF5E59),
-                  ),
+              isRemovable
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: onRemoveTap,
+                        child: const Icon(
+                          Icons.remove_circle_outline,
+                          size: 12,
+                          color: Color(0XFFFF5E59),
+                        ),
+                      ),
+                    )
+                  : const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.remove_circle_outline,
+                  size: 12,
+                  color: Colors.grey,
                 ),
               ),
             ],
@@ -275,6 +297,7 @@ class EducationHistoryWidget extends StatelessWidget {
   final double durationFontSize;
   final Color backgroundColor;
   final VoidCallback onRemoveTap;
+  final bool isRemovable;
 
   const EducationHistoryWidget({
     super.key,
@@ -289,6 +312,7 @@ class EducationHistoryWidget extends StatelessWidget {
     required this.city,
     required this.country,
     required this.instituteName,
+    this.isRemovable = true,
   });
 
   @override
@@ -317,12 +341,15 @@ class EducationHistoryWidget extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(" from ",style: TextStyle(
-                      color: const Color(0xFF4E4949),
-                      fontSize: titleFontSize,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),),
+                    Text(
+                      " from ",
+                      style: TextStyle(
+                        color: const Color(0xFF4E4949),
+                        fontSize: titleFontSize,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     CustomEditableText(
                       backgroundColor: backgroundColor,
                       controller: instituteName,
@@ -336,12 +363,15 @@ class EducationHistoryWidget extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(", ",style: TextStyle(
-                      color: const Color(0xFF4E4949),
-                      fontSize: titleFontSize,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),),
+                    Text(
+                      ", ",
+                      style: TextStyle(
+                        color: const Color(0xFF4E4949),
+                        fontSize: titleFontSize,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     CustomEditableText(
                       backgroundColor: backgroundColor,
                       controller: city,
@@ -355,12 +385,15 @@ class EducationHistoryWidget extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text(", ",style: TextStyle(
-                      color: const Color(0xFF4E4949),
-                      fontSize: titleFontSize,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),),
+                    Text(
+                      ", ",
+                      style: TextStyle(
+                        color: const Color(0xFF4E4949),
+                        fontSize: titleFontSize,
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     CustomEditableText(
                       horizontalPadding: 0,
                       rightMargin: 0,
@@ -377,18 +410,26 @@ class EducationHistoryWidget extends StatelessWidget {
                   ],
                 ),
               ),
-
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: onRemoveTap,
-                  child: const Icon(
-                    Icons.remove_circle_outline,
-                    size: 12,
-                    color: Color(0XFFFF5E59),
-                  ),
-                ),
-              ),
+              isRemovable
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: onRemoveTap,
+                        child: const Icon(
+                          Icons.remove_circle_outline,
+                          size: 12,
+                          color: Color(0XFFFF5E59),
+                        ),
+                      ),
+                    )
+                  : const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.remove_circle_outline,
+                        size: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
             ],
           ),
           Row(
@@ -530,10 +571,10 @@ class _CustomEditableTextState extends State<CustomEditableText> {
             ),
             context: context,
             position: RelativeRect.fromLTRB(
-                MediaQuery.of(context).size.width * 0.075,
-                MediaQuery.of(context).size.height * 0.3,
-                MediaQuery.of(context).size.height * 0.25,
-                0,
+              MediaQuery.of(context).size.width * 0.075,
+              MediaQuery.of(context).size.height * 0.3,
+              MediaQuery.of(context).size.height * 0.25,
+              0,
             ),
             items: [
               PopupMenuItem(
@@ -542,19 +583,20 @@ class _CustomEditableTextState extends State<CustomEditableText> {
                 child: Column(
                   children: [
                     TextField(
-                      onTapOutside:  (event) {
+                      onTapOutside: (event) {
                         saveChanges();
                       },
-                      maxLength:widget.maxLength,
+                      maxLength: widget.maxLength,
                       controller: widget.controller,
-                      decoration:null,
+                      decoration: null,
                       minLines: null,
                       maxLines: null,
                       expands: true,
                       textAlign: TextAlign.justify,
                       focusNode: _focusNode,
-                      style: const TextStyle(fontSize: 14,color: Colors.black,wordSpacing: 0.1,letterSpacing: 0.1),
-                        cursorColor: Colors.purple,
+                      style: const TextStyle(
+                          fontSize: 14, color: Colors.black, wordSpacing: 0.1, letterSpacing: 0.1),
+                      cursorColor: Colors.purple,
                     ),
                     const SizedBox(height: 10),
                     SizedBox(
@@ -600,7 +642,10 @@ class _CustomEditableTextState extends State<CustomEditableText> {
       child: Container(
         padding: EdgeInsets.symmetric(
             horizontal: widget.horizontalPadding, vertical: widget.verticalPadding),
-        margin: EdgeInsets.only(right: widget.rightMargin, bottom: widget.bottomMargin,),
+        margin: EdgeInsets.only(
+          right: widget.rightMargin,
+          bottom: widget.bottomMargin,
+        ),
         decoration: BoxDecoration(
           color: Colors.transparent,
           border: Border.all(
@@ -608,15 +653,17 @@ class _CustomEditableTextState extends State<CustomEditableText> {
           ),
           borderRadius: BorderRadius.circular(_borderRadius),
         ),
-        child:widget.controller.text.isNotEmpty? Text(
-          widget.controller.text,
-          style: widget.style,
-          textAlign: widget.textAlign,
-        ): Text(
-         'Please enter text',
-          style: widget.style,
-          textAlign: widget.textAlign,
-        ),
+        child: widget.controller.text.isNotEmpty
+            ? Text(
+                widget.controller.text,
+                style: widget.style,
+                textAlign: widget.textAlign,
+              )
+            : Text(
+                'Please enter text',
+                style: widget.style,
+                textAlign: widget.textAlign,
+              ),
       ),
       // ),
     );
@@ -624,7 +671,7 @@ class _CustomEditableTextState extends State<CustomEditableText> {
 }
 
 class CvAddButton extends StatelessWidget {
-  const CvAddButton({super.key, required this.onTap,  this.buttonText="Add"});
+  const CvAddButton({super.key, required this.onTap, this.buttonText = "Add"});
 
   final VoidCallback onTap;
   final String buttonText;
@@ -633,11 +680,12 @@ class CvAddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child:  Padding(
+      child: Padding(
         padding: const EdgeInsets.only(right: 4),
         child: Row(
           children: [
-            Text(buttonText,
+            Text(
+                buttonText,
                 style: const TextStyle(
                   color: Color(0XFFC6A4FF),
                   fontSize: 9,
@@ -680,29 +728,29 @@ class ReferenceWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CustomEditableText(
-          horizontalPadding: 0,
-          rightMargin: 0,
-          controller: personName,
-          style: const TextStyle(
-            color: Color(0XFF4E4949),
-            fontSize: 8,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Inter',
-          ),
-        ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: GestureDetector(
-              onTap: onRemoveTap,
-              child: const Icon(
-                Icons.remove_circle_outline,
-                size: 12,
-                color: Color(0XFFFF5E59),
+              horizontalPadding: 0,
+              rightMargin: 0,
+              controller: personName,
+              style: const TextStyle(
+                color: Color(0XFF4E4949),
+                fontSize: 8,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Inter',
               ),
             ),
-          ),
-
-        ],),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: GestureDetector(
+                onTap: onRemoveTap,
+                child: const Icon(
+                  Icons.remove_circle_outline,
+                  size: 12,
+                  color: Color(0XFFFF5E59),
+                ),
+              ),
+            ),
+          ],
+        ),
         CustomEditableText(
           horizontalPadding: 0,
           rightMargin: 0,
@@ -735,11 +783,13 @@ class ProjectWidget extends StatelessWidget {
     required this.title,
     required this.description,
     required this.onRemoveTap,
+    this.isRemovable = true,
   });
 
   final TextEditingController title;
   final TextEditingController description;
   final VoidCallback onRemoveTap;
+  final bool isRemovable;
 
   @override
   Widget build(BuildContext context) {
@@ -750,30 +800,39 @@ class ProjectWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CustomEditableText(
-              horizontalPadding: 0,
-              rightMargin: 0,
-              controller: title,
-              style: const TextStyle(
-                color: Color(0XFF4E4949),
-                fontSize: 8,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Inter',
+           Expanded(child:  CustomEditableText(
+             horizontalPadding: 0,
+             rightMargin: 0,
+             controller: title,
+             style: const TextStyle(
+               color: Color(0XFF4E4949),
+               fontSize: 8,
+               fontWeight: FontWeight.w600,
+               fontFamily: 'Inter',
+             ),
+           ),),
+            isRemovable
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: GestureDetector(
+                      onTap: onRemoveTap,
+                      child: const Icon(
+                        Icons.remove_circle_outline,
+                        size: 12,
+                        color: Color(0XFFFF5E59),
+                      ),
+                    ),
+                  )
+                : const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Icon(
+                Icons.remove_circle_outline,
+                size: 12,
+                color: Colors.grey,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: GestureDetector(
-                onTap: onRemoveTap,
-                child: const Icon(
-                  Icons.remove_circle_outline,
-                  size: 12,
-                  color: Color(0XFFFF5E59),
-                ),
-              ),
-            ),
-
-          ],),
+          ],
+        ),
         const SizedBox(height: 5),
         CustomEditableText(
           horizontalPadding: 0,
@@ -795,13 +854,15 @@ class SkillCircullarWidget extends StatelessWidget {
   const SkillCircullarWidget({
     super.key,
     required this.skill,
-    required this.onButtonTap,  this.leftPadding=10,
-
+    required this.onButtonTap,
+    this.leftPadding = 10,
+    this.isRemovable = true,
   });
 
   final TextEditingController skill;
   final double leftPadding;
   final VoidCallback onButtonTap;
+  final bool isRemovable;
 
   @override
   Widget build(BuildContext context) {
@@ -818,7 +879,8 @@ class SkillCircullarWidget extends StatelessWidget {
         ),
         const SizedBox(width: 5),
         Expanded(
-          child: CustomEditableText(bottomMargin: 0,
+          child: CustomEditableText(
+            bottomMargin: 0,
             maxLength: 50,
             backgroundColor: const Color(0XFFe7e7fb),
             controller: skill,
@@ -830,16 +892,21 @@ class SkillCircullarWidget extends StatelessWidget {
             ),
           ),
         ),
-        GestureDetector(
-          onTap: onButtonTap,
-          child: const Icon(
-            Icons.remove_circle_outline,
-            size: 12,
-            color: Color(0XFFFF5E59),
-          ),
-        ),
+        isRemovable
+            ? GestureDetector(
+                onTap: onButtonTap,
+                child: const Icon(
+                  Icons.remove_circle_outline,
+                  size: 12,
+                  color: Color(0XFFFF5E59),
+                ),
+              )
+            : const Icon(
+              Icons.remove_circle_outline,
+              size: 12,
+              color: Colors.grey,
+            ),
       ],
     );
   }
 }
-

@@ -34,6 +34,7 @@ class _V106State extends State<V106> {
   final storage = GetStorage();
   final controller = Get.put(TempController());
 
+
   @override
   Widget build(BuildContext context) {
     void openGallery() async {
@@ -284,6 +285,7 @@ class _V106State extends State<V106> {
                                   ),
                                   for (int i = 0; i < controller.skills.length; i++)
                                     SkillCircullarWidget(
+                                      isRemovable: controller.skills.length>1,
                                       leftPadding: 0,
                                       skill: controller.skills[i].keys.first,
                                       onButtonTap: () {
@@ -462,6 +464,7 @@ class _V106State extends State<V106> {
                                                 ),
                                                 const SizedBox(width: 5),
                                                 EmploymentHistoryWidget(
+                                                  isRemovable: controller.employmentHistory.length>1,
                                                   durationFontSize: 6,
                                                   description:
                                                       controller.employmentHistory[i].description,
@@ -560,6 +563,7 @@ class _V106State extends State<V106> {
                                                 ),
                                                 const SizedBox(width: 5),
                                                 EducationHistoryWidget(
+                                                  isRemovable: controller.education.length>1,
                                                   description: controller.education[i].description,
                                                   title: controller.education[i].fieldOfStudy,
                                                   from: controller.education[i].startDate,
@@ -655,6 +659,7 @@ class _V106State extends State<V106> {
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         ProjectWidget(
+                                                          isRemovable: controller.projects.length>1,
                                                           title: controller.projects[i].title,
                                                           description: controller.projects[i].description,
                                                           onRemoveTap: () {
