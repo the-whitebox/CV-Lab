@@ -298,6 +298,8 @@ class _V103State extends State<V103> {
                                           Row(
                                             children: [
                                               EmploymentHistoryWidget(
+                                                isRemovable: controller.employmentHistory.length>1,
+
                                                 backgroundColor: const Color(0XFFF2F2F2),
                                                 durationFontSize: 8,
                                                 description:
@@ -364,6 +366,8 @@ class _V103State extends State<V103> {
                                           Row(
                                             children: [
                                               EducationHistoryWidget(
+                                                isRemovable: controller.education.length>1,
+
                                                 durationFontSize: 8,
                                                 backgroundColor: const Color(0XFFF2F2F2),
                                                 description: controller.education[i].description,
@@ -411,6 +415,8 @@ class _V103State extends State<V103> {
                                         ),
                                         for (int i = 0; i < controller.projects.length; i++)
                                           ProjectWidget(
+                                            isRemovable: controller.projects.length>1,
+
                                             title: controller.projects[i].title,
                                             description: controller.projects[i].description,
                                             onRemoveTap: () {
@@ -502,6 +508,8 @@ class _V103State extends State<V103> {
                                             const SizedBox(height: 5),
                                             for (int i = 0; i < controller.skills.length; i++)
                                               SkillCircullarWidget(
+                                                isRemovable: controller.skills.length>1,
+
                                                 leftPadding: 0,
                                                 skill: controller.skills[i].keys.first,
                                                 onButtonTap: () {

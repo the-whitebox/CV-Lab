@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'package:crewdog_cv_lab/custom_widgets/rotating_image.dart';
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../utils/constants.dart';
 import '../routes/app_routes.dart';
 import 'package:http/http.dart' as http;
-
 import 'cv_templates/controllers/temp_controller.dart';
 
 List<int> tappedIndexes = [];
@@ -62,7 +60,6 @@ Future<List<String>> fetchFavoriteCVs(String token) async {
       },
     );
 
-    //print('Raw response body: ${response.body}');
 
     if (response.statusCode == 200) {
       responseDataInFavouriteCV = jsonDecode(response.body);
@@ -84,12 +81,10 @@ Future<List<String>> fetchFavoriteCVs(String token) async {
           })
           .whereType<String>() // Filter out null values and keep only strings
           .toList();
-      // print('favurite : $favoriteCVs');
       return favoriteCVs;
     } else {
       print(
           'Failed to fetch favorite CVs. Status code: ${response.statusCode}');
-      //print('Response: ${response.body}');
       return []; // Return an empty list or handle the error as needed
     }
   } catch (e) {
@@ -119,10 +114,8 @@ Future<void> removeFromFavorites(int templateId, String token) async {
       // Error: Handle the error case
       print(
           'Failed to remove CV from favorites. Status code: ${response.statusCode}');
-      // print('Response: ${response.body}');
     }
   } catch (e) {
-    // Exception: Handle any exceptions that occur during the request
     print('Error removing CV from favorites: $e');
   }
 }
@@ -149,14 +142,10 @@ Future<List<Map<String, dynamic>>> fetchMyCVsData(String token) async {
             .map((cv) {
           final Map<String, dynamic> templateData = cv['template'];
           cv['templateName'] = templateData['name'];
-          print('cv  : $cv\n');
+          print('cv data -: $cv\n');
           return cv;
         }).toList();
 
-        //print('Success: Response data is not null');
-        const JsonEncoder encoder = JsonEncoder.withIndent('');
-        final String formattedJson = encoder.convert(responseData);
-        //print(formattedJson);
         print('cv List : $cvList\n');
         return cvList;
       } else {
@@ -245,6 +234,8 @@ class _SavedCvScreenState extends State<SavedCvScreen>
     with SingleTickerProviderStateMixin {
   TextEditingController searchController = TextEditingController();
 
+  bool receivedValue = Get.arguments==null?false:true;
+
   late TabController _tabController;
   bool isFavourite = false;
   int? tappedIndex;
@@ -275,7 +266,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(_handleTabSelection);
-    controller.refreshController();
+    // controller.refreshController();
   }
 
   @override
@@ -389,9 +380,6 @@ class _SavedCvScreenState extends State<SavedCvScreen>
     return FutureBuilder<List<String>>(
       future: fetchFavoriteCVs(token),
       builder: (context, snapshot) {
-        // if (snapshot.connectionState == ConnectionState.waiting) {
-        //   return const RotatingImage();
-        // } else
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
@@ -725,7 +713,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                     onPressed: () async {
                       await fetchMyCVsData(token);
                       controller.refreshController();
-                      Navigator.pushNamed(context, pdfFiles[index]);
+                      Get.toNamed(pdfFiles[index]);
                     },
                     child: const Text(
                       'Select',
@@ -760,32 +748,6 @@ class _SavedCvScreenState extends State<SavedCvScreen>
     );
   }
 
-  // Widget buildUploadedCVsTab() {
-  //   return Column(
-  //     mainAxisAlignment: MainAxisAlignment.center,
-  //     children: [
-  //       Image.asset(
-  //         'assets/images/sleepy_dog.png',
-  //       ),
-  //       const SizedBox(
-  //         height: 10.0,
-  //       ),
-  //       ElevatedButton(
-  //           onPressed: () {
-  //             // Get.to(
-  //             //     DisplayControllersScreen()); // Navigate to DisplayControllersScreen
-  //           },
-  //           child: Text('Press me')),
-  //       Text('No CV uploaded',
-  //           style: kFont24.copyWith(color: kHighlightedColor)),
-  //       Text(
-  //         'Go upload CV',
-  //         style: kFont12.copyWith(color: const Color(0xFF4E4949)),
-  //       ),
-  //     ],
-  //   );
-  // }
-
   Widget buildGridItem(int index, bool isFavouriteItem) {
     return Padding(
       padding: const EdgeInsets.only(top: 14, right: 8, left: 2),
@@ -803,6 +765,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
             GestureDetector(
               onTap: () {
                 setState(() {
+                  print("VVVVVVVVVVVVVVVVVVVVVVVVVV $receivedValue");
                   tappedIndex = index;
                 });
               },
@@ -813,8 +776,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                 child: ElevatedButton(
                   style: kElevatedButtonPrimaryBG,
                   onPressed: () {
-                    controller.refreshController();
-                    Navigator.pushNamed(context, pdfFiles[index]);
+                    Get.toNamed(pdfFiles[index],arguments: receivedValue??false);
                   },
                   child: const Text(
                     'Select',
@@ -855,34 +817,3 @@ class _SavedCvScreenState extends State<SavedCvScreen>
     );
   }
 }
-// void showRemoveConfirmationDialog(int index) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         title: const Text('Remove from Favourites?'),
-//         content: const Text(
-//             'Are you sure you want to remove this CV from Favourites?'),
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               Navigator.of(context).pop();
-//             },
-//             child: const Text('Cancel'),
-//           ),
-//           TextButton(
-//             onPressed: () {
-//               setState(() {
-//                 tappedIndexes.remove(index);
-//               });
-//
-//               saveFavourites();
-//               Navigator.of(context).pop();
-//             },
-//             child: const Text('Remove'),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }

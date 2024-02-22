@@ -192,6 +192,7 @@ class TempController extends GetxController {
 
       if (response.statusCode == 201) {
         print('CV saved successfully: ${response.body}');
+
         Get.back();
         appSuccessSnackBar('Success', 'CV saved successfully');
       } else {

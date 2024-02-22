@@ -314,7 +314,7 @@ class _V105State extends State<V105> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   EmploymentHistory6(
-                                    description: controller.employmentHistory[i].description,
+                                    isRemovable: controller.employmentHistory.length>1,                                    description: controller.employmentHistory[i].description,
                                     title: controller.employmentHistory[i].jobTitle,
                                     from: controller.employmentHistory[i].startDate,
                                     till: controller.employmentHistory[i].endDate,
@@ -375,6 +375,7 @@ class _V105State extends State<V105> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   EducationHistory6(
+                                    isRemovable: controller.education.length>1,
                                     description: controller.education[i].description,
                                     title: controller.education[i].fieldOfStudy,
                                     from: controller.education[i].startDate,
@@ -436,6 +437,7 @@ class _V105State extends State<V105> {
                                     ),
                                     itemBuilder: (context, index) {
                                       return SkillCircullarWidget(
+                                        isRemovable: controller.skills.length>1,
                                         leftPadding: 0,
                                         skill: controller.skills[index].keys.first,
                                         onButtonTap: () {
@@ -494,6 +496,7 @@ class _V105State extends State<V105> {
                                     children: [
                                       for (int i = 0; i < controller.projects.length; i++)
                                         ProjectWidget(
+                                          isRemovable: controller.projects.length>1,
                                           title: controller.projects[i].title,
                                           description: controller.projects[i].description,
                                           onRemoveTap: () {
@@ -817,6 +820,8 @@ class EmploymentHistory6 extends StatelessWidget {
   final TextEditingController country;
   final TextEditingController companyName;
   final VoidCallback onRemoveTap;
+  final bool isRemovable;
+
 
   const EmploymentHistory6({
     super.key,
@@ -828,6 +833,7 @@ class EmploymentHistory6 extends StatelessWidget {
     required this.onRemoveTap,
     required this.country,
     required this.companyName,
+    this.isRemovable = true,
   });
 
   @override
@@ -977,7 +983,7 @@ class EmploymentHistory6 extends StatelessWidget {
             children: [
               Expanded(
                   flex: 4,
-                  child: GestureDetector(
+                  child:isRemovable? GestureDetector(
                     onTap: onRemoveTap,
                     child: const Padding(
                       padding: EdgeInsets.only(right: 4),
@@ -998,7 +1004,26 @@ class EmploymentHistory6 extends StatelessWidget {
                         ],
                       ),
                     ),
-                  )),
+                  ): const Padding(
+                    padding: EdgeInsets.only(right: 4),
+                    child: Row(
+                      children: [
+                        Text("Remove",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                            )),
+                        SizedBox(width: 5),
+                        Icon(
+                          Icons.remove_circle_outline,
+                          color: Colors.grey,
+                          size: 15,
+                        ),
+                      ],
+                    ),
+                  )
+              ),
               Flexible(
                 flex: 8,
                 child: CustomEditableText(
@@ -1029,6 +1054,8 @@ class EducationHistory6 extends StatelessWidget {
   final TextEditingController country;
   final TextEditingController instituteName;
   final VoidCallback onRemoveTap;
+  final bool isRemovable;
+
 
   const EducationHistory6({
     super.key,
@@ -1040,6 +1067,7 @@ class EducationHistory6 extends StatelessWidget {
     required this.onRemoveTap,
     required this.country,
     required this.instituteName,
+    this.isRemovable = true,
   });
 
   @override
@@ -1191,7 +1219,7 @@ class EducationHistory6 extends StatelessWidget {
             children: [
               Expanded(
                   flex: 4,
-                  child: GestureDetector(
+                  child:isRemovable? GestureDetector(
                     onTap: onRemoveTap,
                     child: const Padding(
                       padding: EdgeInsets.only(right: 4),
@@ -1211,6 +1239,24 @@ class EducationHistory6 extends StatelessWidget {
                           ),
                         ],
                       ),
+                    ),
+                  ): const Padding(
+                    padding: EdgeInsets.only(right: 4),
+                    child: Row(
+                      children: [
+                        Text("Remove",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                            )),
+                        SizedBox(width: 5),
+                        Icon(
+                          Icons.remove_circle_outline,
+                          color: Colors.grey,
+                          size: 15,
+                        ),
+                      ],
                     ),
                   )),
               Flexible(
