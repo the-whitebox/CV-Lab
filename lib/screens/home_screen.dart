@@ -83,6 +83,7 @@ void updateMessages() {
 Map<String, dynamic> cvObj = {};
 Map<String, dynamic> chatCvObj = {};
 bool _firstApiCalled = false;
+bool _secondApiCalled = false;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -292,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void startListening() async {
-    if (cvObj.isNotEmpty && chatCvObj.isNotEmpty) {
+    if (cvObj.isNotEmpty || chatCvObj.isNotEmpty) {
       await speechToText.listen(
         onResult: (result) {
           return onSpeechResult(result);
@@ -355,21 +356,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                         MainAxisAlignment.spaceAround,
                                     children: [
                                       SizedBox(
-
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.47,
                                         child: Card(
-                                          margin:  const EdgeInsets.symmetric(
-                                              horizontal: 2,vertical: 4
-                                          ),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 2, vertical: 4),
                                           color: Colors.white,
                                           elevation: 3,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 10),
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -404,16 +404,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MediaQuery.of(context).size.width *
                                                 0.47,
                                         child: Card(
-                                          margin:  const EdgeInsets.symmetric(
-                                              horizontal: 2,vertical: 4
-                                          ),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 2, vertical: 4),
                                           color: Colors.white,
                                           elevation: 3,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),                                            child: Column(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 10),
+                                            child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
@@ -449,16 +450,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.47,
-                                        child: Card(margin: const EdgeInsets.symmetric(
-                                          horizontal: 2,vertical: 4
-                                        ),
+                                        child: Card(
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 2, vertical: 4),
                                           color: Colors.white,
                                           elevation: 3,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),                                            child: Column(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 10),
+                                            child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
@@ -493,16 +496,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MediaQuery.of(context).size.width *
                                                 0.47,
                                         child: Card(
-                                          margin:  const EdgeInsets.symmetric(
-                                              horizontal: 2,vertical: 4
-                                          ),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 2, vertical: 4),
                                           color: Colors.white,
                                           elevation: 3,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),                                            child: Column(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 10),
+                                            child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
@@ -1640,12 +1644,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     tempController
                                                         .fillControllerFromCvObject(
                                                             chatCvObj);
-                                                    print(tempController
-                                                        .personalInformation
-                                                        .text);
                                                     Get.toNamed(
-                                                        AppRoutes.savedCV,
-                                                        arguments: true);
+                                                        AppRoutes.savedCV);
                                                   },
                                                   style: kInitialChatButton,
                                                   child: Text(
@@ -1655,73 +1655,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15.0),
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              //_showChangeUploadCVDialog(context);
-                                              setState(() {
-                                                _messages.clear();
-                                                _messagesFromAPI.clear();
-                                                _allMessages.clear();
-                                              });
-                                              print('Messages: $_messages');
-                                              print(
-                                                  'API Messages: $_messagesFromAPI');
-                                            },
-                                            style: kInitialChatButton,
-                                            child: Text(
-                                              'No',
-                                              style: kFont10.copyWith(
-                                                  color: Colors.black),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(width: 5),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 15.0),
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              print(
-                                                  "Controller filled with CV Object");
-                                              tempController
-                                                  .fillControllerFromCvObject(
-                                                      chatCvObj);
-                                              Get.toNamed(AppRoutes.savedCV);
-                                            },
-                                            style: kInitialChatButton,
-                                            child: Text(
-                                              'Yes',
-                                              style: kFont10.copyWith(
-                                                  color: Colors.black),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : const Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                width: 5.0,
-                                              ),
-                                              SizedBox(
-                                                  height: 20.0,
-                                                  width: 20.0,
-                                                  child:
-                                                      CircularProgressIndicator()),
-                                              SizedBox(
-                                                width: 5.0,
-                                              ),
-                                              Text('Generating response...'),
                                             ],
                                           )
                                         : Align(
@@ -1774,7 +1707,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 IgnorePointer(
-                  ignoring: _firstApiCalled,
+                  ignoring: _secondApiCalled,
                   child: SizedBox(
                     child: Row(
                       children: [
@@ -1858,7 +1791,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 suffixIcon: GestureDetector(
                                   onTap: () {
-                                    if (cvObj.isNotEmpty &&
+                                    _newMessage = true;
+                                    if (cvObj.isNotEmpty ||
                                         chatCvObj.isNotEmpty) {
                                       String message = _messageController.text;
 
@@ -1870,7 +1804,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       if (message.isNotEmpty) {
                                         // _chatApi(cvObj, jobDescription, message, token);
                                         setState(() {
-                                          _newMessage = true;
                                           _messages.add(message);
                                           _messageController.clear();
                                         });
@@ -1943,7 +1876,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -1958,7 +1891,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final client = http.Client();
 
     try {
-      _firstApiCalled = true;
+      // _firstApiCalled = true;
+      _secondApiCalled = true;
+
       final chatResponse = await client.post(
         chatApiUrl,
         headers: {
@@ -1975,6 +1910,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (chatResponse.statusCode == 200) {
         setState(() {
           _firstApiCalled = false;
+          _secondApiCalled = false;
         });
         print('Chat API call successful');
 
@@ -2021,7 +1957,6 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           setState(() {
-            _errorInChatApi = false;
             jobDescription = jsonResponse['job_description'] ?? '';
             String formattedMessage = _formatMessageDetails(
                 summary,
@@ -2032,13 +1967,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 projectsList);
             _messagesFromAPI.add(formattedMessage);
             updateMessages();
+            _newMessage = false;
           });
-          _newMessage = false;
         } else {
           print('No valid response received');
         }
       } else {
         setState(() {
+          _secondApiCalled = false;
           _firstApiCalled = false;
           _errorInChatApi = true;
           _messagesFromAPI.add(_errorApiMessage);
@@ -2050,17 +1986,16 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       setState(() {
-        _errorInChatApi = true;
-
+        _secondApiCalled = false;
         _firstApiCalled = false;
+        _errorInChatApi = true;
         _messagesFromAPI.add(_errorApiMessage);
         updateMessages();
       });
       print('Error in chat API call: $e');
     } finally {
       setState(() {
-        // _messagesFromAPI.add(_errorApiMessage);
-        // updateMessages();
+        _secondApiCalled = false;
         _firstApiCalled = false;
       });
       client.close();
