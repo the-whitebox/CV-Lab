@@ -38,6 +38,9 @@ List<String> _messagesFromAPI = [];
 List<String> _messages = [];
 List<Map<String, dynamic>> _allMessages = [];
 bool newMessage = false;
+bool _errorInChatApi = false;
+String _errorApiMessage =
+    'Oops! Something went wrong on our end. Please give us a moment to fix it. Feel free to try again.';
 
 final OutlineInputBorder _customBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(10.0),
@@ -1503,27 +1506,35 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )
                 else if (_firstApiCalled)
-                  const Expanded(
+                  Expanded(
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 5.0,
                           ),
                           Row(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: 5.0,
                               ),
-                              SizedBox(
+                              Image.asset(
+                                'assets/images/avatars/dogDP.png',
+                                height: 50,
+                                width: 50,
+                              ),
+                              const SizedBox(
+                                width: 10.0,
+                              ),
+                              const SizedBox(
                                   height: 20.0,
                                   width: 20.0,
                                   child: CircularProgressIndicator()),
-                              SizedBox(
+                              const SizedBox(
                                 width: 5.0,
                               ),
-                              Text('Generating response...'),
+                              const Text('Generating response...'),
                             ],
                           ),
                         ],
@@ -1538,52 +1549,118 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: _allMessages.length + 1,
                       itemBuilder: (context, index) {
                         if (index == _allMessages.length) {
-                          return StatefulBuilder(
-                            builder: (context, state) {
-                              return !newMessage
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Stack(
-                                          children: [
-                                            Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 10.0),
-                                                child: Container(
-                                                  margin: const EdgeInsets
-                                                      .symmetric(
-                                                      vertical: 5,
-                                                      horizontal: 13),
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 13),
-                                                  decoration: BoxDecoration(
-                                                    color: kLightPurple,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
+                          return (!newMessage && !_errorInChatApi)
+                              ? StatefulBuilder(
+                                  builder: (context, state) {
+                                    return !newMessage
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Stack(
+                                                children: [
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 10.0),
+                                                      child: Container(
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            vertical: 5,
+                                                            horizontal: 13),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 10,
+                                                                vertical: 13),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: kLightPurple,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                        ),
+                                                        child: Text(
+                                                          'Do you want to choose a template now?',
+                                                          style:
+                                                              kFont10.copyWith(
+                                                                  color: Colors
+                                                                      .black),
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
+                                                  Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            bottom: 10.0),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Image.asset(
+                                                        'assets/images/avatars/dogDP.png',
+                                                        height: 30,
+                                                        width: 30,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15.0),
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    //_showChangeUploadCVDialog(context);
+                                                    setState(() {
+                                                      _messages.clear();
+                                                      _messagesFromAPI.clear();
+                                                      _allMessages.clear();
+                                                      _jobDescriptionControllerForUploadCV
+                                                          .clear();
+                                                      result = null;
+                                                      _fileUploaded = false;
+                                                    });
+                                                    print(
+                                                        'Messages: $_messages');
+                                                    print(
+                                                        'API Messages: $_messagesFromAPI');
+                                                  },
+                                                  style: kInitialChatButton,
                                                   child: Text(
-                                                    'Do you want to choose a template now?',
+                                                    'No',
                                                     style: kFont10.copyWith(
                                                         color: Colors.black),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  bottom: 10.0),
-                                              child: Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Image.asset(
-                                                  'assets/images/avatars/dogDP.png',
-                                                  height: 20,
-                                                  width: 20,
+                                              const SizedBox(width: 5),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15.0),
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    print(
+                                                        "Controller filled with CV Object");
+                                                    tempController
+                                                        .fillControllerFromCvObject(
+                                                            chatCvObj);
+                                                    print(tempController
+                                                        .personalInformation
+                                                        .text);
+                                                    Get.toNamed(
+                                                        AppRoutes.savedCV,
+                                                        arguments: true);
+                                                  },
+                                                  style: kInitialChatButton,
+                                                  child: Text(
+                                                    'Yes',
+                                                    style: kFont10.copyWith(
+                                                        color: Colors.black),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -1654,15 +1731,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                               Text('Generating response...'),
                                             ],
-                                          ),
-                                          SizedBox(
-                                            height: 10.0,
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                            },
-                          );
+                                          )
+                                        : const Align(
+                                            alignment: Alignment.bottomLeft,
+                                            child: Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 5.0,
+                                                    ),
+                                                    SizedBox(
+                                                        height: 20.0,
+                                                        width: 20.0,
+                                                        child:
+                                                            CircularProgressIndicator()),
+                                                    SizedBox(
+                                                      width: 5.0,
+                                                    ),
+                                                    Text(
+                                                        'Generating response...'),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 10.0,
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                  },
+                                )
+                              : const SizedBox();
 
                           //buildAdditionalColumn(clearMessages);
                         } else {
@@ -1691,6 +1790,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               _messages.clear();
                               _messagesFromAPI.clear();
                               _allMessages.clear();
+
+                              _jobDescriptionControllerForUploadCV.clear();
+                              result = null;
+                              _fileUploaded = false;
                             });
                           },
                           child: Padding(
@@ -1909,6 +2012,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           setState(() {
+            _errorInChatApi = false;
             jobDescription = jsonResponse['job_description'] ?? '';
             String formattedMessage = _formatMessageDetails(
                 summary,
@@ -1927,6 +2031,9 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         setState(() {
           _firstApiCalled = false;
+          _errorInChatApi = true;
+          _messagesFromAPI.add(_errorApiMessage);
+          updateMessages();
         });
         print(
             'Second API call failed with status code ${chatResponse.statusCode}');
@@ -1934,11 +2041,17 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       setState(() {
+        _errorInChatApi = true;
+
         _firstApiCalled = false;
+        _messagesFromAPI.add(_errorApiMessage);
+        updateMessages();
       });
       print('Error in chat API call: $e');
     } finally {
       setState(() {
+        // _messagesFromAPI.add(_errorApiMessage);
+        // updateMessages();
         _firstApiCalled = false;
       });
       client.close();

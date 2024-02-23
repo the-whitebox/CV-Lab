@@ -60,7 +60,6 @@ Future<List<String>> fetchFavoriteCVs(String token) async {
       },
     );
 
-
     if (response.statusCode == 200) {
       responseDataInFavouriteCV = jsonDecode(response.body);
 
@@ -491,9 +490,9 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                   itemCount: filteredData.length,
                   itemBuilder: (context, index) {
                     final cvData = filteredData[index];
-                    final templateId = cvData['template']['name'];
+                    // final templateId = cvData['template']['name'];
                     final title = filteredData[index]['username'];
-                    final cvId = cvData['cv']['id'];
+                    // final cvId = cvData['cv']['id'];
                     final templateName = cvData['template']['name'];
                     final lastDigit = int.tryParse(
                             templateName.substring(templateName.length - 1)) ??
@@ -539,7 +538,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
 
   Widget buildGridItemForMyCVs(int indexOfMyCV, int mainIndex, String title) {
     return Padding(
-      padding: const EdgeInsets.only(top: 14, right: 10, left: 2),
+      padding: const EdgeInsets.only(top: 15, right: 8, left: 8, bottom: 30.0),
       child: Container(
         decoration: const BoxDecoration(boxShadow: [
           BoxShadow(
@@ -577,7 +576,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                   ),
                 ),
               Align(
-                alignment: const Alignment(1.35, -1.2),
+                alignment: const Alignment(1.2, -1.2),
                 child: IconButton(
                   onPressed: () {
                     int cvId = cvList[mainIndex]['cv']['id'];
@@ -598,7 +597,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                 ),
               ),
               Align(
-                alignment: const Alignment(0.0, 1.35),
+                alignment: const Alignment(0.0, 1.23),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
