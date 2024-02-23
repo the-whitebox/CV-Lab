@@ -38,9 +38,6 @@ List<String> _messagesFromAPI = [];
 List<String> _messages = [];
 List<Map<String, dynamic>> _allMessages = [];
 bool newMessage = false;
-bool _errorInChatApi = false;
-String _errorApiMessage =
-    'Oops! Something went wrong on our end. Please give us a moment to fix it. Feel free to try again.';
 
 final OutlineInputBorder _customBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(10.0),
@@ -1506,35 +1503,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   )
                 else if (_firstApiCalled)
-                  Expanded(
+                  const Expanded(
                     child: Align(
                       alignment: Alignment.topLeft,
                       child: Column(
                         children: [
-                          const SizedBox(
+                          SizedBox(
                             height: 5.0,
                           ),
                           Row(
                             children: [
-                              const SizedBox(
+                              SizedBox(
                                 width: 5.0,
                               ),
-                              Image.asset(
-                                'assets/images/avatars/dogDP.png',
-                                height: 50,
-                                width: 50,
-                              ),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              const SizedBox(
+                              SizedBox(
                                   height: 20.0,
                                   width: 20.0,
                                   child: CircularProgressIndicator()),
-                              const SizedBox(
+                              SizedBox(
                                 width: 5.0,
                               ),
-                              const Text('Generating response...'),
+                              Text('Generating response...'),
                             ],
                           ),
                         ],
@@ -1549,118 +1538,52 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: _allMessages.length + 1,
                       itemBuilder: (context, index) {
                         if (index == _allMessages.length) {
-                          return (!newMessage && !_errorInChatApi)
-                              ? StatefulBuilder(
-                                  builder: (context, state) {
-                                    return !newMessage
-                                        ? Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Stack(
-                                                children: [
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 10.0),
-                                                      child: Container(
-                                                        margin: const EdgeInsets
-                                                            .symmetric(
-                                                            vertical: 5,
-                                                            horizontal: 13),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 10,
-                                                                vertical: 13),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: kLightPurple,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(12),
-                                                        ),
-                                                        child: Text(
-                                                          'Do you want to choose a template now?',
-                                                          style:
-                                                              kFont10.copyWith(
-                                                                  color: Colors
-                                                                      .black),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                            bottom: 10.0),
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.topLeft,
-                                                      child: Image.asset(
-                                                        'assets/images/avatars/dogDP.png',
-                                                        height: 30,
-                                                        width: 30,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Padding(
+                          return StatefulBuilder(
+                            builder: (context, state) {
+                              return !newMessage
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Padding(
                                                 padding: const EdgeInsets.only(
-                                                    left: 15.0),
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    //_showChangeUploadCVDialog(context);
-                                                    setState(() {
-                                                      _messages.clear();
-                                                      _messagesFromAPI.clear();
-                                                      _allMessages.clear();
-                                                      _jobDescriptionControllerForUploadCV
-                                                          .clear();
-                                                      result = null;
-                                                      _fileUploaded = false;
-                                                    });
-                                                    print(
-                                                        'Messages: $_messages');
-                                                    print(
-                                                        'API Messages: $_messagesFromAPI');
-                                                  },
-                                                  style: kInitialChatButton,
+                                                    top: 10.0),
+                                                child: Container(
+                                                  margin: const EdgeInsets
+                                                      .symmetric(
+                                                      vertical: 5,
+                                                      horizontal: 13),
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 13),
+                                                  decoration: BoxDecoration(
+                                                    color: kLightPurple,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                  ),
                                                   child: Text(
-                                                    'No',
+                                                    'Do you want to choose a template now?',
                                                     style: kFont10.copyWith(
                                                         color: Colors.black),
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(width: 5),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15.0),
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    print(
-                                                        "Controller filled with CV Object");
-                                                    tempController
-                                                        .fillControllerFromCvObject(
-                                                            chatCvObj);
-                                                    print(tempController
-                                                        .personalInformation
-                                                        .text);
-                                                    Get.toNamed(
-                                                        AppRoutes.savedCV,
-                                                        arguments: true);
-                                                  },
-                                                  style: kInitialChatButton,
-                                                  child: Text(
-                                                    'Yes',
-                                                    style: kFont10.copyWith(
-                                                        color: Colors.black),
-                                                  ),
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  bottom: 10.0),
+                                              child: Align(
+                                                alignment: Alignment.topLeft,
+                                                child: Image.asset(
+                                                  'assets/images/avatars/dogDP.png',
+                                                  height: 20,
+                                                  width: 20,
                                                 ),
                                               ),
                                             ),
@@ -1731,37 +1654,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                               Text('Generating response...'),
                                             ],
-                                          )
-                                        : const Align(
-                                            alignment: Alignment.bottomLeft,
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 5.0,
-                                                    ),
-                                                    SizedBox(
-                                                        height: 20.0,
-                                                        width: 20.0,
-                                                        child:
-                                                            CircularProgressIndicator()),
-                                                    SizedBox(
-                                                      width: 5.0,
-                                                    ),
-                                                    Text(
-                                                        'Generating response...'),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 10.0,
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                  },
-                                )
-                              : const SizedBox();
+                                          ),
+                                          SizedBox(
+                                            height: 10.0,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                            },
+                          );
 
                           //buildAdditionalColumn(clearMessages);
                         } else {
@@ -1773,7 +1674,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                   ),
-                SizedBox(
+                IgnorePointer(
+                  ignoring: true,
+                  child: SizedBox(
                   child: Row(
                     children: [
                       const SizedBox(
@@ -1790,10 +1693,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               _messages.clear();
                               _messagesFromAPI.clear();
                               _allMessages.clear();
-
-                              _jobDescriptionControllerForUploadCV.clear();
-                              result = null;
-                              _fileUploaded = false;
                             });
                           },
                           child: Padding(
@@ -1838,19 +1737,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               border: const OutlineInputBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(5.0)),
+                                BorderRadius.all(Radius.circular(5.0)),
                               ),
                               enabledBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Color(0xFFF1F1F1), width: 1.0),
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(5.0)),
+                                BorderRadius.all(Radius.circular(5.0)),
                               ),
                               focusedBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Color(0xFFEBEBEB), width: 1.0),
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(5.0)),
+                                BorderRadius.all(Radius.circular(5.0)),
                               ),
                               suffixIcon: GestureDetector(
                                 onTap: () {
@@ -1859,7 +1758,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ///todo:chatAPI
                                   _messageController.text.isNotEmpty
                                       ? _chatApi(chatCvObj, jobDescription,
-                                          message, token)
+                                      message, token)
                                       : '';
                                   if (message.isNotEmpty) {
                                     // _chatApi(cvObj, jobDescription, message, token);
@@ -1872,7 +1771,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       _scrollController
                                           .position.maxScrollExtent,
                                       duration:
-                                          const Duration(milliseconds: 300),
+                                      const Duration(milliseconds: 300),
                                       curve: Curves.easeOut,
                                     );
                                   }
@@ -1904,30 +1803,30 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color:
-                                    Colors.white, // Change color when recording
+                                Colors.white, // Change color when recording
                                 boxShadow: speechToText.isListening
                                     ? [
-                                        const BoxShadow(
-                                          color: kPurple,
-                                          spreadRadius: 5,
-                                          blurRadius: 10,
-                                        ),
-                                      ]
+                                  const BoxShadow(
+                                    color: kPurple,
+                                    spreadRadius: 5,
+                                    blurRadius: 10,
+                                  ),
+                                ]
                                     : [],
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: speechToText.isListening
                                     ? Image.asset(
-                                        'assets/images/gifs/mic_gif.gif',
-                                        width: 20,
-                                        height: 20,
-                                      )
+                                  'assets/images/gifs/mic_gif.gif',
+                                  width: 20,
+                                  height: 20,
+                                )
                                     : Image.asset(
-                                        'assets/images/mic.png',
-                                        width: 20,
-                                        height: 20,
-                                      ),
+                                  'assets/images/mic.png',
+                                  width: 20,
+                                  height: 20,
+                                ),
                               ),
                             ),
                           ),
@@ -1935,7 +1834,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     ],
                   ),
-                )
+                ),)
               ],
             ),
           ),
@@ -2012,7 +1911,6 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           setState(() {
-            _errorInChatApi = false;
             jobDescription = jsonResponse['job_description'] ?? '';
             String formattedMessage = _formatMessageDetails(
                 summary,
@@ -2031,9 +1929,6 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         setState(() {
           _firstApiCalled = false;
-          _errorInChatApi = true;
-          _messagesFromAPI.add(_errorApiMessage);
-          updateMessages();
         });
         print(
             'Second API call failed with status code ${chatResponse.statusCode}');
@@ -2041,17 +1936,11 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (e) {
       setState(() {
-        _errorInChatApi = true;
-
         _firstApiCalled = false;
-        _messagesFromAPI.add(_errorApiMessage);
-        updateMessages();
       });
       print('Error in chat API call: $e');
     } finally {
       setState(() {
-        // _messagesFromAPI.add(_errorApiMessage);
-        // updateMessages();
         _firstApiCalled = false;
       });
       client.close();

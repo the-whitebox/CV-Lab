@@ -335,7 +335,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               },
               style: kTextFieldTextStyle,
               decoration: kTextFieldDecoration.copyWith(
-                errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,height: 0.1),
+                errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10),
                 isDense: isLargerScreen ? false : true,
                 errorText: _validateEmail ? _emailErrorText : null,
                 hintText: 'Enter email address...',
@@ -714,7 +714,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     },
                     style: kTextFieldTextStyle,
                     decoration: kTextFieldDecoration.copyWith(
-                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,height: 0.1),
+                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10),
                       isDense: isLargerScreen ? false : true,
                       suffixIconConstraints: BoxConstraints(
                         maxHeight: isLargerScreen ? 40 : 30,
@@ -749,7 +749,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     },
                     style: kTextFieldTextStyle,
                     decoration: kTextFieldDecoration.copyWith(
-                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,height: 0.1),
+                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10),
                       suffixIconConstraints: BoxConstraints(
                         maxHeight: isLargerScreen ? 40 : 30,
                         maxWidth: 50,
