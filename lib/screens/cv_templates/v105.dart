@@ -23,6 +23,8 @@ class V105 extends StatefulWidget {
 class _V105State extends State<V105> {
   final controller = Get.put(TempController());
   File? selectedImage;
+  bool isCanPop=true;
+
 
   void openGallery() async {
     final picker = ImagePicker();
@@ -45,7 +47,18 @@ class _V105State extends State<V105> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+        canPop: isCanPop,
+        onPopInvoked: (didPop) {
+          if (didPop && controller.isChatData == true) {
+            print("Came from Home Screen");
+            isCanPop=false;
+            // Perform actions specific to coming from the Home Screen
+          } else {
+            controller.refreshController();
+          }
+        },
+        child: Scaffold(
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
@@ -131,17 +144,17 @@ class _V105State extends State<V105> {
                           children: [
                             Expanded(
                                 child: CustomEditableText(
-                              controller: controller.nameController,
-                              textAlign: TextAlign.end,
-                              rightMargin: 0,
-                              horizontalPadding: 0,
-                              style: const TextStyle(
-                                color: Color(0XFF4E4949),
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'Inter',
-                              ),
-                            )),
+                                  controller: controller.nameController,
+                                  textAlign: TextAlign.end,
+                                  rightMargin: 0,
+                                  horizontalPadding: 0,
+                                  style: const TextStyle(
+                                    color: Color(0XFF4E4949),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Inter',
+                                  ),
+                                )),
                             const Text(
                               ', ',
                               style: TextStyle(
@@ -153,16 +166,16 @@ class _V105State extends State<V105> {
                             ),
                             Expanded(
                                 child: CustomEditableText(
-                              controller: controller.designationController,
-                              textAlign: TextAlign.start,
-                              horizontalPadding: 0,
-                              style: const TextStyle(
-                                color: Color(0XFF4E4949),
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'Inter',
-                              ),
-                            )),
+                                  controller: controller.designationController,
+                                  textAlign: TextAlign.start,
+                                  horizontalPadding: 0,
+                                  style: const TextStyle(
+                                    color: Color(0XFF4E4949),
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Inter',
+                                  ),
+                                )),
                           ],
                         ),
                         const SizedBox(height: 7),
@@ -294,7 +307,7 @@ class _V105State extends State<V105> {
                                           jobTitle: TextEditingController(text: 'Lorem Ipsum'),
                                           description: TextEditingController(
                                               text:
-                                                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+                                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
                                           endDate: TextEditingController(text: 'November 2015'),
                                           startDate: TextEditingController(text: 'September 2019'),
                                           city: TextEditingController(text: 'Lorem Ipsum'),
@@ -352,7 +365,7 @@ class _V105State extends State<V105> {
                                         EducationHistory(
                                           keyController: GlobalKey(),
                                           fieldOfStudy:
-                                              TextEditingController(text: "Computer Science"),
+                                          TextEditingController(text: "Computer Science"),
                                           city: TextEditingController(text: "Lorem Ipsum"),
                                           country: TextEditingController(text: "Lorem Ipsum"),
                                           instituteName: TextEditingController(
@@ -431,9 +444,9 @@ class _V105State extends State<V105> {
                                     itemCount: controller.skills.length,
                                     shrinkWrap: true,
                                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                      childAspectRatio: 2.5,
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 2
+                                        childAspectRatio: 2.5,
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 2
                                     ),
                                     itemBuilder: (context, index) {
                                       return SkillCircullarWidget(
@@ -540,11 +553,11 @@ class _V105State extends State<V105> {
                                           setState(() {
                                             controller.reference.add(
                                                 References(
-                                                personName:
+                                                    personName:
                                                     TextEditingController(text: "Reference Name"),
-                                                contactNumber:
+                                                    contactNumber:
                                                     TextEditingController(text: "Contact Number"),
-                                                referenceText:
+                                                    referenceText:
                                                     TextEditingController(text: "Reference Text")));
                                           });
                                         },
@@ -588,6 +601,9 @@ class _V105State extends State<V105> {
                     await controller.updateCv(('v105'), controller.saveCvId);
                   }else{
                     await controller.saveCv('v105');
+                    if(controller.isChatData==false) {
+                      controller.refreshController();
+                    }
                   }
                 },
                 onDownloadPressed: () async {
@@ -599,6 +615,9 @@ class _V105State extends State<V105> {
                     netImage = await networkImage('$baseUrl${controller.cvImagePath}');
                   }
                   await makePdf(buildTemplate6Pdf(controller,netImage), controller.nameController.text);
+                  if(controller.isChatData==false) {
+                    controller.refreshController();
+                  }
                   Get.back();
                   appSuccessSnackBar("Success", 'Your CV has been Downloaded');
                 },
@@ -607,7 +626,7 @@ class _V105State extends State<V105> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   pw.Widget buildTemplate6Pdf(TempController controller,  pw.ImageProvider netImage,) {

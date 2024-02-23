@@ -23,13 +23,25 @@ class V102 extends StatefulWidget {
 class _V102State extends State<V102> {
 
   final controller = Get.put(TempController());
+  bool isCanPop=true;
 
 
   File? selectedImage;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return PopScope(
+        canPop: isCanPop,
+        onPopInvoked: (didPop) {
+          if (didPop && controller.isChatData == true) {
+            print("Came from Home Screen");
+            isCanPop=false;
+            // Perform actions specific to coming from the Home Screen
+          } else {
+            controller.refreshController();
+          }
+        },
+        child: SafeArea(
       child: Scaffold(
         body: Container(
           decoration: const BoxDecoration(
@@ -73,56 +85,56 @@ class _V102State extends State<V102> {
                                 controller.profilePicState
                                     ? const SizedBox()
                                     : GestureDetector(
-                                        onTap: () {
-                                          openGallery();
-                                          controller.profilePicState = true;
-                                        },
-                                        child: const Text("Add Image",
-                                            style: TextStyle(
-                                              color: Color(0XFFC6A4FF),
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w600,
-                                            )),
-                                      ),
+                                  onTap: () {
+                                    openGallery();
+                                    controller.profilePicState = true;
+                                  },
+                                  child: const Text("Add Image",
+                                      style: TextStyle(
+                                        color: Color(0XFFC6A4FF),
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                      )),
+                                ),
                                 controller.profilePicState
                                     ? GestureDetector(
-                                        onTap: () {
-                                          openGallery();
-                                        },
-                                        child: ClipOval(
-                                          child: SizedBox(
-                                            height: 60,
-                                            width: 60,
-                                            child: Image(
-                                              image: controller.cvImagePath.isNotEmpty
-                                                  ? NetworkImage(
-                                                      '$baseUrl${controller.cvImagePath}')
-                                                  : const AssetImage(
-                                                          'assets/images/icon-profile.png')
-                                                      as ImageProvider,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      )
+                                  onTap: () {
+                                    openGallery();
+                                  },
+                                  child: ClipOval(
+                                    child: SizedBox(
+                                      height: 60,
+                                      width: 60,
+                                      child: Image(
+                                        image: controller.cvImagePath.isNotEmpty
+                                            ? NetworkImage(
+                                            '$baseUrl${controller.cvImagePath}')
+                                            : const AssetImage(
+                                            'assets/images/icon-profile.png')
+                                        as ImageProvider,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                )
                                     : const SizedBox(),
                                 const SizedBox(height: 5),
                                 controller.profilePicState
                                     ? GestureDetector(
-                                        onTap: () {
-                                          controller.profilePicState = false;
-                                          controller.cvImagePath = '';
-                                          controller.cvImage = File('');
-                                          selectedImage == null;
-                                          setState(() {});
-                                        },
-                                        child: const Text("Remove Image",
-                                            style: TextStyle(
-                                              color: Color(0XFFC6A4FF),
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w600,
-                                            )),
-                                      )
+                                  onTap: () {
+                                    controller.profilePicState = false;
+                                    controller.cvImagePath = '';
+                                    controller.cvImage = File('');
+                                    selectedImage == null;
+                                    setState(() {});
+                                  },
+                                  child: const Text("Remove Image",
+                                      style: TextStyle(
+                                        color: Color(0XFFC6A4FF),
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                      )),
+                                )
                                     : const SizedBox(),
                               ],
                             )
@@ -344,20 +356,20 @@ class _V102State extends State<V102> {
                                                 controller.education.add(
                                                   EducationHistory(
                                                     fieldOfStudy:
-                                                        TextEditingController(text: 'Lorem Ipsum'),
+                                                    TextEditingController(text: 'Lorem Ipsum'),
                                                     description: TextEditingController(
                                                         text:
-                                                            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+                                                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
                                                     endDate: TextEditingController(
                                                         text: 'November 2015'),
                                                     startDate: TextEditingController(
                                                         text: 'September 2019'),
                                                     city:
-                                                        TextEditingController(text: 'Lorem Ipsum'),
+                                                    TextEditingController(text: 'Lorem Ipsum'),
                                                     country:
-                                                        TextEditingController(text: 'Lorem Ipsum'),
+                                                    TextEditingController(text: 'Lorem Ipsum'),
                                                     instituteName:
-                                                        TextEditingController(text: 'Lorem Ipsum'),
+                                                    TextEditingController(text: 'Lorem Ipsum'),
                                                     keyController: GlobalKey(),
                                                   ),
                                                 );
@@ -420,10 +432,10 @@ class _V102State extends State<V102> {
                                         EmploymentHistory(
                                           jobTitle: TextEditingController(
                                               text:
-                                                  'Lorem Ipsum is simply dummy text of the printing and'),
+                                              'Lorem Ipsum is simply dummy text of the printing and'),
                                           description: TextEditingController(
                                               text:
-                                                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+                                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
                                           endDate: TextEditingController(text: 'November 2015'),
                                           startDate: TextEditingController(text: 'September 2019'),
                                           city: TextEditingController(text: 'London'),
@@ -634,11 +646,11 @@ class _V102State extends State<V102> {
                                           setState(() {
                                             controller.reference.add(References(
                                                 personName:
-                                                    TextEditingController(text: "Reference Name"),
+                                                TextEditingController(text: "Reference Name"),
                                                 contactNumber:
-                                                    TextEditingController(text: "Contact Number"),
+                                                TextEditingController(text: "Contact Number"),
                                                 referenceText:
-                                                    TextEditingController(text: "Reference Text")));
+                                                TextEditingController(text: "Reference Text")));
                                           });
                                         },
                                       ),
@@ -682,6 +694,9 @@ class _V102State extends State<V102> {
                     await controller.updateCv(('v102'), controller.saveCvId);
                   } else {
                     await controller.saveCv('v102');
+                    if(controller.isChatData==false) {
+                      controller.refreshController();
+                    }
                   }
                 },
                 onDownloadPressed: () async {
@@ -695,6 +710,9 @@ class _V102State extends State<V102> {
                   }
                   await makePdf(
                       buildTemplate3Pdf(controller, netImage), controller.nameController.text);
+                  if(controller.isChatData==false) {
+                    controller.refreshController();
+                  }
                   Get.back();
                   appSuccessSnackBar("Success", 'Your CV has been Downloaded');
                 },
@@ -703,7 +721,7 @@ class _V102State extends State<V102> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   void openGallery() async {

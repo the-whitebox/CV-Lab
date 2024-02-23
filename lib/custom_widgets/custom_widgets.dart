@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../utils/constants.dart';
+import 'rotating_image.dart';
 
-class SaveDownloadButtonsRow extends StatelessWidget {
-  final VoidCallback onSavePressed;
-  final VoidCallback onDownloadPressed;
+class SaveDownloadButtonsRow extends StatefulWidget {
+  final Future<void> Function() onSavePressed;
+  final Future<void> Function() onDownloadPressed;
   final bool isUpdateCV;
 
   const SaveDownloadButtonsRow({
@@ -15,6 +16,14 @@ class SaveDownloadButtonsRow extends StatelessWidget {
   });
 
   @override
+  _SaveDownloadButtonsRowState createState() => _SaveDownloadButtonsRowState();
+}
+
+class _SaveDownloadButtonsRowState extends State<SaveDownloadButtonsRow> {
+  bool _saving = false;
+  bool _downloading = false;
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -22,45 +31,69 @@ class SaveDownloadButtonsRow extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ElevatedButton(
-              onPressed: onSavePressed,
+              onPressed: () async {
+                setState(() {
+                  _saving = true;
+                  _downloading = false;
+                });
+                await widget.onSavePressed();
+                _saving = false;
+              },
               style: kElevatedButtonWhiteOpacityBG.copyWith(
                 side: const MaterialStatePropertyAll(BorderSide(color: kHighlightedColor)),
                 backgroundColor: const MaterialStatePropertyAll(Colors.white),
               ),
-              child: isUpdateCV
+              child: _saving
+                  ? const RotatingImage(
+                height:
+                30,
+                width: 30,
+              ) // Show indicator while saving
+                  : widget.isUpdateCV
                   ? const Text(
-                      'Update',
-                      style: TextStyle(
-                          color: Color(0xFFFF5E59), fontWeight: FontWeight.w500, fontSize: 16),
-                    )
+                'Update',
+                style: TextStyle(
+                    color: Color(0xFFFF5E59), fontWeight: FontWeight.w500, fontSize: 16),
+              )
                   : const Text(
-                      'Save',
-                      style: TextStyle(
-                          color: Color(0xFFFF5E59), fontWeight: FontWeight.w500, fontSize: 16),
-                    ),
+                'Save',
+                style: TextStyle(
+                    color: Color(0xFFFF5E59), fontWeight: FontWeight.w500, fontSize: 16),
+              ),
             ),
             const SizedBox(width: 20.0),
             ElevatedButton(
-              onPressed: onDownloadPressed,
+              onPressed: () async {
+                setState(() {
+                  _downloading = true;
+                  _saving = false;
+                });
+                await widget.onDownloadPressed();
+                _downloading = false;
+              },
               style: kElevatedButtonWhiteOpacityBG.copyWith(
                 backgroundColor: const MaterialStatePropertyAll(kHighlightedColor),
               ),
-              child: Row(
+              child: _downloading
+                  ? const RotatingImage(
+                height:
+                30,
+                width: 30,
+              ) // Show indicator while downloading
+                  : Row(
                 children: [
                   Image.asset(
-                    'assets/images/download.png', // Replace with your image path
+                    'assets/images/download.png',
                     width: 16.0,
                     height: 16.0,
                   ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
+                  const SizedBox(width: 10.0),
                   const Text(
                     'Download',
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
-                        fontSize: 16), // Replace with your color
+                        fontSize: 16),
                   ),
                 ],
               ),
@@ -74,6 +107,12 @@ class SaveDownloadButtonsRow extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
 
 class EmploymentHistoryWidget extends StatelessWidget {
   final TextEditingController title;

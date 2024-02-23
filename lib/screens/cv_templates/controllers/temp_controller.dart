@@ -20,6 +20,7 @@ class TempController extends GetxController {
   int saveCvId = 0;
   File cvImage = File('');
   String cvImagePath = profileImage;
+  bool isChatData=false;
   bool profilePicState = true;
   TextEditingController nameController = TextEditingController(text: 'Adnan Ashraf');
   TextEditingController designationController = TextEditingController(text: 'Manager');
@@ -192,7 +193,7 @@ class TempController extends GetxController {
 
       if (response.statusCode == 201) {
         print('CV saved successfully: ${response.body}');
-
+        // isChatData=false;
         Get.back();
         appSuccessSnackBar('Success', 'CV saved successfully');
       } else {
@@ -239,7 +240,7 @@ class TempController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-
+        // isChatData=false;
         print('CV Updated successfully: ${response.body}');
         Get.back();
         appSuccessSnackBar('Success', 'CV Updated successfully');
@@ -265,6 +266,8 @@ class TempController extends GetxController {
       );
 
       if (response.statusCode == 200) {
+        isChatData=false;
+        refreshController();
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final Map<String, dynamic> cvData = responseData['cv']['cv'];
         print('CV Object updated with data from backend');
@@ -290,6 +293,7 @@ class TempController extends GetxController {
     designationController.text = personalData['job_title'] ?? '';
     personalInformation.text = personalData['summary'] ?? '';
     cvImagePath = personalData['profile_pic'] ?? '';
+    isChatData=true;
     // profilePicState = responseData['cv']['profile_pic_state'] ?? true;
     // saveCvId = cvId;
 
@@ -408,6 +412,7 @@ class TempController extends GetxController {
       );
 
       if (response.statusCode == 200) {
+        isChatData=false;
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final Map<String, dynamic> cvData = responseData['cv']['cv'];
 
@@ -536,6 +541,7 @@ class TempController extends GetxController {
   void refreshController() {
     print("Controller Refreshed");
     profilePicState = true;
+    isChatData=false;
     profileImage = getProfilePic();
     if (profileImage.contains("https://api-cvlab.crewdog.ai")) {
       profileImage = profileImage.substring(28);
