@@ -25,13 +25,23 @@ class V101 extends StatefulWidget {
 class _V101State extends State<V101> {
 
   final controller = Get.put(TempController());
-  bool receivedValue = Get.arguments==null?false:true;
   File? selectedImage;
-
+bool isCanPop=true;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(child: Scaffold(
+    return PopScope(
+      canPop: isCanPop,
+      onPopInvoked: (didPop) {
+        if (didPop && controller.isChatData == true) {
+          print("Came from Home Screen");
+          isCanPop=false;
+          // Perform actions specific to coming from the Home Screen
+        } else {
+          controller.refreshController();
+        }
+      },
+      child: Scaffold(
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
@@ -561,12 +571,16 @@ class _V101State extends State<V101> {
               SaveDownloadButtonsRow(
                 isUpdateCV: controller.saveCvId != 0,
                 onSavePressed: () async {
+                  print("I have CHAT DATA while saving ${controller.isChatData}");
                   if (controller.saveCvId != 0) {
                     await controller.updateCv(('v101'), controller.saveCvId);
-                    controller.refreshController();
+                    // controller.refreshController();
                   } else {
                     await controller.saveCv('v101');
-                    controller.refreshController();
+                    if(controller.isChatData==false) {
+                      controller.refreshController();
+                    }
+
                   }
                 },
                 onDownloadPressed: () async {
@@ -580,7 +594,9 @@ class _V101State extends State<V101> {
                   }
                   await makePdf(
                       buildTemplate4Pdf(controller, netImage), controller.nameController.text);
-                  controller.refreshController();
+                  if(controller.isChatData==false) {
+                    controller.refreshController();
+                  }
                   Get.back();
                   appSuccessSnackBar("Success", 'Your CV has been Downloaded');
                 },
@@ -589,16 +605,7 @@ class _V101State extends State<V101> {
           ),
         ),
       ),
-    ), onWillPop: () async {
-
-      if(receivedValue==true){
-        print("Came from Home Screen");
-      }
-      else{
-        controller.refreshController();
-      }
-      return Future.value(true);
-    },);
+    ),);
   }
 
   void openGallery() async {

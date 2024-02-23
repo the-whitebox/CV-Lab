@@ -233,8 +233,6 @@ class _SavedCvScreenState extends State<SavedCvScreen>
     with SingleTickerProviderStateMixin {
   TextEditingController searchController = TextEditingController();
 
-  bool receivedValue = Get.arguments == null ? false : true;
-
   late TabController _tabController;
   bool isFavourite = false;
   int? tappedIndex;
@@ -700,6 +698,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
           onTap: () {
             setState(() {
               tappedFavCVIndex = index;
+              print("I have CHAT DATA ${controller.isChatData}");
             });
           },
           child: Stack(
@@ -711,7 +710,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                     style: kElevatedButtonPrimaryBG,
                     onPressed: () async {
                       await fetchMyCVsData(token);
-                      controller.refreshController();
+                      // controller.refreshController();
                       Get.toNamed(pdfFiles[index]);
                     },
                     child: const Text(
@@ -764,8 +763,8 @@ class _SavedCvScreenState extends State<SavedCvScreen>
             GestureDetector(
               onTap: () {
                 setState(() {
-                  print("VVVVVVVVVVVVVVVVVVVVVVVVVV $receivedValue");
                   tappedIndex = index;
+                  print("I have CHAT DATA ${controller.isChatData}");
                 });
               },
               child: Image.asset(pdfImages[index]),
@@ -775,8 +774,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                 child: ElevatedButton(
                   style: kElevatedButtonPrimaryBG,
                   onPressed: () {
-                    Get.toNamed(pdfFiles[index],
-                        arguments: receivedValue ?? false);
+                    Get.toNamed(pdfFiles[index]);
                   },
                   child: const Text(
                     'Select',

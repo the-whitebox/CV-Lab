@@ -351,17 +351,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                         MainAxisAlignment.spaceAround,
                                     children: [
                                       SizedBox(
+
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.47,
                                         child: Card(
+                                          margin:  const EdgeInsets.symmetric(
+                                              horizontal: 2,vertical: 4
+                                          ),
                                           color: Colors.white,
                                           elevation: 3,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -375,7 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ),
                                                     Text(
                                                       'Upload',
-                                                      style: kFont14black600
+                                                      style: kFont13black500
                                                           .copyWith(
                                                               color: kPurple),
                                                     )
@@ -383,7 +387,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 Text(
                                                   'Upload your current CV\nor used a saved one.',
-                                                  style: kFont12.copyWith(
+                                                  style: kFont11.copyWith(
                                                       color: Colors.black),
                                                 )
                                               ],
@@ -396,14 +400,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MediaQuery.of(context).size.width *
                                                 0.47,
                                         child: Card(
+                                          margin:  const EdgeInsets.symmetric(
+                                              horizontal: 2,vertical: 4
+                                          ),
                                           color: Colors.white,
                                           elevation: 3,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
+                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),                                            child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
@@ -416,12 +422,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ),
                                                     const Text(
                                                         'Job description',
-                                                        style: kFont14black600)
+                                                        style: kFont13black500)
                                                   ],
                                                 ),
                                                 Text(
                                                   'Copy and paste the job\ndescription',
-                                                  style: kFont12.copyWith(
+                                                  style: kFont11.copyWith(
                                                       color: Colors.black),
                                                 )
                                               ],
@@ -439,15 +445,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.47,
-                                        child: Card(
+                                        child: Card(margin: const EdgeInsets.symmetric(
+                                          horizontal: 2,vertical: 4
+                                        ),
                                           color: Colors.white,
                                           elevation: 3,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.all(7.0),
-                                            child: Column(
+                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),                                            child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
@@ -460,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ),
                                                     Text(
                                                       'Choose template',
-                                                      style: kFont14black600
+                                                      style: kFont13black500
                                                           .copyWith(
                                                               color:
                                                                   kHighlightedColor),
@@ -469,7 +476,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 Text(
                                                   'Review your new CV and\nchoose a template',
-                                                  style: kFont12.copyWith(
+                                                  style: kFont11.copyWith(
                                                       color: Colors.black),
                                                 )
                                               ],
@@ -482,14 +489,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MediaQuery.of(context).size.width *
                                                 0.47,
                                         child: Card(
+                                          margin:  const EdgeInsets.symmetric(
+                                              horizontal: 2,vertical: 4
+                                          ),
                                           color: Colors.white,
                                           elevation: 3,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.all(7.0),
-                                            child: Column(
+                                            padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 10),                                            child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
@@ -501,14 +510,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       height: 25,
                                                     ),
                                                     Text('Download',
-                                                        style: kFont14black600
+                                                        style: kFont13black500
                                                             .copyWith(
                                                                 color: kBlue))
                                                   ],
                                                 ),
                                                 Text(
                                                   'Now you can save or\ndownload it!',
-                                                  style: kFont12.copyWith(
+                                                  style: kFont11.copyWith(
                                                       color: Colors.black),
                                                 )
                                               ],
@@ -1654,6 +1663,73 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ),
                                                 ),
                                               ),
+                                            ),
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15.0),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              //_showChangeUploadCVDialog(context);
+                                              setState(() {
+                                                _messages.clear();
+                                                _messagesFromAPI.clear();
+                                                _allMessages.clear();
+                                              });
+                                              print('Messages: $_messages');
+                                              print(
+                                                  'API Messages: $_messagesFromAPI');
+                                            },
+                                            style: kInitialChatButton,
+                                            child: Text(
+                                              'No',
+                                              style: kFont10.copyWith(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 15.0),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              print(
+                                                  "Controller filled with CV Object");
+                                              tempController
+                                                  .fillControllerFromCvObject(
+                                                      chatCvObj);
+                                              Get.toNamed(AppRoutes.savedCV);
+                                            },
+                                            style: kInitialChatButton,
+                                            child: Text(
+                                              'Yes',
+                                              style: kFont10.copyWith(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : const Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                width: 5.0,
+                                              ),
+                                              SizedBox(
+                                                  height: 20.0,
+                                                  width: 20.0,
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                              SizedBox(
+                                                width: 5.0,
+                                              ),
+                                              Text('Generating response...'),
                                             ],
                                           )
                                         : const Align(

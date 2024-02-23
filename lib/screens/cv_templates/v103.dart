@@ -23,7 +23,7 @@ class V103 extends StatefulWidget {
 
 class _V103State extends State<V103> {
   final controller = Get.put(TempController());
-
+  bool isCanPop=true;
   File? selectedImage;
 
   @override
@@ -47,7 +47,18 @@ class _V103State extends State<V103> {
       }
     }
 
-    return Scaffold(
+    return PopScope(
+        canPop: isCanPop,
+        onPopInvoked: (didPop) {
+          if (didPop && controller.isChatData == true) {
+            print("Came from Home Screen");
+            isCanPop=false;
+            // Perform actions specific to coming from the Home Screen
+          } else {
+            controller.refreshController();
+          }
+        },
+        child: Scaffold(
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
@@ -87,56 +98,56 @@ class _V103State extends State<V103> {
                                     controller.profilePicState
                                         ? const SizedBox()
                                         : GestureDetector(
-                                            onTap: () {
-                                              openGallery();
-                                              controller.profilePicState = true;
-                                            },
-                                            child: const Text("Add Image",
-                                                style: TextStyle(
-                                                  color: Color(0XFFC6A4FF),
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w600,
-                                                )),
-                                          ),
+                                      onTap: () {
+                                        openGallery();
+                                        controller.profilePicState = true;
+                                      },
+                                      child: const Text("Add Image",
+                                          style: TextStyle(
+                                            color: Color(0XFFC6A4FF),
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                    ),
                                     controller.profilePicState
                                         ? GestureDetector(
-                                            onTap: () {
-                                              openGallery();
-                                            },
-                                            child: ClipOval(
-                                              child: SizedBox(
-                                                height: 60,
-                                                width: 60,
-                                                child: Image(
-                                                  image: controller.cvImagePath.isNotEmpty
-                                                      ? NetworkImage(
-                                                          '$baseUrl${controller.cvImagePath}')
-                                                      : const AssetImage(
-                                                              'assets/images/icon-profile.png')
-                                                          as ImageProvider,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ),
-                                          )
+                                      onTap: () {
+                                        openGallery();
+                                      },
+                                      child: ClipOval(
+                                        child: SizedBox(
+                                          height: 60,
+                                          width: 60,
+                                          child: Image(
+                                            image: controller.cvImagePath.isNotEmpty
+                                                ? NetworkImage(
+                                                '$baseUrl${controller.cvImagePath}')
+                                                : const AssetImage(
+                                                'assets/images/icon-profile.png')
+                                            as ImageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                         : const SizedBox(),
                                     const SizedBox(height: 5),
                                     controller.profilePicState
                                         ? GestureDetector(
-                                            onTap: () {
-                                              controller.profilePicState = false;
-                                              controller.cvImagePath = '';
-                                              controller.cvImage = File('');
-                                              selectedImage == null;
-                                              setState(() {});
-                                            },
-                                            child: const Text("Remove Image",
-                                                style: TextStyle(
-                                                  color: Color(0XFFC6A4FF),
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w600,
-                                                )),
-                                          )
+                                      onTap: () {
+                                        controller.profilePicState = false;
+                                        controller.cvImagePath = '';
+                                        controller.cvImage = File('');
+                                        selectedImage == null;
+                                        setState(() {});
+                                      },
+                                      child: const Text("Remove Image",
+                                          style: TextStyle(
+                                            color: Color(0XFFC6A4FF),
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                    )
                                         : const SizedBox(),
                                     const SizedBox(height: 15),
                                     CustomEditableText(
@@ -202,7 +213,7 @@ class _V103State extends State<V103> {
                                     Container(
                                       margin: const EdgeInsets.symmetric(vertical: 15),
                                       padding:
-                                          const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                      const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                                       decoration: BoxDecoration(
                                           color: const Color(0XFFE1E1E1),
                                           borderRadius: BorderRadius.circular(10)),
@@ -243,259 +254,20 @@ class _V103State extends State<V103> {
                           Row(
                             children: [
                               Flexible(
-                                  // flex: 5,
+                                // flex: 5,
                                   child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Flexible(
-                                    flex: 4,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            const Text(
-                                              'Employment History',
-                                              style: TextStyle(
-                                                color: Color(0XFF4E4949),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'Inter',
-                                              ),
-                                            ),
-                                            const Spacer(),
-                                            CvAddButton(
-                                              onTap: () {
-                                                setState(() {
-                                                  controller.employmentHistory.add(
-                                                    EmploymentHistory(
-                                                      keyController: GlobalKey(),
-                                                      jobTitle: TextEditingController(
-                                                          text: 'Lorem Ipsum'),
-                                                      description: TextEditingController(
-                                                          text:
-                                                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
-                                                      endDate: TextEditingController(
-                                                          text: 'November 2015'),
-                                                      startDate: TextEditingController(
-                                                          text: 'September 2019'),
-                                                      city: TextEditingController(text: 'London'),
-                                                      country: TextEditingController(text: 'UK'),
-                                                      companyName:
-                                                          TextEditingController(text: 'WhiteBox'),
-                                                    ),
-                                                  );
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5.0),
-                                        for (int i = 0;
-                                            i < controller.employmentHistory.length;
-                                            i++)
-                                          Row(
-                                            children: [
-                                              EmploymentHistoryWidget(
-                                                isRemovable: controller.employmentHistory.length>1,
-
-                                                backgroundColor: const Color(0XFFF2F2F2),
-                                                durationFontSize: 8,
-                                                description:
-                                                    controller.employmentHistory[i].description,
-                                                title: controller.employmentHistory[i].jobTitle,
-                                                from: controller.employmentHistory[i].startDate,
-                                                till: controller.employmentHistory[i].endDate,
-                                                country: controller.employmentHistory[i].country,
-                                                city: controller.employmentHistory[i].city,
-                                                companyName:
-                                                    controller.employmentHistory[i].companyName,
-                                                onRemoveTap: () {
-                                                  setState(() {
-                                                    controller.employmentHistory.removeAt(i);
-                                                  });
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        // const SizedBox(height: 5),
-
-                                        const SizedBox(height: 5),
-                                        Row(
-                                          children: [
-                                            const Text(
-                                              'Education',
-                                              style: TextStyle(
-                                                color: Color(0XFF4E4949),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'Inter',
-                                              ),
-                                            ),
-                                            const Spacer(),
-                                            CvAddButton(
-                                              onTap: () {
-                                                setState(() {
-                                                  controller.education.add(
-                                                    EducationHistory(
-                                                      fieldOfStudy: TextEditingController(
-                                                          text:
-                                                              'Lorem Ipsum is simply dummy text of the printing and'),
-                                                      description: TextEditingController(
-                                                          text:
-                                                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
-                                                      endDate: TextEditingController(
-                                                          text: 'November 2015'),
-                                                      startDate: TextEditingController(
-                                                          text: 'September 2019'),
-                                                      city: TextEditingController(text: 'London'),
-                                                      country: TextEditingController(text: 'UK'),
-                                                      instituteName:
-                                                          TextEditingController(text: 'WhiteBox'),
-                                                      keyController: GlobalKey(),
-                                                    ),
-                                                  );
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5.0),
-                                        for (int i = 0; i < controller.education.length; i++)
-                                          Row(
-                                            children: [
-                                              EducationHistoryWidget(
-                                                isRemovable: controller.education.length>1,
-
-                                                durationFontSize: 8,
-                                                backgroundColor: const Color(0XFFF2F2F2),
-                                                description: controller.education[i].description,
-                                                title: controller.education[i].fieldOfStudy,
-                                                from: controller.education[i].startDate,
-                                                till: controller.education[i].endDate,
-                                                city: controller.education[i].city,
-                                                country: controller.education[i].country,
-                                                instituteName:
-                                                    controller.education[i].instituteName,
-                                                onRemoveTap: () {
-                                                  setState(() {
-                                                    controller.education.removeAt(i);
-                                                  });
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            const Text(
-                                              'Projects',
-                                              style: TextStyle(
-                                                color: Color(0XFF4E4949),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'Inter',
-                                              ),
-                                            ),
-                                            const Spacer(),
-                                            CvAddButton(
-                                              onTap: () {
-                                                setState(() {
-                                                  controller.projects.add(Projects(
-                                                      title: TextEditingController(
-                                                          text: "Your project title"),
-                                                      description: TextEditingController(
-                                                          text:
-                                                              "Write your project description here")));
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        for (int i = 0; i < controller.projects.length; i++)
-                                          ProjectWidget(
-                                            isRemovable: controller.projects.length>1,
-
-                                            title: controller.projects[i].title,
-                                            description: controller.projects[i].description,
-                                            onRemoveTap: () {
-                                              setState(() {
-                                                controller.projects.removeAt(i);
-                                              });
-                                            },
-                                          ),
-
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            if(controller.reference.isNotEmpty)     const Text(
-                                              'Reference',
-                                              style: TextStyle(
-                                                color: Color(0XFF4E4949),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'Inter',
-                                              ),
-                                            ),
-                                            const Spacer(),
-                                            CvAddButton(
-                                              buttonText: controller.reference.isNotEmpty ?"Add":"Add Reference",
-                                              onTap: () {
-                                                setState(() {
-                                                  controller.reference.add(References(
-                                                      personName: TextEditingController(
-                                                          text: "Reference Name"),
-                                                      contactNumber: TextEditingController(
-                                                          text: "Contact Number"),
-                                                      referenceText: TextEditingController(
-                                                          text: "Reference Text")));
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 5),
-                                        Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Flexible(
+                                        flex: 4,
+                                        child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
-                                            for (int i = 0; i < controller.reference.length; i++)
-                                              ReferenceWidget(
-                                                personName: controller.reference[i].personName,
-                                                contactNumber:
-                                                    controller.reference[i].contactNumber,
-                                                referenceText:
-                                                    controller.reference[i].referenceText,
-                                                onRemoveTap: () {
-                                                  setState(() {
-                                                    controller.reference.removeAt(i);
-                                                  });
-                                                },
-                                              )
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  // const SizedBox(width: 2),
-                                  Flexible(
-                                      flex: 2,
-                                      child: Container(
-                                        padding:
-                                            const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                                        decoration: BoxDecoration(
-                                          color: const Color(0XFFE1E1E1),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            const Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            Row(
                                               children: [
-                                                Text(
-                                                  'Skills',
+                                                const Text(
+                                                  'Employment History',
                                                   style: TextStyle(
                                                     color: Color(0XFF4E4949),
                                                     fontSize: 14,
@@ -503,35 +275,274 @@ class _V103State extends State<V103> {
                                                     fontFamily: 'Inter',
                                                   ),
                                                 ),
+                                                const Spacer(),
+                                                CvAddButton(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      controller.employmentHistory.add(
+                                                        EmploymentHistory(
+                                                          keyController: GlobalKey(),
+                                                          jobTitle: TextEditingController(
+                                                              text: 'Lorem Ipsum'),
+                                                          description: TextEditingController(
+                                                              text:
+                                                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+                                                          endDate: TextEditingController(
+                                                              text: 'November 2015'),
+                                                          startDate: TextEditingController(
+                                                              text: 'September 2019'),
+                                                          city: TextEditingController(text: 'London'),
+                                                          country: TextEditingController(text: 'UK'),
+                                                          companyName:
+                                                          TextEditingController(text: 'WhiteBox'),
+                                                        ),
+                                                      );
+                                                    });
+                                                  },
+                                                ),
                                               ],
                                             ),
-                                            const SizedBox(height: 5),
-                                            for (int i = 0; i < controller.skills.length; i++)
-                                              SkillCircullarWidget(
-                                                isRemovable: controller.skills.length>1,
+                                            const SizedBox(height: 5.0),
+                                            for (int i = 0;
+                                            i < controller.employmentHistory.length;
+                                            i++)
+                                              Row(
+                                                children: [
+                                                  EmploymentHistoryWidget(
+                                                    isRemovable: controller.employmentHistory.length>1,
 
-                                                leftPadding: 0,
-                                                skill: controller.skills[i].keys.first,
-                                                onButtonTap: () {
+                                                    backgroundColor: const Color(0XFFF2F2F2),
+                                                    durationFontSize: 8,
+                                                    description:
+                                                    controller.employmentHistory[i].description,
+                                                    title: controller.employmentHistory[i].jobTitle,
+                                                    from: controller.employmentHistory[i].startDate,
+                                                    till: controller.employmentHistory[i].endDate,
+                                                    country: controller.employmentHistory[i].country,
+                                                    city: controller.employmentHistory[i].city,
+                                                    companyName:
+                                                    controller.employmentHistory[i].companyName,
+                                                    onRemoveTap: () {
+                                                      setState(() {
+                                                        controller.employmentHistory.removeAt(i);
+                                                      });
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            // const SizedBox(height: 5),
+
+                                            const SizedBox(height: 5),
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                  'Education',
+                                                  style: TextStyle(
+                                                    color: Color(0XFF4E4949),
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'Inter',
+                                                  ),
+                                                ),
+                                                const Spacer(),
+                                                CvAddButton(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      controller.education.add(
+                                                        EducationHistory(
+                                                          fieldOfStudy: TextEditingController(
+                                                              text:
+                                                              'Lorem Ipsum is simply dummy text of the printing and'),
+                                                          description: TextEditingController(
+                                                              text:
+                                                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+                                                          endDate: TextEditingController(
+                                                              text: 'November 2015'),
+                                                          startDate: TextEditingController(
+                                                              text: 'September 2019'),
+                                                          city: TextEditingController(text: 'London'),
+                                                          country: TextEditingController(text: 'UK'),
+                                                          instituteName:
+                                                          TextEditingController(text: 'WhiteBox'),
+                                                          keyController: GlobalKey(),
+                                                        ),
+                                                      );
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 5.0),
+                                            for (int i = 0; i < controller.education.length; i++)
+                                              Row(
+                                                children: [
+                                                  EducationHistoryWidget(
+                                                    isRemovable: controller.education.length>1,
+
+                                                    durationFontSize: 8,
+                                                    backgroundColor: const Color(0XFFF2F2F2),
+                                                    description: controller.education[i].description,
+                                                    title: controller.education[i].fieldOfStudy,
+                                                    from: controller.education[i].startDate,
+                                                    till: controller.education[i].endDate,
+                                                    city: controller.education[i].city,
+                                                    country: controller.education[i].country,
+                                                    instituteName:
+                                                    controller.education[i].instituteName,
+                                                    onRemoveTap: () {
+                                                      setState(() {
+                                                        controller.education.removeAt(i);
+                                                      });
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              children: [
+                                                const Text(
+                                                  'Projects',
+                                                  style: TextStyle(
+                                                    color: Color(0XFF4E4949),
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'Inter',
+                                                  ),
+                                                ),
+                                                const Spacer(),
+                                                CvAddButton(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      controller.projects.add(Projects(
+                                                          title: TextEditingController(
+                                                              text: "Your project title"),
+                                                          description: TextEditingController(
+                                                              text:
+                                                              "Write your project description here")));
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                            for (int i = 0; i < controller.projects.length; i++)
+                                              ProjectWidget(
+                                                isRemovable: controller.projects.length>1,
+
+                                                title: controller.projects[i].title,
+                                                description: controller.projects[i].description,
+                                                onRemoveTap: () {
                                                   setState(() {
-                                                    controller.skills.removeAt(i);
+                                                    controller.projects.removeAt(i);
                                                   });
                                                 },
                                               ),
-                                            CvAddButton(
-                                              onTap: () {
-                                                setState(() {
-                                                  controller.skills.add({
-                                                    TextEditingController(text: "Your Skill"): 0.7
-                                                  });
-                                                });
-                                              },
+
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              children: [
+                                                if(controller.reference.isNotEmpty)     const Text(
+                                                  'Reference',
+                                                  style: TextStyle(
+                                                    color: Color(0XFF4E4949),
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'Inter',
+                                                  ),
+                                                ),
+                                                const Spacer(),
+                                                CvAddButton(
+                                                  buttonText: controller.reference.isNotEmpty ?"Add":"Add Reference",
+                                                  onTap: () {
+                                                    setState(() {
+                                                      controller.reference.add(References(
+                                                          personName: TextEditingController(
+                                                              text: "Reference Name"),
+                                                          contactNumber: TextEditingController(
+                                                              text: "Contact Number"),
+                                                          referenceText: TextEditingController(
+                                                              text: "Reference Text")));
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 5),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                for (int i = 0; i < controller.reference.length; i++)
+                                                  ReferenceWidget(
+                                                    personName: controller.reference[i].personName,
+                                                    contactNumber:
+                                                    controller.reference[i].contactNumber,
+                                                    referenceText:
+                                                    controller.reference[i].referenceText,
+                                                    onRemoveTap: () {
+                                                      setState(() {
+                                                        controller.reference.removeAt(i);
+                                                      });
+                                                    },
+                                                  )
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ))
-                                ],
-                              )),
+                                      ),
+                                      // const SizedBox(width: 2),
+                                      Flexible(
+                                          flex: 2,
+                                          child: Container(
+                                            padding:
+                                            const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0XFFE1E1E1),
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                const Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      'Skills',
+                                                      style: TextStyle(
+                                                        color: Color(0XFF4E4949),
+                                                        fontSize: 14,
+                                                        fontWeight: FontWeight.w600,
+                                                        fontFamily: 'Inter',
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 5),
+                                                for (int i = 0; i < controller.skills.length; i++)
+                                                  SkillCircullarWidget(
+                                                    isRemovable: controller.skills.length>1,
+
+                                                    leftPadding: 0,
+                                                    skill: controller.skills[i].keys.first,
+                                                    onButtonTap: () {
+                                                      setState(() {
+                                                        controller.skills.removeAt(i);
+                                                      });
+                                                    },
+                                                  ),
+                                                CvAddButton(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      controller.skills.add({
+                                                        TextEditingController(text: "Your Skill"): 0.7
+                                                      });
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ))
+                                    ],
+                                  )),
                             ],
                           )
                         ],
@@ -547,7 +558,11 @@ class _V103State extends State<V103> {
                   if (controller.saveCvId != 0) {
                     await controller.updateCv(('v103'), controller.saveCvId);
                   } else {
+
                     await controller.saveCv('v103');
+                    if(controller.isChatData==false) {
+                      controller.refreshController();
+                    }
                   }
                 },
                 onDownloadPressed: () async {
@@ -565,6 +580,9 @@ class _V103State extends State<V103> {
                         netImage,
                       ),
                       controller.nameController.text);
+                  if(controller.isChatData==false) {
+                    controller.refreshController();
+                  }
                   Get.back();
                   appSuccessSnackBar("Success", 'Your CV has been Downloaded');
                 },
@@ -573,7 +591,7 @@ class _V103State extends State<V103> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   pw.Widget buildTemplate5Pdf(

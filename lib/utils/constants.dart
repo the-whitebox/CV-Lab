@@ -93,6 +93,10 @@ const TextStyle kSuperUserMainScreenCardTextStyle = TextStyle(
   fontSize: 14,
   color: Colors.white,
 );
+const TextStyle kFont11 = TextStyle(
+  fontSize: 11,
+  color: Colors.white,
+);
 
 const TextStyle kFont12 = TextStyle(
   fontSize: 12,
@@ -106,6 +110,8 @@ const TextStyle kFont12GreySmallScreen = TextStyle(
   fontSize: 10,
   color: Color(0xFF95969D),
 );
+const TextStyle kFont13black500 =
+TextStyle(fontSize: 13, color: Colors.black, fontWeight: FontWeight.w500);
 
 const TextStyle kFont14 = TextStyle(
   fontSize: 14,

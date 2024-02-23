@@ -22,13 +22,25 @@ class V104 extends StatefulWidget {
 
 class _V104State extends State<V104> {
   final controller = Get.put(TempController());
-
+  bool isCanPop=true;
   File? selectedImage;
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+
+        canPop: isCanPop,
+        onPopInvoked: (didPop) {
+          if (didPop && controller.isChatData == true) {
+            print("Came from Home Screen");
+            isCanPop=false;
+            // Perform actions specific to coming from the Home Screen
+          } else {
+            controller.refreshController();
+          }
+        },
+        child: Scaffold(
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
@@ -219,18 +231,18 @@ class _V104State extends State<V104> {
                                                 keyController: GlobalKey(),
                                                 jobTitle: TextEditingController(
                                                     text:
-                                                        'Lorem Ipsum'),
+                                                    'Lorem Ipsum'),
                                                 description: TextEditingController(
                                                     text:
-                                                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+                                                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
                                                 endDate:
-                                                    TextEditingController(text: 'November 2015'),
+                                                TextEditingController(text: 'November 2015'),
                                                 startDate:
-                                                    TextEditingController(text: 'September 2019'),
+                                                TextEditingController(text: 'September 2019'),
                                                 city: TextEditingController(text: 'Lorem Ipsum'),
                                                 country: TextEditingController(text: 'Lorem Ipsum'),
                                                 companyName:
-                                                    TextEditingController(text: 'Lorem Ipsum'),
+                                                TextEditingController(text: 'Lorem Ipsum'),
                                               ),
                                             );
                                           });
@@ -283,18 +295,18 @@ class _V104State extends State<V104> {
                                               EducationHistory(
                                                 fieldOfStudy: TextEditingController(
                                                     text:
-                                                        'Lorem Ipsum'),
+                                                    'Lorem Ipsum'),
                                                 description: TextEditingController(
                                                     text:
-                                                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+                                                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
                                                 endDate:
-                                                    TextEditingController(text: 'November 2015'),
+                                                TextEditingController(text: 'November 2015'),
                                                 startDate:
-                                                    TextEditingController(text: 'September 2019'),
+                                                TextEditingController(text: 'September 2019'),
                                                 city: TextEditingController(text: 'Lorem Ipsum'),
                                                 country: TextEditingController(text: 'Lorem Ipsum'),
                                                 instituteName:
-                                                    TextEditingController(text: 'Lorem Ipsum'),
+                                                TextEditingController(text: 'Lorem Ipsum'),
                                                 keyController: GlobalKey(),
                                               ),
                                             );
@@ -375,7 +387,7 @@ class _V104State extends State<V104> {
                                       ],
                                     ),
                                   const SizedBox(height: 5.0),
-                                     Row(
+                                  Row(
                                     children: [
                                       if(controller.reference.isNotEmpty)   Row(
                                         children: [
@@ -402,12 +414,12 @@ class _V104State extends State<V104> {
                                           setState(() {
                                             controller.reference.add(
                                                 References(
-                                                personName:
-                                                TextEditingController(text: "Reference Name"),
-                                                contactNumber:
-                                                TextEditingController(text: "Contact Number"),
-                                                referenceText:
-                                                TextEditingController(text: "Reference Text")));
+                                                    personName:
+                                                    TextEditingController(text: "Reference Name"),
+                                                    contactNumber:
+                                                    TextEditingController(text: "Contact Number"),
+                                                    referenceText:
+                                                    TextEditingController(text: "Reference Text")));
                                           });
                                         },
                                       ),
@@ -538,6 +550,9 @@ class _V104State extends State<V104> {
                     await controller.updateCv(('v104'), controller.saveCvId);
                   }else{
                     await controller.saveCv('v104');
+                    if(controller.isChatData==false) {
+                      controller.refreshController();
+                    }
                   }
                 },
                 onDownloadPressed: () async {
@@ -549,6 +564,9 @@ class _V104State extends State<V104> {
                     netImage = await networkImage('$baseUrl${controller.cvImagePath}');
                   }
                   await makePdf(buildTemplate2Pdf(controller,netImage), controller.nameController.text);
+                  if(controller.isChatData==false) {
+                    controller.refreshController();
+                  }
                   Get.back();
                   appSuccessSnackBar("Success", 'Your CV has been Downloaded');
                 },
@@ -557,7 +575,7 @@ class _V104State extends State<V104> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   void openGallery() async {

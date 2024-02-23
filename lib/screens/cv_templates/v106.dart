@@ -33,6 +33,8 @@ class _V106State extends State<V106> {
   double containerHeight = 0.0;
   final storage = GetStorage();
   final controller = Get.put(TempController());
+  bool isCanPop=true;
+
 
 
   @override
@@ -56,7 +58,18 @@ class _V106State extends State<V106> {
       }
     }
 
-    return Scaffold(
+    return PopScope(
+        canPop: isCanPop,
+        onPopInvoked: (didPop) {
+          if (didPop && controller.isChatData == true) {
+            print("Came from Home Screen");
+            isCanPop=false;
+            // Perform actions specific to coming from the Home Screen
+          } else {
+            controller.refreshController();
+          }
+        },
+        child: Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
@@ -89,54 +102,54 @@ class _V106State extends State<V106> {
                             controller.profilePicState
                                 ? const SizedBox()
                                 : GestureDetector(
-                                    onTap: () {
-                                      openGallery();
-                                      controller.profilePicState = true;
-                                    },
-                                    child: const Text("Add Image",
-                                        style: TextStyle(
-                                          color: Color(0XFFC6A4FF),
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                        )),
-                                  ),
+                              onTap: () {
+                                openGallery();
+                                controller.profilePicState = true;
+                              },
+                              child: const Text("Add Image",
+                                  style: TextStyle(
+                                    color: Color(0XFFC6A4FF),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                            ),
                             controller.profilePicState
                                 ? GestureDetector(
-                                    onTap: () {
-                                      openGallery();
-                                    },
-                                    child: ClipOval(
-                                      child: SizedBox(
-                                        height: 50,
-                                        width: 50,
-                                        child: Image(
-                                          image: controller.cvImagePath.isNotEmpty
-                                              ? NetworkImage('$baseUrl${controller.cvImagePath}')
-                                              : const AssetImage('assets/images/icon-profile.png')
-                                                  as ImageProvider,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  )
+                              onTap: () {
+                                openGallery();
+                              },
+                              child: ClipOval(
+                                child: SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: Image(
+                                    image: controller.cvImagePath.isNotEmpty
+                                        ? NetworkImage('$baseUrl${controller.cvImagePath}')
+                                        : const AssetImage('assets/images/icon-profile.png')
+                                    as ImageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            )
                                 : const SizedBox(),
                             const SizedBox(height: 5),
                             controller.profilePicState
                                 ? GestureDetector(
-                                    onTap: () {
-                                      controller.profilePicState = false;
-                                      controller.cvImagePath = '';
-                                      controller.cvImage = File('');
-                                      selectedImage == null;
-                                      setState(() {});
-                                    },
-                                    child: const Text("Remove Image",
-                                        style: TextStyle(
-                                          color: Color(0XFFC6A4FF),
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600,
-                                        )),
-                                  )
+                              onTap: () {
+                                controller.profilePicState = false;
+                                controller.cvImagePath = '';
+                                controller.cvImage = File('');
+                                selectedImage == null;
+                                setState(() {});
+                              },
+                              child: const Text("Remove Image",
+                                  style: TextStyle(
+                                    color: Color(0XFFC6A4FF),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                            )
                                 : const SizedBox(),
                           ],
                         ),
@@ -409,18 +422,18 @@ class _V106State extends State<V106> {
                                               EmploymentHistory(
                                                 keyController: GlobalKey(),
                                                 jobTitle:
-                                                    TextEditingController(text: 'Lorem Ipsum'),
+                                                TextEditingController(text: 'Lorem Ipsum'),
                                                 description: TextEditingController(
                                                     text:
-                                                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+                                                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
                                                 endDate:
-                                                    TextEditingController(text: 'November 2015'),
+                                                TextEditingController(text: 'November 2015'),
                                                 startDate:
-                                                    TextEditingController(text: 'September 2019'),
+                                                TextEditingController(text: 'September 2019'),
                                                 city: TextEditingController(text: 'Lorem Ipsum'),
                                                 country: TextEditingController(text: 'Lorem Ipsum'),
                                                 companyName:
-                                                    TextEditingController(text: 'Lorem Ipsum'),
+                                                TextEditingController(text: 'Lorem Ipsum'),
                                               ),
                                             );
                                           });
@@ -467,14 +480,14 @@ class _V106State extends State<V106> {
                                                   isRemovable: controller.employmentHistory.length>1,
                                                   durationFontSize: 6,
                                                   description:
-                                                      controller.employmentHistory[i].description,
+                                                  controller.employmentHistory[i].description,
                                                   title: controller.employmentHistory[i].jobTitle,
                                                   from: controller.employmentHistory[i].startDate,
                                                   till: controller.employmentHistory[i].endDate,
                                                   country: controller.employmentHistory[i].country,
                                                   city: controller.employmentHistory[i].city,
                                                   companyName:
-                                                      controller.employmentHistory[i].companyName,
+                                                  controller.employmentHistory[i].companyName,
                                                   onRemoveTap: () {
                                                     setState(() {
                                                       controller.employmentHistory.removeAt(i);
@@ -510,18 +523,18 @@ class _V106State extends State<V106> {
                                             controller.education.add(
                                               EducationHistory(
                                                 fieldOfStudy:
-                                                    TextEditingController(text: 'Lorem Ipsum'),
+                                                TextEditingController(text: 'Lorem Ipsum'),
                                                 description: TextEditingController(
                                                     text:
-                                                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+                                                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
                                                 endDate:
-                                                    TextEditingController(text: 'November 2015'),
+                                                TextEditingController(text: 'November 2015'),
                                                 startDate:
-                                                    TextEditingController(text: 'September 2019'),
+                                                TextEditingController(text: 'September 2019'),
                                                 city: TextEditingController(text: 'Lorem Ipsum'),
                                                 country: TextEditingController(text: 'Lorem Ipsum'),
                                                 instituteName:
-                                                    TextEditingController(text: 'Lorem Ipsum'),
+                                                TextEditingController(text: 'Lorem Ipsum'),
                                                 keyController: GlobalKey(),
                                               ),
                                             );
@@ -571,7 +584,7 @@ class _V106State extends State<V106> {
                                                   city: controller.education[i].city,
                                                   country: controller.education[i].country,
                                                   instituteName:
-                                                      controller.education[i].instituteName,
+                                                  controller.education[i].instituteName,
                                                   onRemoveTap: () {
                                                     setState(() {
                                                       controller.education.removeAt(i);
@@ -606,14 +619,14 @@ class _V106State extends State<V106> {
                                         onTap: () {
                                           setState(() {
                                             controller.projects.add(
-                                                Projects(
+                                              Projects(
                                                 title: TextEditingController(
                                                     text: "Your project title"),
                                                 description: TextEditingController(
                                                     text:
                                                     "Write your project description here"),
-                                                  keyController: GlobalKey(),
-                                                ),);
+                                                keyController: GlobalKey(),
+                                              ),);
                                           });
                                         },
                                       ),
@@ -680,7 +693,7 @@ class _V106State extends State<V106> {
                                     ),
 
                                   const SizedBox(height: 5),
-                                        Row(
+                                  Row(
                                     children: [
                                       if(controller.reference.isNotEmpty)    Row(
                                         children: [
@@ -707,11 +720,11 @@ class _V106State extends State<V106> {
                                           setState(() {
                                             controller.reference.add(References(
                                               personName:
-                                                  TextEditingController(text: "Reference Name"),
+                                              TextEditingController(text: "Reference Name"),
                                               contactNumber:
-                                                  TextEditingController(text: "Contact Number"),
+                                              TextEditingController(text: "Contact Number"),
                                               referenceText:
-                                                  TextEditingController(text: "Reference Text"),
+                                              TextEditingController(text: "Reference Text"),
                                               keyController: GlobalKey(),
                                             ));
                                           });
@@ -752,17 +765,17 @@ class _V106State extends State<V106> {
                                                 Expanded(
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.symmetric(vertical: 4),
+                                                    const EdgeInsets.symmetric(vertical: 4),
                                                     child: Column(
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         ReferenceWidget(
                                                           personName:
-                                                              controller.reference[i].personName,
+                                                          controller.reference[i].personName,
                                                           contactNumber:
-                                                              controller.reference[i].contactNumber,
+                                                          controller.reference[i].contactNumber,
                                                           referenceText:
-                                                              controller.reference[i].referenceText,
+                                                          controller.reference[i].referenceText,
                                                           onRemoveTap: () {
                                                             setState(() {
                                                               controller.reference.removeAt(i);
@@ -797,11 +810,14 @@ class _V106State extends State<V106> {
                       await controller.updateCv(('v106'), controller.saveCvId);
                     }else{
                       await controller.saveCv('v106');
+                      if(controller.isChatData==false) {
+                        controller.refreshController();
+                      }
                     }
                   }, onDownloadPressed: () async {
                 WidgetsBinding.instance.addPostFrameCallback((_) async {
                   final RenderBox profileRenderBox =
-                      profileContainerKey.currentContext!.findRenderObject() as RenderBox;
+                  profileContainerKey.currentContext!.findRenderObject() as RenderBox;
                   storage.write("profile", profileRenderBox.size.height);
                   for (int i = 0; i < controller.employmentHistory.length; i++) {
                     final employmentRenderBox = controller
@@ -812,16 +828,16 @@ class _V106State extends State<V106> {
                   }
                   for (int i = 0; i < controller.education.length; i++) {
                     final educationRenderBox =
-                        controller.education[i].keyController?.currentContext!.findRenderObject()
-                            as RenderBox;
+                    controller.education[i].keyController?.currentContext!.findRenderObject()
+                    as RenderBox;
                     storage.write("education$i", educationRenderBox.size.height*1.2);
                     print("Education History Height ${educationRenderBox.size.height*1.2}");
                   }
 
                   for (int i = 0; i < controller.reference.length; i++) {
                     final referenceRenderBox =
-                        controller.reference[i].keyController?.currentContext!.findRenderObject()
-                            as RenderBox;
+                    controller.reference[i].keyController?.currentContext!.findRenderObject()
+                    as RenderBox;
                     storage.write("reference$i", referenceRenderBox.size.height*1.2);
                     print("Reference Height ${referenceRenderBox.size.height*1.2}");
                   }
@@ -842,6 +858,9 @@ class _V106State extends State<V106> {
                   }
                   await makePdf(
                       buildTemplate1Pdf(controller, netImage), controller.nameController.text);
+                  if(controller.isChatData==false) {
+                    controller.refreshController();
+                  }
                   Get.back();
                   appSuccessSnackBar("Success", 'Your CV has been Downloaded');
                 });
@@ -850,7 +869,7 @@ class _V106State extends State<V106> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   pw.Widget buildTemplate1Pdf(TempController controller, pw.ImageProvider netImage) {
