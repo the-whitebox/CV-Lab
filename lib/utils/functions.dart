@@ -4,6 +4,8 @@ import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+
+
 Future<void> requestPermissions() async {
   var status = await Permission.storage.status;
   print('###Status$status');
@@ -36,6 +38,7 @@ Future<void> makePdf(pw.Widget widget, String templateName) async {
   final file = File('${downloadsDirectory.path}/$templateName.pdf');
   await file.writeAsBytes(await pdf.save());
 
+
   // final Directory? directoryPath;
   // if (Platform.isAndroid) {
   //   directoryPath = await getExternalStorageDirectory();
@@ -66,6 +69,7 @@ bool isNameValid(String name) {
   RegExp regex = RegExp(r'^[a-zA-Z ]+$');
   return regex.hasMatch(name);
 }
+
 
 Future<bool> isInternetConnected() async {
   try {

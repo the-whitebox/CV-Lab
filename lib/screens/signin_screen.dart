@@ -57,6 +57,7 @@ class _SigninScreenState extends State<SigninScreen> {
           final String? access = responseData['access'];
 
           if (access != null) {
+
             print('Login successful. Access Token: $access');
             storeAccessToken(access);
 
@@ -69,11 +70,11 @@ class _SigninScreenState extends State<SigninScreen> {
             // var lastName = response['last_name'];
             // var avatarUrl = response['avatar_url'];
             storeUserId(id.toString());
-            if (profilePic != null) {
+            if(profilePic!=null) {
               print("Profile Pic Stored");
               storeProfilePic(profilePic);
             }
-            return true;
+              return true;
           } else {
             print(' Error: Access token not found in response.');
             return false;
@@ -125,26 +126,17 @@ class _SigninScreenState extends State<SigninScreen> {
                     children: [
                       Container(
                         margin: EdgeInsets.only(
-                          top: isLargerScreen
-                              ? screenHeight * 0.11
-                              : screenHeight * 0.09,
+                          top: isLargerScreen ? screenHeight * 0.11 : screenHeight * 0.09,
                         ),
                         width: double.infinity,
                         padding: EdgeInsets.only(
-                          top: isLargerScreen
-                              ? screenHeight * 0.012
-                              : screenHeight * 0.012,
-                          left: isLargerScreen
-                              ? screenWidth * 0.04
-                              : screenWidth * 0.07,
-                          right: isLargerScreen
-                              ? screenWidth * 0.04
-                              : screenWidth * 0.07,
+                          top: isLargerScreen ? screenHeight * 0.012 : screenHeight * 0.012,
+                          left: isLargerScreen ? screenWidth * 0.04 : screenWidth * 0.07,
+                          right: isLargerScreen ? screenWidth * 0.04 : screenWidth * 0.07,
                         ),
                         decoration: const BoxDecoration(
                           color: Color(0xFFFFFAFA), // Background color
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(25.0)),
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
                           // Border radius
                           border: Border.fromBorderSide(
                             BorderSide(color: Color(0xFFFFEFEE), width: 1),
@@ -176,8 +168,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                       height: isLargerScreen
                                           ? screenHeight * 0.018
                                           : screenHeight * 0.01),
-                                  const Text('Email',
-                                      style: kTextFieldTextStyle),
+                                  const Text('Email', style: kTextFieldTextStyle),
                                   TextField(
                                     controller: _emailTextController,
                                     keyboardType: TextInputType.emailAddress,
@@ -189,23 +180,20 @@ class _SigninScreenState extends State<SigninScreen> {
                                     style: kTextFieldTextStyle,
                                     decoration: kTextFieldDecoration.copyWith(
                                       isDense: isLargerScreen ? false : true,
-                                      errorText: _validateEmail
-                                          ? _emailErrorText
-                                          : null,
+                                      errorText: _validateEmail ? _emailErrorText : null,
                                       hintText: 'Enter email address...',
-                                      errorStyle: TextStyle(
-                                          fontSize: isLargerScreen ? 11 : 10),
+                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,height: 0.1),
                                     ),
                                   ),
                                   SizedBox(
                                       height: isLargerScreen
                                           ? screenHeight * 0.015
                                           : screenHeight * 0.01),
-                                  const Text('Password',
-                                      style: kTextFieldTextStyle),
+                                  const Text('Password', style: kTextFieldTextStyle),
                                   TextField(
                                     controller: _passwordTextController,
                                     obscureText: !_passwordVisible,
+
                                     onChanged: (value) {
                                       setState(() {
                                         _validatePassword = false;
@@ -216,11 +204,8 @@ class _SigninScreenState extends State<SigninScreen> {
                                     style: kTextFieldTextStyle,
                                     decoration: kTextFieldDecoration.copyWith(
                                       isDense: isLargerScreen ? false : true,
-                                      errorText: _validatePassword
-                                          ? _passwordErrorText
-                                          : null,
-                                      errorStyle: TextStyle(
-                                          fontSize: isLargerScreen ? 11 : 10),
+                                      errorText: _validatePassword ? _passwordErrorText : null,
+                                      errorStyle: TextStyle(fontSize: isLargerScreen ? 11 : 10,height: 0.1),
                                       hintText: 'Enter password...',
                                       errorMaxLines: 2,
                                       suffixIconConstraints: BoxConstraints(
@@ -236,8 +221,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                         ),
                                         onPressed: () {
                                           setState(() {
-                                            _passwordVisible =
-                                                !_passwordVisible;
+                                            _passwordVisible = !_passwordVisible;
                                           });
                                         },
                                       ),
@@ -280,26 +264,20 @@ class _SigninScreenState extends State<SigninScreen> {
                                           _validateEmail = true;
                                         });
                                         return;
-                                      } else if (!isValidEmail(
-                                          _emailTextController.text)) {
+                                      } else if (!isValidEmail(_emailTextController.text)) {
                                         setState(() {
                                           _validateEmail = true;
-                                          _emailErrorText =
-                                              'Invalid email format';
+                                          _emailErrorText = 'Invalid email format';
                                         });
                                         return;
                                       }
-                                      if (_passwordTextController
-                                          .text.isEmpty) {
+                                      if (_passwordTextController.text.isEmpty) {
                                         setState(() {
                                           _validatePassword = true;
-                                          _passwordErrorText =
-                                              'Password can\'t be empty';
+                                          _passwordErrorText = 'Password can\'t be empty';
                                         });
                                         return;
-                                      } else if (_passwordTextController
-                                              .text.length <
-                                          6) {
+                                      } else if (_passwordTextController.text.length < 6) {
                                         setState(() {
                                           _validatePassword = true;
                                           _passwordErrorText =
@@ -307,8 +285,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                         });
                                         return;
                                       } else if (!passwordContainsAlphabeticAndSpecial
-                                          .hasMatch(
-                                              _passwordTextController.text)) {
+                                          .hasMatch(_passwordTextController.text)) {
                                         setState(() {
                                           _validatePassword = true;
                                           _passwordErrorText =
@@ -341,18 +318,15 @@ class _SigninScreenState extends State<SigninScreen> {
                                       padding: EdgeInsets.symmetric(
                                           vertical: screenHeight * 0.007,
                                           horizontal: screenWidth * 0.008),
-                                      minimumSize:
-                                          const Size(double.infinity, 0),
+                                      minimumSize: const Size(double.infinity, 0),
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                        side: const BorderSide(
-                                            color: Color(0xFFFF5E59)),
+                                        borderRadius: BorderRadius.circular(5.0),
+                                        side: const BorderSide(color: Color(0xFFFF5E59)),
                                       ),
                                     ).copyWith(
                                       elevation: MaterialStateProperty.all(5),
-                                      shadowColor: MaterialStateProperty.all(
-                                          const Color(0x8096BEE7)),
+                                      shadowColor:
+                                          MaterialStateProperty.all(const Color(0x8096BEE7)),
                                     ),
                                     child: _isLoading
                                         ? RotatingImage(
@@ -374,8 +348,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                           ? screenHeight * 0.04
                                           : screenHeight * 0.02),
                                   const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Divider(
@@ -385,8 +358,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                         ),
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 8.0),
+                                        padding: EdgeInsets.symmetric(horizontal: 8.0),
                                         child: Text(
                                           'or sign in with',
                                           style: kFont12Grey,
@@ -407,21 +379,18 @@ class _SigninScreenState extends State<SigninScreen> {
                                           : screenHeight * 0.017),
                                   getPlatformInfo()
                                       ? Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
                                             GestureDetector(
-                                              onTap: () {
+                                              onTap: (){
                                                 googleSignIn();
                                               },
                                               child: Container(
                                                 height: screenHeight * 0.045,
-                                                padding:
-                                                    const EdgeInsets.all(8),
+                                                padding: const EdgeInsets.all(8),
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
+                                                  borderRadius: BorderRadius.circular(5),
                                                 ),
                                                 child: Image.asset(
                                                   'assets/images/google.png',
@@ -435,12 +404,10 @@ class _SigninScreenState extends State<SigninScreen> {
                                               child: Container(
                                                 // width: 90,
                                                 height: screenHeight * 0.045,
-                                                padding:
-                                                    const EdgeInsets.all(8),
+                                                padding: const EdgeInsets.all(8),
                                                 decoration: BoxDecoration(
                                                   color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
+                                                  borderRadius: BorderRadius.circular(5),
                                                 ),
                                                 child: Image.asset(
                                                   'assets/images/apple.png',
@@ -460,8 +427,7 @@ class _SigninScreenState extends State<SigninScreen> {
                                               padding: const EdgeInsets.all(8),
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
+                                                borderRadius: BorderRadius.circular(5),
                                               ),
                                               child: Image.asset(
                                                 'assets/images/google.png',
@@ -482,9 +448,7 @@ class _SigninScreenState extends State<SigninScreen> {
                               children: [
                                 Text(
                                   'Don\'t have an account? ',
-                                  style: isLargerScreen
-                                      ? kFont12Grey
-                                      : kFont12GreySmallScreen,
+                                  style: isLargerScreen ? kFont12Grey : kFont12GreySmallScreen,
                                 ),
                                 GestureDetector(
                                   onTap: () {
@@ -495,25 +459,19 @@ class _SigninScreenState extends State<SigninScreen> {
                                     style: isLargerScreen
                                         ? kFont12.copyWith(
                                             color: kHighlightedColor,
-                                            decoration:
-                                                TextDecoration.underline,
+                                            decoration: TextDecoration.underline,
                                             decorationColor: kHighlightedColor)
                                         : kFont12GreySmallScreen.copyWith(
                                             color: kHighlightedColor,
-                                            decoration:
-                                                TextDecoration.underline,
+                                            decoration: TextDecoration.underline,
                                             decorationColor: kHighlightedColor),
                                   ),
                                 ),
                                 SizedBox(width: screenWidth * 0.02),
                                 Image.asset(
                                   'assets/images/dog_email_container.png',
-                                  height: isLargerScreen
-                                      ? screenHeight * 0.14
-                                      : screenHeight * 0.1,
-                                  width: isLargerScreen
-                                      ? screenWidth * 0.2
-                                      : screenWidth * 0.15,
+                                  height: isLargerScreen ? screenHeight * 0.14 : screenHeight * 0.1,
+                                  width: isLargerScreen ? screenWidth * 0.2 : screenWidth * 0.15,
                                 ),
                               ],
                             ),
@@ -521,18 +479,11 @@ class _SigninScreenState extends State<SigninScreen> {
                         ),
                       ),
                       Positioned(
-                        top: isLargerScreen
-                            ? screenHeight * 0.0175
-                            : screenHeight * 0.003,
-                        left: isLargerScreen
-                            ? screenWidth * 0.05
-                            : screenWidth * 0.09,
+                        top: isLargerScreen ? screenHeight * 0.0175 : screenHeight * 0.003,
+                        left: isLargerScreen ? screenWidth * 0.05 : screenWidth * 0.09,
                         child: Image(
-                          image: const AssetImage(
-                              'assets/images/girl_email_container.png'),
-                          height: isLargerScreen
-                              ? screenHeight * 0.11
-                              : screenHeight * 0.1,
+                          image: const AssetImage('assets/images/girl_email_container.png'),
+                          height: isLargerScreen ? screenHeight * 0.11 : screenHeight * 0.1,
                         ),
                       ),
                     ],

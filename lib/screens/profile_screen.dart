@@ -76,12 +76,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   late Future<Map<String, dynamic>> _profileFuture;
 
-  Future<void> _updateProfile(String firstName, String lastName, String token,
-      XFile? profilePic, int? avatarIndex) async {
+  Future<void> _updateProfile(
+      String firstName, String lastName, String token, XFile? profilePic, int? avatarIndex) async {
     if (await isInternetConnected()) {
       try {
-        await updateProfile(
-            token, firstName, lastName, profilePic, avatarIndex);
+        await updateProfile(token, firstName, lastName, profilePic, avatarIndex);
         print('Profile updated successfully!');
       } catch (error) {
         print('Error updating profile: $error');
@@ -123,8 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (errorData['detail'] != "") {
           appSnackBar(" Error", " ${errorData['detail']}");
         } else {
-          appSnackBar(" Error",
-              'Failed to change password. Status code: ${response.statusCode}');
+          appSnackBar(" Error", 'Failed to change password. Status code: ${response.statusCode}');
         }
       }
     } else {
@@ -188,11 +186,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: RotatingImage(
-                    height: isLargerScreen
-                        ? screenHeight * 0.25
-                        : screenHeight * 0.20,
-                    width:
-                        isLargerScreen ? screenWidth * 0.25 : screenWidth * 0.2,
+                    height: isLargerScreen ? screenHeight * 0.25 : screenHeight * 0.20,
+                    width: isLargerScreen ? screenWidth * 0.25 : screenWidth * 0.2,
                   ),
                 );
               } else if (snapshot.hasError) {
@@ -211,35 +206,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             children: [
                               SizedBox(
-                                height: isLargerScreen
-                                    ? screenHeight * 0.02
-                                    : screenHeight * 0.06,
+                                height: isLargerScreen ? screenHeight * 0.02 : screenHeight * 0.06,
                               ),
                               Visibility(
                                 visible: _isMyProfile,
                                 child: Text(
                                   'My profile',
-                                  style: isLargerScreen
-                                      ? kFont24
-                                      : kFont24SmallScreen,
+                                  style: isLargerScreen ? kFont24 : kFont24SmallScreen,
                                 ),
                               ),
                               Visibility(
                                 visible: _isEditProfile,
                                 child: Text(
                                   'Edit profile',
-                                  style: isLargerScreen
-                                      ? kFont24
-                                      : kFont24SmallScreen,
+                                  style: isLargerScreen ? kFont24 : kFont24SmallScreen,
                                 ),
                               ),
                               Visibility(
                                 visible: _isChangePassword,
                                 child: Text(
                                   'Change password',
-                                  style: isLargerScreen
-                                      ? kFont24
-                                      : kFont24SmallScreen,
+                                  style: isLargerScreen ? kFont24 : kFont24SmallScreen,
                                 ),
                               ),
                               Visibility(
@@ -310,19 +297,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       imageNetwork = baseUrl + userData['profile_pic'];
       print("Profile Pic Stored===$imageNetwork");
       storeProfilePic(imageNetwork!);
-    } else if (userData['avatar_url'] != null) {
+    } else if(userData['avatar_url'] != null) {
       avatarIndexNetwork = int.parse(userData['avatar_url']);
       print("Profile Pic is empty=====");
-      storeProfilePic("");
+storeProfilePic("");
     }
     return Container(
-      padding: EdgeInsets.only(
-          top: isLargerScreen ? screenHeight * 0.02 : screenHeight * 0.035),
+      padding: EdgeInsets.only(top: isLargerScreen ? screenHeight * 0.02 : screenHeight * 0.035),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(25.0),
-        border: Border.all(
-            color: const Color(0x4D000000).withOpacity(0.08), width: 3),
+        border: Border.all(color: const Color(0x4D000000).withOpacity(0.08), width: 3),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -363,20 +348,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 CircleAvatar(
                   radius: screenHeight * 0.075,
                   backgroundImage: (tempImage != null)
-                      ? FileImage(
-                          File(tempImage!.path)) // Show tempImage if present
+                      ? FileImage(File(tempImage!.path)) // Show tempImage if present
                       : (selectedAvatarIndex != 0)
-                          ? AssetImage(avatarList[selectedAvatarIndex])
-                              as ImageProvider<Object>
+                          ? AssetImage(avatarList[selectedAvatarIndex]) as ImageProvider<Object>
                           : (imageNetwork != null)
                               ? NetworkImage(imageNetwork!)
                               : (avatarIndexNetwork != null)
-                                  ? AssetImage(
-                                      avatarList[
-                                          avatarIndexNetwork!]) as ImageProvider<
-                                      Object> // Show avatarIndex image if present
-                                  : const AssetImage('fallback_image_path')
-                                      as ImageProvider<Object>,
+                                  ? AssetImage(avatarList[avatarIndexNetwork!])
+                                      as ImageProvider<Object> // Show avatarIndex image if present
+                                  : const AssetImage('fallback_image_path') as ImageProvider<Object>,
                 ),
                 Positioned.fill(
                   child: Transform.rotate(
@@ -400,9 +380,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Text(
                     '${userData['first_name']} ${userData['last_name']}',
-                    style: isLargerScreen
-                        ? kFont24Username
-                        : kFont24Username.copyWith(fontSize: 20),
+                    style: isLargerScreen ? kFont24Username : kFont24Username.copyWith(fontSize: 20),
                   ),
                   Text('${userData['email']}', style: kFont14Black),
                 ],
@@ -410,6 +388,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           const SizedBox(height: 5),
+
           const Divider(
             color: Color(0xFF95969D),
           ),
@@ -424,8 +403,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.05,
-                  vertical: screenHeight * 0.005),
+                  horizontal: screenWidth * 0.05, vertical: screenHeight * 0.005),
               child: Row(
                 children: [
                   Image.asset(
@@ -444,6 +422,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
+
           const Divider(
             color: Color(0xFF95969D),
           ),
@@ -490,12 +469,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const Divider(
             color: Color(0xFF95969D),
           ),
-          SizedBox(
-              height:
-                  isLargerScreen ? screenHeight * 0.18 : screenHeight * 0.05),
+          SizedBox(height: isLargerScreen ? screenHeight * 0.18 : screenHeight * 0.05),
           Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.07, vertical: screenHeight * 0.04),
+            padding:
+                EdgeInsets.symmetric(horizontal: screenWidth * 0.07, vertical: screenHeight * 0.04),
             child: ElevatedButton(
               onPressed: () async {
                 clearUserId();
@@ -507,12 +484,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: kElevatedButtonWithWhiteColor.copyWith(
                 padding: MaterialStateProperty.all(
                   EdgeInsets.symmetric(
-                      vertical: isLargerScreen
-                          ? screenHeight * 0.009
-                          : screenHeight * 0.005,
-                      horizontal: isLargerScreen
-                          ? screenWidth * 0.05
-                          : screenWidth * 0.05),
+                      vertical: isLargerScreen ? screenHeight * 0.009 : screenHeight * 0.005,
+                      horizontal: isLargerScreen ? screenWidth * 0.05 : screenWidth * 0.05),
                 ),
               ),
               child: Row(
@@ -529,13 +502,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Text(
                     'Log out',
                     style: kButtonTextStyle.copyWith(
-                        color: kHighlightedColor,
-                        fontSize: isLargerScreen ? 20 : 18),
+                        color: kHighlightedColor, fontSize: isLargerScreen ? 20 : 18),
                   ),
                 ],
               ),
             ),
           ),
+
         ],
       ),
     );
@@ -558,8 +531,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(25.0),
-        border: Border.all(
-            color: const Color(0x4D000000).withOpacity(0.08), width: 3),
+        border: Border.all(color: const Color(0x4D000000).withOpacity(0.08), width: 3),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -573,22 +545,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     CircleAvatar(
                       radius: screenHeight * 0.075,
                       backgroundImage: (tempImage != null)
-                          ? FileImage(File(
-                              tempImage!.path)) // Show tempImage if present
+                          ? FileImage(File(tempImage!.path)) // Show tempImage if present
                           : (selectedAvatarIndex != 0)
-                              ? AssetImage(avatarList[selectedAvatarIndex])
-                                  as ImageProvider<Object>
+                              ? AssetImage(avatarList[selectedAvatarIndex]) as ImageProvider<Object>
                               : (imageNetwork != null)
-                                  ? NetworkImage(
-                                      imageNetwork!) // Show imageNetwork if present
+                                  ? NetworkImage(imageNetwork!) // Show imageNetwork if present
                                   : (avatarIndexNetwork != null)
-                                      ? AssetImage(
-                                              avatarList[avatarIndexNetwork!])
+                                      ? AssetImage(avatarList[avatarIndexNetwork!])
                                           as ImageProvider<
                                               Object> // Show avatarIndex image if present
-                                      : const AssetImage('fallback_image_path')
-                                          as ImageProvider<
-                                              Object>, // Provide a fallback image path or handle accordingly
+                                      : const AssetImage('fallback_image_path') as ImageProvider<
+                                          Object>, // Provide a fallback image path or handle accordingly
                     ),
                     Positioned.fill(
                       child: Transform.rotate(
@@ -647,9 +614,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
             style: kTextFieldTextStyle.copyWith(),
             decoration: kTextFieldDecoration.copyWith(
-              errorMaxLines: 2,
-              errorStyle: const TextStyle(fontSize: 11),
-              counterStyle: const TextStyle(fontSize: 9),
+              errorMaxLines: 2,errorStyle: const TextStyle(fontSize: 11),
+              counterStyle:const TextStyle(fontSize: 9),
               isDense: isLargerScreen ? false : true,
               errorText: _validateFirstName ? _firstNameErrorText : null,
               hintText: 'Enter first name...',
@@ -659,6 +625,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const Text('Last name', style: kFont14Black),
           SizedBox(height: screenHeight * 0.005),
           TextField(
+
             maxLength: 20,
             controller: _lastNameTextController,
             keyboardType: TextInputType.name,
@@ -668,9 +635,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               });
             },
             style: kTextFieldTextStyle,
-            decoration: kTextFieldDecoration.copyWith(
-              counterStyle: const TextStyle(fontSize: 9),
-              errorStyle: const TextStyle(fontSize: 11),
+            decoration: kTextFieldDecoration.copyWith(counterStyle:const TextStyle(fontSize: 9),errorStyle: const TextStyle(fontSize: 11),
               // counterText: "",
               errorMaxLines: 2,
               isDense: isLargerScreen ? false : true,
@@ -685,14 +650,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: kTextFieldTextStyle,
             decoration: kTextFieldDecoration.copyWith(
               isDense: isLargerScreen ? false : true,
-              disabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent)),
+              disabledBorder:
+                  const OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
               hintText: '${userData['email']}',
             ),
           ),
-          SizedBox(
-              height:
-                  isLargerScreen ? screenHeight * 0.03 : screenHeight * 0.01),
+          SizedBox(height: isLargerScreen ? screenHeight * 0.03 : screenHeight * 0.01),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -709,8 +672,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: kElevatedButtonWhiteOpacityBG.copyWith(
                   elevation: MaterialStateProperty.all(0.001),
                   padding: MaterialStateProperty.all(
-                    EdgeInsets.symmetric(
-                        vertical: 0, horizontal: screenWidth * 0.08),
+                    EdgeInsets.symmetric(vertical: 0, horizontal: screenWidth * 0.08),
                   ),
                 ),
                 child: Text(
@@ -726,12 +688,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _validateFirstName = true;
                       _firstNameErrorText = 'Please enter first name';
                     });
-                  } else if (!isNameValid(
-                      _firstNameTextController.text.trim())) {
+                  } else if (!isNameValid(_firstNameTextController.text.trim())) {
                     setState(() {
                       _validateFirstName = true;
-                      _firstNameErrorText =
-                          'Special characters are not allowed';
+                      _firstNameErrorText = 'Special characters are not allowed';
                     });
                   } else if (_firstNameTextController.text.contains(' ')) {
                     setState(() {
@@ -823,11 +783,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: kElevatedButtonWhiteOpacityBG.copyWith(
                   elevation: MaterialStateProperty.all(0.001),
                   padding: MaterialStateProperty.all(
-                    EdgeInsets.symmetric(
-                        vertical: 0, horizontal: screenWidth * 0.08),
+                    EdgeInsets.symmetric(vertical: 0, horizontal: screenWidth * 0.08),
                   ),
-                  backgroundColor:
-                      const MaterialStatePropertyAll(kHighlightedColor),
+                  backgroundColor: const MaterialStatePropertyAll(kHighlightedColor),
                 ),
                 child: Text(
                   'Save',
@@ -859,8 +817,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(25.0),
-        border: Border.all(
-            color: const Color(0x4D000000).withOpacity(0.08), width: 3),
+        border: Border.all(color: const Color(0x4D000000).withOpacity(0.08), width: 3),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -880,14 +837,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
             style: kTextFieldTextStyle,
             decoration: kTextFieldDecoration.copyWith(
-              errorStyle: const TextStyle(fontSize: 11),
+              errorStyle: const TextStyle(height: 0.1,fontSize: 11),
               isDense: isLargerScreen ? false : true,
               suffixIconConstraints: BoxConstraints(
                 maxHeight: isLargerScreen ? 40 : 30,
                 maxWidth: 50,
               ),
-              errorText:
-                  _validateCurrentPassword ? _currentPasswordErrorText : null,
+              errorText: _validateCurrentPassword ? _currentPasswordErrorText : null,
               hintText: '**********',
               suffixIcon: IconButton(
                 icon: Icon(
@@ -917,7 +873,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
             style: kTextFieldTextStyle,
             decoration: kTextFieldDecoration.copyWith(
-              errorStyle: const TextStyle(fontSize: 11),
+              errorStyle: const TextStyle(height: 0.1,fontSize: 11),
               isDense: isLargerScreen ? false : true,
               suffixIconConstraints: BoxConstraints(
                 maxHeight: isLargerScreen ? 40 : 30,
@@ -927,9 +883,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               hintText: 'New password...',
               suffixIcon: IconButton(
                 icon: Icon(
-                  _newPasswordVisible
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
+                  _newPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                   color: const Color(0xFF95969D),
                 ),
                 onPressed: () {
@@ -953,14 +907,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
             style: kTextFieldTextStyle,
             decoration: kTextFieldDecoration.copyWith(
-              errorStyle: const TextStyle(fontSize: 11),
+              errorStyle: const TextStyle(height: 0.1,fontSize: 11),
               isDense: isLargerScreen ? false : true,
               suffixIconConstraints: BoxConstraints(
                 maxHeight: isLargerScreen ? 40 : 30,
                 maxWidth: 50,
               ),
-              errorText:
-                  _validateConfirmPassword ? _confirmPasswordErrorText : null,
+              errorText: _validateConfirmPassword ? _confirmPasswordErrorText : null,
               hintText: 'Confirm password...',
               suffixIcon: IconButton(
                 icon: Icon(
@@ -993,8 +946,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (_currentPasswordTextController.text.isEmpty) {
                 setState(() {
                   _validateCurrentPassword = true;
-                  _currentPasswordErrorText =
-                      'Current password can\'t be empty';
+                  _currentPasswordErrorText = 'Current password can\'t be empty';
                 });
                 return;
               }
@@ -1015,8 +967,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   .hasMatch(_newPasswordTextController.text)) {
                 setState(() {
                   _validateNewPassword = true;
-                  _newPasswordErrorText =
-                      'One alphabetic and special character';
+                  _newPasswordErrorText = 'One alphabetic and special character';
                 });
                 return;
               }
@@ -1024,8 +975,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (_newPasswordConfirmTextController.text.isEmpty) {
                 setState(() {
                   _validateConfirmPassword = true;
-                  _confirmPasswordErrorText =
-                      'Confirm password can\'t be empty';
+                  _confirmPasswordErrorText = 'Confirm password can\'t be empty';
                 });
                 return;
               } else if (_newPasswordConfirmTextController.text !=
@@ -1057,9 +1007,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: kElevatedButtonStyle.copyWith(
               padding: MaterialStateProperty.all(
                 EdgeInsets.symmetric(
-                    vertical: isLargerScreen
-                        ? screenHeight * 0.009
-                        : screenHeight * 0.007,
+                    vertical: isLargerScreen ? screenHeight * 0.009 : screenHeight * 0.007,
                     horizontal: screenWidth * 0.08),
               ),
             ),
@@ -1072,9 +1020,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     alignment: Alignment.center,
                     child: Text(
                       'Change password',
-                      style: isLargerScreen
-                          ? kButtonTextStyle
-                          : kButtonTextStyleSmallScreen,
+                      style: isLargerScreen ? kButtonTextStyle : kButtonTextStyleSmallScreen,
                     ),
                   ),
           ),
@@ -1097,11 +1043,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, state) => AlertDialog(
-            insetPadding: EdgeInsets.only(
-                left: screenWidth * 0.07, right: screenWidth * 0.07),
+            insetPadding: EdgeInsets.only(left: screenWidth * 0.07, right: screenWidth * 0.07),
             titlePadding: EdgeInsets.zero,
-            contentPadding: EdgeInsets.only(
-                left: screenWidth * 0.035, right: screenWidth * 0.035),
+            contentPadding: EdgeInsets.only(left: screenWidth * 0.035, right: screenWidth * 0.035),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -1143,9 +1087,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       textStyle: dialogButtonTextStyle,
                       onPressed: (int index) {
                         state(() {
-                          for (int buttonIndex = 0;
-                              buttonIndex < 2;
-                              buttonIndex++) {
+                          for (int buttonIndex = 0; buttonIndex < 2; buttonIndex++) {
                             if (buttonIndex == index) {
                               isPictureSelected[buttonIndex] = true;
 
@@ -1173,43 +1115,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: screenWidth * 0.11, vertical: 10),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: screenWidth * 0.11, vertical: 10),
                           decoration: BoxDecoration(
-                              color: isFirstIndex
-                                  ? const Color(0xFFFFFFFF)
-                                  : Colors.transparent,
+                              color: isFirstIndex ? const Color(0xFFFFFFFF) : Colors.transparent,
                               borderRadius: BorderRadius.circular(6)),
-                          child: Text(
-                            "Picture",
-                            style: kFont8Black.copyWith(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                              color: isFirstIndex
-                                  ? kHighlightedColor
-                                  : Colors.black,
-                            ),
-                          ),
+                          child:  Text("Picture",style:  kFont8Black.copyWith(fontSize: 17,fontWeight: FontWeight.w500,color:isFirstIndex ? kHighlightedColor: Colors.black, ),),
                         ),
 
                         Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: screenWidth * 0.12, vertical: 10),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: screenWidth * 0.12, vertical: 10),
                           decoration: BoxDecoration(
-                              color: isSecondIndex
-                                  ? const Color(0xFFFFFFFF)
-                                  : Colors.transparent,
+                              color: isSecondIndex ? const Color(0xFFFFFFFF) : Colors.transparent,
                               borderRadius: BorderRadius.circular(6)),
-                          child: Text(
-                            "Avatar",
-                            style: kFont8Black.copyWith(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                              color: !isFirstIndex
-                                  ? kHighlightedColor
-                                  : Colors.black,
-                            ),
-                          ),
+                          child:  Text("Avatar",style:  kFont8Black.copyWith(fontSize: 17,fontWeight: FontWeight.w500,color:!isFirstIndex ? kHighlightedColor: Colors.black, ),),
                         ),
                         // Text('Avatar'),
                       ],
@@ -1220,9 +1140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Column(
                     children: [
                       SizedBox(height: screenHeight * 0.015),
-                      Text('Choose avatar',
-                          style: kFont8Black.copyWith(
-                              fontSize: 17, fontWeight: FontWeight.w500)),
+                       Text('Choose avatar',style: kFont8Black.copyWith(fontSize: 17,fontWeight: FontWeight.w500)),
                       SizedBox(height: screenHeight * 0.015),
                       Center(
                         child: Stack(
@@ -1230,8 +1148,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           children: [
                             CircleAvatar(
                                 radius: screenHeight * 0.05,
-                                backgroundImage: AssetImage(
-                                    avatarList[selectedAvatarIndex])),
+                                backgroundImage: AssetImage(avatarList[selectedAvatarIndex])),
                             Positioned.fill(
                               child: Transform.rotate(
                                 angle: 3.14 / 2,
@@ -1247,10 +1164,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.01),
-                      Row(
+                       Row(
                         children: [
-                          Text('Select avatar',
-                              style: kFont8Black.copyWith(fontSize: 14)),
+                          Text('Select avatar',style: kFont8Black.copyWith(fontSize: 14)),
                         ],
                       ),
                       const Divider(),
@@ -1260,8 +1176,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: screenWidth * 0.75,
                         child: GridView.builder(
                           scrollDirection: Axis.horizontal,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0,
                             mainAxisSpacing: 8.0,
@@ -1293,11 +1208,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Column(
                     children: [
                       SizedBox(height: screenHeight * 0.015),
-                      Text(
-                        'Upload picture',
-                        style: kFont8Black.copyWith(
-                            fontSize: 18, fontWeight: FontWeight.w500),
-                      ),
+                       Text('Upload picture',style: kFont8Black.copyWith(fontSize: 18,fontWeight: FontWeight.w500),),
                       SizedBox(height: screenHeight * 0.015),
                       DottedBorder(
                         color: kPurple,
@@ -1314,8 +1225,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: Colors.transparent,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            padding: EdgeInsets.symmetric(
-                                vertical: screenHeight * 0.02),
+                            padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
                             child: Column(
                               children: [
                                 Image.asset(
@@ -1332,27 +1242,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 GestureDetector(
                                     onTap: () async {
                                       final pickedFile = await ImagePicker()
-                                          .pickImage(
-                                              source: ImageSource.gallery);
+                                          .pickImage(source: ImageSource.gallery);
                                       if (pickedFile != null) {
                                         final file = File(pickedFile.path);
                                         int fileSizeBytes = await file.length();
-                                        double fileSizeKB =
-                                            fileSizeBytes / 1024;
+                                        double fileSizeKB = fileSizeBytes / 1024;
                                         state(() {
                                           _fileUploaded = true;
                                           tempImage = pickedFile;
                                           _fileName = pickedFile.name;
-                                          _fileSize =
-                                              '${fileSizeKB.toStringAsFixed(2)} KB';
+                                          _fileSize = '${fileSizeKB.toStringAsFixed(2)} KB';
                                         });
                                         for (int i = 0; i <= 100; i += 10) {
-                                          await Future.delayed(const Duration(
-                                              milliseconds: 100));
+                                          await Future.delayed(const Duration(milliseconds: 100));
                                           state(() {
                                             _progress = i / 100;
-                                            _timeRemaining =
-                                                '${(10 - i ~/ 10)} sec';
+                                            _timeRemaining = '${(10 - i ~/ 10)} sec';
                                           });
                                         }
                                       } else {
@@ -1361,14 +1266,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     },
                                     child: Text(
                                       'Browse',
-                                      style: kFont8Black.copyWith(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        color: kPurple,
+                                      style: kFont8Black.copyWith(fontSize: 18,fontWeight: FontWeight.w500,color: kPurple,
                                         decoration: TextDecoration.underline,
                                         decorationColor: kPurple,
-                                        decorationThickness: 2.0,
-                                      ),
+                                        decorationThickness: 2.0,),
+
                                     )),
                               ],
                             ),
@@ -1378,23 +1280,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: 3.0,
                       ),
-                      Align(
+                       Align(
                         alignment: Alignment.centerRight,
-                        child: _fileUploaded
-                            ? GestureDetector(
-                                onTap: () {
-                                  state(() {
-                                    tempImage = null;
-                                    _fileUploaded = false;
-                                  });
-                                },
-                                child:
-                                    const Icon(Icons.cancel_outlined, size: 14),
-                              )
-                            : const Text(
-                                'JPG or PNG',
-                                style: kFont8Black,
-                              ),
+                        child:_fileUploaded? GestureDetector(
+                          onTap: () {
+                            state(() {
+                              tempImage = null;
+                              _fileUploaded = false;
+                            });
+                          },
+                          child: const Icon(Icons.cancel_outlined,size:14 ),
+                        ): const Text(
+                          'JPG or PNG',
+                          style: kFont8Black,
+                        ),
                       ),
                       Visibility(
                         visible: _fileUploaded,
@@ -1414,14 +1313,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               minHeight: 1.5,
                               value: _progress,
                               backgroundColor: kPurple,
-                              valueColor: const AlwaysStoppedAnimation<Color>(
-                                  kHighlightedColor),
+                              valueColor: const AlwaysStoppedAnimation<Color>(kHighlightedColor),
                             ),
+
                             const SizedBox(height: 2.0),
                             Text(
                               'Time remaining: $_timeRemaining',
-                              style: kFont7.copyWith(
-                                  color: const Color(0xFF4E4949)),
+                              style: kFont7.copyWith(color: const Color(0xFF4E4949)),
                             ),
                             const SizedBox(height: 15),
                           ],

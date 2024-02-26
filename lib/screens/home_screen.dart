@@ -77,6 +77,7 @@ void updateMessages() {
       userIndex++;
     }
   }
+  print('Updated Messages: $_allMessages');
 }
 
 Map<String, dynamic> cvObj = {};
@@ -121,7 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // bool _fileSelected = false;
   bool _isJobDescriptionEmpty = false;
   bool _isLoading = false;
-  bool _isSubmitPressed = false;
 
   final TextEditingController _jobDescriptionControllerForUploadCV =
       TextEditingController();
@@ -597,7 +597,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onPressed: () {
                                     _jobDescriptionControllerForUploadCV
                                         .clear();
-                                    _isJobDescriptionEmpty = false;
                                     result = null;
                                     _fileUploaded = false;
                                     showDialog<void>(
@@ -812,8 +811,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 CrossAxisAlignment
                                                                     .center,
                                                             children: [
-                                                              Expanded(
-                                                                flex: 100,
+                                                              Flexible(
+                                                                flex: 15,
                                                                 child:
                                                                     LinearProgressIndicator(
                                                                   minHeight:
@@ -833,14 +832,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           kHighlightedColor),
                                                                 ),
                                                               ),
-                                                              Expanded(
-                                                                flex: 13,
+                                                              Flexible(
+                                                                flex: 1,
                                                                 child:
                                                                     IconButton(
                                                                   highlightColor:
                                                                       Colors
                                                                           .transparent,
-                                                                  iconSize: 20,
+                                                                  iconSize: 15,
                                                                   onPressed:
                                                                       () {
                                                                     state(() {
@@ -949,27 +948,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           const SizedBox(
                                                             width: 40,
                                                           ),
-                                                          IgnorePointer(
-                                                            ignoring:
-                                                                _isSubmitPressed,
-                                                            child:
-                                                                ElevatedButton(
-                                                              onPressed: () {
-                                                                Get.back();
-                                                              },
-                                                              style:
-                                                                  kElevatedButtonWhiteOpacityBG,
-                                                              child: Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                  'Cancel',
-                                                                  style: kFont12
-                                                                      .copyWith(
-                                                                          color:
-                                                                              Colors.black),
-                                                                ),
+                                                          ElevatedButton(
+                                                            onPressed: () {
+                                                              Get.back();
+                                                            },
+                                                            style:
+                                                                kElevatedButtonWhiteOpacityBG,
+                                                            child: Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                'Cancel',
+                                                                style: kFont12.copyWith(
+                                                                    color: Colors
+                                                                        .black),
                                                               ),
                                                             ),
                                                           ),
@@ -979,8 +972,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           ElevatedButton(
                                                             onPressed:
                                                                 () async {
-                                                              _isSubmitPressed =
-                                                                  true;
                                                               _isJobDescriptionEmpty =
                                                                   _jobDescriptionControllerForUploadCV
                                                                       .text
@@ -996,8 +987,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 state(() {
                                                                   _isJobDescriptionEmpty =
                                                                       true;
-                                                                  _isSubmitPressed =
-                                                                      false;
                                                                 });
                                                               }
                                                               if (_fileUploaded &&
@@ -1012,8 +1001,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   state(() {
                                                                     _firstApiCalled =
                                                                         true;
-                                                                    _isSubmitPressed =
-                                                                        false;
                                                                   });
                                                                   if (cvObj
                                                                       .isNotEmpty) {
@@ -1097,8 +1084,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.only(left: 15.0),
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    _isLoading = false;
-                                    _isJobDescriptionForSavedCVEmpty = false;
                                     _isCVSelected = false;
                                     _cvNotSelected = true;
                                     _selectButton = 'Select';
@@ -1390,27 +1375,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             const SizedBox(
                                                               width: 40,
                                                             ),
-                                                            IgnorePointer(
-                                                              ignoring:
-                                                                  _isSubmitPressed,
-                                                              child:
-                                                                  ElevatedButton(
-                                                                onPressed: () {
-                                                                  Get.back();
-                                                                },
-                                                                style:
-                                                                    kElevatedButtonWhiteOpacityBG,
-                                                                child: Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  child: Text(
-                                                                    'Cancel',
-                                                                    style: kFont12
-                                                                        .copyWith(
-                                                                            color:
-                                                                                Colors.black),
-                                                                  ),
+                                                            ElevatedButton(
+                                                              onPressed: () {
+                                                                Get.back();
+                                                              },
+                                                              style:
+                                                                  kElevatedButtonWhiteOpacityBG,
+                                                              child: Align(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                  'Cancel',
+                                                                  style: kFont12
+                                                                      .copyWith(
+                                                                          color:
+                                                                              Colors.black),
                                                                 ),
                                                               ),
                                                             ),
@@ -1435,12 +1415,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         false;
                                                                   });
                                                                 }
-                                                                if (!_jobDescriptionControllerForSavedCV
-                                                                        .text
-                                                                        .isEmpty &&
+                                                                if (!_isJobDescriptionForSavedCVEmpty &&
                                                                     _isCVSelected) {
-                                                                  _isSubmitPressed =
-                                                                      true;
                                                                   _isLoading =
                                                                       true;
                                                                   if (await isInternetConnected()) {
@@ -1450,8 +1426,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                             .text,
                                                                         '',
                                                                         token);
-                                                                    _isSubmitPressed =
-                                                                        false;
                                                                     Navigator.pop(
                                                                         context);
                                                                   } else {
@@ -1461,12 +1435,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   }
                                                                 } else {
                                                                   state(() {
-                                                                    if (_jobDescriptionControllerForSavedCV
-                                                                        .text
-                                                                        .isEmpty) {
-                                                                      _isJobDescriptionForSavedCVEmpty =
-                                                                          true;
-                                                                    }
+                                                                    _isJobDescriptionForSavedCVEmpty =
+                                                                        true;
                                                                   });
                                                                 }
 
@@ -1572,137 +1542,161 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: _allMessages.length + 1,
                       itemBuilder: (context, index) {
                         if (index == _allMessages.length) {
-                          print(
-                              'New Message : $_newMessage and Error in API :: $_errorInChatApi');
-                          if (!_newMessage && !_errorInChatApi) {
-                            if (!_newMessage) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Stack(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 10.0),
-                                          child: Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 13),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 13),
-                                            decoration: BoxDecoration(
-                                              color: kLightPurple,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                            ),
-                                            child: Text(
-                                              'Do you want to choose a template now?',
-                                              style: kFont10.copyWith(
-                                                  color: Colors.black),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        margin:
-                                            const EdgeInsets.only(bottom: 10.0),
-                                        child: Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Image.asset(
-                                            'assets/images/avatars/dogDP.png',
-                                            height: 30,
-                                            width: 30,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 15.0),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _messages.clear();
-                                          _messagesFromAPI.clear();
-                                          _allMessages.clear();
-                                          cvObj.clear();
-                                          chatCvObj.clear();
+                          return (!_newMessage && !_errorInChatApi)
+                              ? StatefulBuilder(
+                                  builder: (context, state) {
+                                    return !_newMessage
+                                        ? Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Stack(
+                                                children: [
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 10.0),
+                                                      child: Container(
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            vertical: 5,
+                                                            horizontal: 13),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 10,
+                                                                vertical: 13),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: kLightPurple,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                        ),
+                                                        child: Text(
+                                                          'Do you want to choose a template now?',
+                                                          style:
+                                                              kFont10.copyWith(
+                                                                  color: Colors
+                                                                      .black),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            bottom: 10.0),
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Image.asset(
+                                                        'assets/images/avatars/dogDP.png',
+                                                        height: 30,
+                                                        width: 30,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15.0),
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    //_showChangeUploadCVDialog(context);
+                                                    setState(() {
+                                                      _messages.clear();
+                                                      _messagesFromAPI.clear();
+                                                      _allMessages.clear();
+                                                      cvObj.clear();
+                                                      chatCvObj.clear();
 
-                                          _jobDescriptionControllerForUploadCV
-                                              .clear();
-                                          result = null;
-                                          _fileUploaded = false;
-                                        });
-                                      },
-                                      style: kInitialChatButton,
-                                      child: Text(
-                                        'No',
-                                        style: kFont10.copyWith(
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 15.0),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        print(
-                                            "Controller filled with CV Object");
-                                        tempController
-                                            .fillControllerFromCvObject(
-                                                chatCvObj);
-                                        Get.toNamed(AppRoutes.savedCV);
-                                      },
-                                      style: kInitialChatButton,
-                                      child: Text(
-                                        'Yes',
-                                        style: kFont10.copyWith(
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          } else if (!_errorInChatApi) {
-                            return Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  Row(
-                                    children: [
-                                      const SizedBox(
-                                        width: 5.0,
-                                      ),
-                                      Image.asset(
-                                        'assets/images/avatars/dogDP.png',
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                      const SizedBox(
-                                        width: 10.0,
-                                      ),
-                                      const SizedBox(
-                                          height: 20.0,
-                                          width: 20.0,
-                                          child: CircularProgressIndicator()),
-                                      const SizedBox(
-                                        width: 5.0,
-                                      ),
-                                      const Text('Generating responseeee...'),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
+                                                      _jobDescriptionControllerForUploadCV
+                                                          .clear();
+                                                      result = null;
+                                                      _fileUploaded = false;
+                                                    });
+                                                    print(
+                                                        'Messages: $_messages');
+                                                    print(
+                                                        'API Messages: $_messagesFromAPI');
+                                                  },
+                                                  style: kInitialChatButton,
+                                                  child: Text(
+                                                    'No',
+                                                    style: kFont10.copyWith(
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 5),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15.0),
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    print(
+                                                        "Controller filled with CV Object");
+                                                    tempController
+                                                        .fillControllerFromCvObject(
+                                                            chatCvObj);
+                                                    Get.toNamed(
+                                                        AppRoutes.savedCV);
+                                                  },
+                                                  style: kInitialChatButton,
+                                                  child: Text(
+                                                    'Yes',
+                                                    style: kFont10.copyWith(
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : Align(
+                                            alignment: Alignment.bottomLeft,
+                                            child: Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 5.0,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    const SizedBox(
+                                                      width: 5.0,
+                                                    ),
+                                                    Image.asset(
+                                                      'assets/images/avatars/dogDP.png',
+                                                      height: 50,
+                                                      width: 50,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 10.0,
+                                                    ),
+                                                    const SizedBox(
+                                                        height: 20.0,
+                                                        width: 20.0,
+                                                        child:
+                                                            CircularProgressIndicator()),
+                                                    const SizedBox(
+                                                      width: 5.0,
+                                                    ),
+                                                    const Text(
+                                                        'Generating response...'),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                  },
+                                )
+                              : const SizedBox();
+
+                          //buildAdditionalColumn(clearMessages);
                         } else {
                           return MessageBubble(
                             message: _allMessages[index]['message'],
@@ -1801,8 +1795,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     if (cvObj.isNotEmpty ||
                                         chatCvObj.isNotEmpty) {
                                       String message = _messageController.text;
-
-                                      _secondApiCalled = true;
 
                                       ///todo:chatAPI
                                       _messageController.text.isNotEmpty
@@ -1976,7 +1968,6 @@ class _HomeScreenState extends State<HomeScreen> {
             _messagesFromAPI.add(formattedMessage);
             updateMessages();
             _newMessage = false;
-            _errorInChatApi = false;
           });
         } else {
           print('No valid response received');
@@ -1985,8 +1976,6 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _secondApiCalled = false;
           _firstApiCalled = false;
-          print('I am in else of status code 200');
-
           _errorInChatApi = true;
           _messagesFromAPI.add(_errorApiMessage);
           updateMessages();
@@ -1999,7 +1988,6 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _secondApiCalled = false;
         _firstApiCalled = false;
-        print('I am in catch of chat api');
         _errorInChatApi = true;
         _messagesFromAPI.add(_errorApiMessage);
         updateMessages();
