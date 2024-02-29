@@ -594,204 +594,179 @@ class _V103State extends State<V103> {
     ));
   }
 
-  pw.Widget buildTemplate5Pdf(
+  List<pw.Widget> buildTemplate5Pdf(
     TempController controller,
     pw.ImageProvider netImage,
   ) {
-    return pw.Container(
-      color: PdfColors.white,
-      child: pw.Padding(
-        padding: const pw.EdgeInsets.all(8),
-        child: pw.Column(
-          children: [
-            pw.Row(
+    List<pw.Widget> widgets = [
+      pw.Row(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Flexible(
+            flex: 2,
+            child: pw.Column(
+              mainAxisSize: pw.MainAxisSize.min,
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Flexible(
-                  flex: 2,
-                  child: pw.Column(
-                    mainAxisSize: pw.MainAxisSize.min,
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: [
-                      pw.Row(
-                        children: [
-                          pw.ClipOval(
-                            child: pw.SizedBox(
-                              height: 70,
-                              width: 70,
-                              child: (!controller.profilePicState)
-                                  ? pw.SizedBox()
-                                  : controller.cvImagePath.isNotEmpty
-                                      ? pw.Image(netImage, fit: pw.BoxFit.cover)
-                                      : pw.Image(pw.MemoryImage(PwAssets.cvDemoImage)),
-                            ),
-                          )
-                        ],
+                pw.Row(
+                  children: [
+                    pw.ClipOval(
+                      child: pw.SizedBox(
+                        height: 70,
+                        width: 70,
+                        child: (!controller.profilePicState)
+                            ? pw.SizedBox()
+                            : controller.cvImagePath.isNotEmpty
+                            ? pw.Image(netImage, fit: pw.BoxFit.cover)
+                            : pw.Image(pw.MemoryImage(PwAssets.cvDemoImage)),
                       ),
-                      pw.SizedBox(height: 15),
-                      pw.Text(
-                        controller.designationController.text,
-                        style: TextStylesPdf.bodyText12w600,
-                      ),
-                      pw.Text(controller.mailController.text,
-                          style: TextStylesPdf.bodyText12Simple),
-                      pw.Text(controller.contactController.text,
-                          style: TextStylesPdf.bodyText12Simple),
-                      pw.Text(controller.addressController.text,
-                          style: TextStylesPdf.bodyText12Simple),
-                    ],
-                  ),
+                    )
+                  ],
                 ),
-                pw.SizedBox(width: 15),
-                pw.Flexible(
-                  flex: 4,
+                pw.SizedBox(height: 15),
+                pw.Text(
+                  controller.designationController.text,
+                  style: TextStylesPdf.bodyText12w600,
+                ),
+                pw.Text(controller.mailController.text,
+                    style: TextStylesPdf.bodyText12Simple),
+                pw.Text(controller.contactController.text,
+                    style: TextStylesPdf.bodyText12Simple),
+                pw.Text(controller.addressController.text,
+                    style: TextStylesPdf.bodyText12Simple),
+              ],
+            ),
+          ),
+          pw.SizedBox(width: 15),
+          pw.Flexible(
+            flex: 6,
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Text(
+                  controller.nameController.text,
+                  textAlign: pw.TextAlign.start,
+                  style: TextStylesPdf.headingText22w700,
+                ),
+                pw.Padding(
+                  padding: const pw.EdgeInsets.only(left: 10,top: 10),
                   child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text(
-                        controller.nameController.text,
-                        textAlign: pw.TextAlign.start,
-                        style: TextStylesPdf.headingText22w700,
-                      ),
-                      pw.Container(
-                        margin: const pw.EdgeInsets.only(right: 15, top: 15, bottom: 15),
-                        padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                        decoration: pw.BoxDecoration(
-                            color: AppPdfColor.pdfDividerColor,
-                            borderRadius: pw.BorderRadius.circular(10)),
-                        child: pw.Column(
-                          crossAxisAlignment: pw.CrossAxisAlignment.start,
-                          children: [
-                            pw.Text('Profile', style: TextStylesPdf.headingText20w600),
-                            pw.SizedBox(height: 3),
-                            pw.Text(controller.personalInformation.text,
-                                style: TextStylesPdf.bodyText12w500),
-                          ],
-                        ),
-                      )
+                      pw.Text('Profile', style: TextStylesPdf.headingText20w600),
+                      pw.SizedBox(height: 3),
+                      pw.Text(controller.personalInformation.text,
+                          style: TextStylesPdf.bodyText12w500),
                     ],
                   ),
                 )
               ],
             ),
-            pw.Divider(
-              height: 20,
-              color: AppPdfColor.pdfDividerColor,
-            ),
-            pw.Flexible(
-                flex: 6,
-                child: pw.Row(
-                  children: [
-                    pw.Flexible(
-                      flex: 5,
-                      child: pw.Column(
-                        crossAxisAlignment: pw.CrossAxisAlignment.start,
-                        mainAxisAlignment: pw.MainAxisAlignment.start,
-                        children: [
-                          pw.Text('Employment History', style: TextStylesPdf.headingText20w600),
-                          pw.SizedBox(height: 5),
-                          for (int i = 0; i < controller.employmentHistory.length; i++)
-                            pw.Row(
-                              children: [
-                                PdfEmploymentHistoryWidget(
-                                  city: controller.employmentHistory[i].city.text,
-                                  country: controller.employmentHistory[i].country.text,
-                                  companyName: controller.employmentHistory[i].companyName.text,
-                                  durationFontStyle: TextStylesPdf.bodyText10Simple,
-                                  title: controller.employmentHistory[i].jobTitle.text,
-                                  from: controller.employmentHistory[i].startDate.text,
-                                  till: controller.employmentHistory[i].endDate.text,
-                                  description: controller.employmentHistory[i].description.text,
-                                )
-                              ],
-                            ),
-                          pw.SizedBox(height: 5),
-                          pw.Text('Education', style: TextStylesPdf.headingText20w600),
-                          pw.SizedBox(height: 5),
-                          for (int i = 0; i < controller.education.length; i++)
-                            pw.Row(
-                              children: [
-                                PdfEducationHistoryWidget(
-                                  instituteName: controller.education[i].instituteName.text,
-                                  city: controller.education[i].city.text,
-                                  country: controller.education[i].country.text,
-                                  durationFontStyle: TextStylesPdf.bodyText10Simple,
-                                  title: controller.education[i].fieldOfStudy.text,
-                                  from: controller.education[i].startDate.text,
-                                  till: controller.education[i].endDate.text,
-                                  description: controller.education[i].description.text,
-                                )
-                              ],
-                            ),
-                          pw.SizedBox(height: 5),
-                          pw.Text(
-                            'Projects',
-                            style: TextStylesPdf.headingText20w600,
-                          ),
-                          pw.SizedBox(height: 5),
-                          pw.Column(
-                            crossAxisAlignment: pw.CrossAxisAlignment.start,
-                            mainAxisAlignment: pw.MainAxisAlignment.start,
-                            children: [
-                              for (int i = 0; i < controller.projects.length; i++)
-                                PdfProjectWidget(
-                                  title: controller.projects[i].title.text,
-                                  description: controller.projects[i].description.text,
-                                )
-                            ],
-                          ),
-                          pw.SizedBox(height: 5),
-                          if( controller.reference.isNotEmpty)   pw.Text(
-                            'Reference',
-                            style: TextStylesPdf.headingText20w600,
-                          ),
-                          pw.SizedBox(height: 5),
-                          pw.Column(
-                            crossAxisAlignment: pw.CrossAxisAlignment.start,
-                            mainAxisAlignment: pw.MainAxisAlignment.start,
-                            children: [
-                              for (int i = 0; i < controller.reference.length; i++)
-                                PdfReferenceWidget(
-                                    personName: controller.reference[i].personName.text,
-                                    contactNumber: controller.reference[i].contactNumber.text,
-                                    referenceText: controller.reference[i].referenceText.text)
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    pw.Flexible(
-                        flex: 2,
-                        child: pw.Column(
-                          children: [
-                            pw.Container(
-                              margin: const pw.EdgeInsets.only(right: 15),
-                              padding: const pw.EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                              decoration: pw.BoxDecoration(
-                                color: AppPdfColor.pdfDividerColor,
-                                borderRadius: pw.BorderRadius.circular(10),
-                              ),
-                              child: pw.Column(
-                                crossAxisAlignment: pw.CrossAxisAlignment.start,
-                                children: [
-                                  pw.Text('Skills', style: TextStylesPdf.headingText20w600),
-                                  pw.SizedBox(height: 5),
-                                  for (int i = 0; i < controller.skills.length; i++)
-                                    PdfSkillCircullarWidget(
-                                      leftPadding: 0,
-                                      skill: controller.skills[i].keys.first.text,
-                                    ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ))
-                  ],
-                )),
-            //
-          ],
-        ),
+          )
+        ],
       ),
-    );
+      pw.Divider(
+        height: 20,
+        color: AppPdfColor.pdfDividerColor,
+      ),
+      pw.Partitions(
+        children: [
+          pw.Partition(
+            flex: 6,
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              mainAxisAlignment: pw.MainAxisAlignment.start,
+              children: [
+                pw.Text('Employment History', style: TextStylesPdf.headingText20w600),
+                pw.SizedBox(height: 5),
+                for (int i = 0; i < controller.employmentHistory.length; i++)
+                  pw.Row(
+                    children: [
+                      PdfEmploymentHistoryWidget(
+                        city: controller.employmentHistory[i].city.text,
+                        country: controller.employmentHistory[i].country.text,
+                        companyName: controller.employmentHistory[i].companyName.text,
+                        durationFontStyle: TextStylesPdf.bodyText10Simple,
+                        title: controller.employmentHistory[i].jobTitle.text,
+                        from: controller.employmentHistory[i].startDate.text,
+                        till: controller.employmentHistory[i].endDate.text,
+                        description: controller.employmentHistory[i].description.text,
+                      )
+                    ],
+                  ),
+                pw.SizedBox(height: 5),
+                pw.Text('Education', style: TextStylesPdf.headingText20w600),
+                pw.SizedBox(height: 5),
+                for (int i = 0; i < controller.education.length; i++)
+                  pw.Row(
+                    children: [
+                      PdfEducationHistoryWidget(
+                        instituteName: controller.education[i].instituteName.text,
+                        city: controller.education[i].city.text,
+                        country: controller.education[i].country.text,
+                        durationFontStyle: TextStylesPdf.bodyText10Simple,
+                        title: controller.education[i].fieldOfStudy.text,
+                        from: controller.education[i].startDate.text,
+                        till: controller.education[i].endDate.text,
+                        description: controller.education[i].description.text,
+                      )
+                    ],
+                  ),
+                pw.SizedBox(height: 5),
+                pw.Text(
+                  'Projects',
+                  style: TextStylesPdf.headingText20w600,
+                ),
+                pw.SizedBox(height: 5),
+                pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  children: [
+                    for (int i = 0; i < controller.projects.length; i++)
+                      PdfProjectWidget(
+                        title: controller.projects[i].title.text,
+                        description: controller.projects[i].description.text,
+                      )
+                  ],
+                ),
+                pw.SizedBox(height: 5),
+                if( controller.reference.isNotEmpty)   pw.Text(
+                  'Reference',
+                  style: TextStylesPdf.headingText20w600,
+                ),
+                pw.SizedBox(height: 5),
+                pw.Column(
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  children: [
+                    for (int i = 0; i < controller.reference.length; i++)
+                      PdfReferenceWidget(
+                          personName: controller.reference[i].personName.text,
+                          contactNumber: controller.reference[i].contactNumber.text,
+                          referenceText: controller.reference[i].referenceText.text)
+                  ],
+                )
+              ],
+            ),
+          ),
+          pw.Partition(
+            flex: 2,
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Text('Skills', style: TextStylesPdf.headingText20w600),
+                pw.SizedBox(height: 5),
+                for (int i = 0; i < controller.skills.length; i++)
+                  PdfSkillCircullarWidget(
+                    leftPadding: 0,
+                    skill: controller.skills[i].keys.first.text,
+                  ),
+              ],
+            ),)
+        ],
+      )
+    ];
+
+    return widgets;
   }
 }

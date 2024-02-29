@@ -629,204 +629,195 @@ class _V105State extends State<V105> {
     ));
   }
 
-  pw.Widget buildTemplate6Pdf(TempController controller,  pw.ImageProvider netImage,) {
-    return pw.Column(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
-      children: [
-        pw.Center(
-          child: pw.SizedBox(
-            height: 50,width: 50,
-            child: pw.ClipOval(
-              child: (!controller.profilePicState)
-                  ? pw.SizedBox()
-                  : controller.cvImagePath.isNotEmpty
-                  ? pw.Image(netImage, fit: pw.BoxFit.cover)
-                  : pw.Image(pw.MemoryImage(PwAssets.cvDemoImage)),
-            ),
-          )
-        ),
-        pw.SizedBox(
-          height: 10
-        ),
-        pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.center,
-          children: [
-            pw.Text(
-                textAlign: pw.TextAlign.end,
-                '${controller.nameController.text}, ',
-                style: TextStylesPdf.headingText20w700),
-            pw.Text(
-                textAlign: pw.TextAlign.start,
-                controller.designationController.text,
-                style: TextStylesPdf.headingText20w700),
-          ],
-        ),
-        pw.SizedBox(height: 15.0),
-        pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.center,
-          children: [
-            pw.Flexible(
-              flex: 3,
-              child: pw.Text(
-                  textAlign: pw.TextAlign.start,
-                  '${controller.addressController.text},',
-                  style: TextStylesPdf.bodyText11Simple),
-            ),
-            pw.Flexible(
-              child: pw.Text('${controller.contactController.text},',
-                  style: TextStylesPdf.bodyText11Simple),
-            ),
-            pw.Flexible(
-              flex: 2,
-              child: pw.Text(controller.mailController.text, style: TextStylesPdf.bodyText11Simple),
-            ),
-          ],
-        ),
-        pw.Divider(
-          height: 20,
-        ),
-        pw.Row(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            pw.Expanded(
-              flex: 1,
-              child: pw.Text('Profile', style: TextStylesPdf.headingText15w600),
-            ),
-            pw.Expanded(
-              fit: pw.FlexFit.tight,
-              flex: 2,
-              child: pw.Text(
-                controller.personalInformation.text,
-                style: TextStylesPdf.bodyText11Simple,
-              ),
-            ),
-          ],
-        ),
-        pw.Divider(
-          height: 20,
-          color: AppPdfColor.pdfGreyColorE49,
-        ),
-        pw.Text('Employment History', style: TextStylesPdf.headingText15w600),
-        pw.SizedBox(height: 10),
-        for (int i = 0; i < controller.employmentHistory.length; i++)
-          pw.Row(
-            children: [
-              PdfEmploymentHistory6(
-                country: controller.employmentHistory[i].country.text,
-                companyName: controller.employmentHistory[i].companyName.text,
-                title: controller.employmentHistory[i].jobTitle.text,
-                from: controller.employmentHistory[i].startDate.text,
-                till: controller.employmentHistory[i].endDate.text,
-                description: controller.employmentHistory[i].description.text,
-                city: controller.employmentHistory[i].city.text,
-              ),
-            ],
-          ),
-        pw.Divider(
-          height: 20,
-        ),
-        pw.Text('Education', style: TextStylesPdf.headingText15w600),
-        pw.SizedBox(height: 10),
-        for (int i = 0; i < controller.education.length; i++)
-          pw.Row(
-            children: [
-              PdfEducationHistory6(
-                instituteName: controller.education[i].instituteName.text,
-                country: controller.education[i].country.text,
-                title: controller.education[i].fieldOfStudy.text,
-                from: controller.education[i].startDate.text,
-                till: controller.education[i].endDate.text,
-                description: controller.education[i].description.text,
-                city: controller.education[i].city.text,
-              ),
-            ],
-          ),
-        pw.Divider(
-          height: 20,
-        ),
-        pw.Row(
-          children: [
-            pw.Expanded(
-              flex: 1,
-              child: pw.Row(
-                children: [
-                  pw.Text('Skills', style: TextStylesPdf.headingText15w600),
-                ],
-              ),
-            ),
-            pw.Flexible(
-              flex: 2,
-              child: pw.Wrap(
-                runSpacing: 10,
-                spacing: 20,
-                alignment: pw.WrapAlignment.spaceBetween,
-                verticalDirection: pw.VerticalDirection.down,
-                direction: pw.Axis.horizontal,
-                children: [
-                  for (int i = 0; i < controller.skills.length; i++)
-                    PdfSkillCircullarWidget(leftPadding: 0,
-                      skill: controller.skills[i].keys.first.text,
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
+ List< pw.Widget> buildTemplate6Pdf(TempController controller,  pw.ImageProvider netImage,) {
+   List<pw.Widget> widgets = [
+     pw.Center(
+         child: pw.SizedBox(
+           height: 50,width: 50,
+           child: pw.ClipOval(
+             child: (!controller.profilePicState)
+                 ? pw.SizedBox()
+                 : controller.cvImagePath.isNotEmpty
+                 ? pw.Image(netImage, fit: pw.BoxFit.cover)
+                 : pw.Image(pw.MemoryImage(PwAssets.cvDemoImage)),
+           ),
+         )
+     ),
+     pw.SizedBox(
+         height: 10
+     ),
+     pw.Row(
+       mainAxisAlignment: pw.MainAxisAlignment.center,
+       children: [
+         pw.Text(
+             textAlign: pw.TextAlign.end,
+             '${controller.nameController.text}, ',
+             style: TextStylesPdf.headingText20w700),
+         pw.Text(
+             textAlign: pw.TextAlign.start,
+             controller.designationController.text,
+             style: TextStylesPdf.headingText20w700),
+       ],
+     ),
+     pw.SizedBox(height: 15.0),
+     pw.Row(
+       mainAxisAlignment: pw.MainAxisAlignment.center,
+       children: [
+         pw.Text(
+             textAlign: pw.TextAlign.start,
+             '${controller.addressController.text}, ',
+             style: TextStylesPdf.bodyText11Simple),
+         pw.Text('${controller.contactController.text}, ',
+             style: TextStylesPdf.bodyText11Simple),
+         pw.Text(controller.mailController.text, style: TextStylesPdf.bodyText11Simple),
+       ],
+     ),
+     pw.Divider(
+       height: 20,
+     ),
+     pw.Row(
+       crossAxisAlignment: pw.CrossAxisAlignment.start,
+       children: [
+         pw.Expanded(
+           flex: 1,
+           child: pw.Text('Profile', style: TextStylesPdf.headingText15w600),
+         ),
+         pw.Expanded(
+           fit: pw.FlexFit.tight,
+           flex: 2,
+           child: pw.Text(
+             controller.personalInformation.text,
+             style: TextStylesPdf.bodyText11Simple,
+           ),
+         ),
+       ],
+     ),
+     pw.Divider(
+       height: 20,
+       color: AppPdfColor.pdfGreyColorE49,
+     ),
+     pw.Text('Employment History', style: TextStylesPdf.headingText15w600),
+     pw.SizedBox(height: 10),
+     for (int i = 0; i < controller.employmentHistory.length; i++)
+       pw.Row(
+         children: [
+           PdfEmploymentHistory6(
+             country: controller.employmentHistory[i].country.text,
+             companyName: controller.employmentHistory[i].companyName.text,
+             title: controller.employmentHistory[i].jobTitle.text,
+             from: controller.employmentHistory[i].startDate.text,
+             till: controller.employmentHistory[i].endDate.text,
+             description: controller.employmentHistory[i].description.text,
+             city: controller.employmentHistory[i].city.text,
+           ),
+         ],
+       ),
+     pw.Divider(
+       height: 20,
+     ),
+     pw.Text('Education', style: TextStylesPdf.headingText15w600),
+     pw.SizedBox(height: 10),
+     for (int i = 0; i < controller.education.length; i++)
+       pw.Row(
+         children: [
+           PdfEducationHistory6(
+             instituteName: controller.education[i].instituteName.text,
+             country: controller.education[i].country.text,
+             title: controller.education[i].fieldOfStudy.text,
+             from: controller.education[i].startDate.text,
+             till: controller.education[i].endDate.text,
+             description: controller.education[i].description.text,
+             city: controller.education[i].city.text,
+           ),
+         ],
+       ),
+     pw.Divider(
+       height: 20,
+     ),
+     pw.Row(
+       children: [
+         pw.Expanded(
+           flex: 1,
+           child: pw.Row(
+             children: [
+               pw.Text('Skills', style: TextStylesPdf.headingText15w600),
+             ],
+           ),
+         ),
+         pw.Flexible(
+           flex: 2,
+           child: pw.Wrap(
+             runSpacing: 10,
+             spacing: 20,
+             alignment: pw.WrapAlignment.spaceBetween,
+             verticalDirection: pw.VerticalDirection.down,
+             direction: pw.Axis.horizontal,
+             children: [
+               for (int i = 0; i < controller.skills.length; i++)
+                 PdfSkillCircullarWidget(leftPadding: 0,
+                   skill: controller.skills[i].keys.first.text,
+                 ),
+             ],
+           ),
+         ),
+       ],
+     ),
 
-        pw.Divider(
-          height: 20,
-          //color: Color(0XFF4E4949),
-        ),
-        pw.Row(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            pw.Expanded(
-              flex: 1,
-              child: pw.Text('Projects', style: TextStylesPdf.headingText15w600),
-            ),
-            pw.Expanded(
-                flex: 2,
-                child: pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  mainAxisAlignment: pw.MainAxisAlignment.start,
-                  children: [
-                    for (int i = 0; i < controller.projects.length; i++)
-                      PdfProjectWidget(
-                        title: controller.projects[i].title.text,
-                        description: controller.projects[i].description.text,
-                      )
-                  ],
-                )),
-          ],
-        ),
-        if(controller.reference.isNotEmpty)    pw.Divider(
-          height: 20,
-          //color: Color(0XFF4E4949),
-        ),
-        pw.Row(
-          crossAxisAlignment: pw.CrossAxisAlignment.start,
-          children: [
-            if(controller.reference.isNotEmpty)   pw.Expanded(
-              flex: 1,
-              child: pw.Text('Reference', style: TextStylesPdf.headingText15w600),
-            ),
-            pw.Expanded(
-                flex: 2,
-                child: pw.Column(
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  mainAxisAlignment: pw.MainAxisAlignment.start,
-                  children: [
-                    for (int i = 0; i < controller.reference.length; i++)
-                      PdfReferenceWidget(
-                          personName: controller.reference[i].personName.text,
-                          contactNumber: controller.reference[i].contactNumber.text,
-                          referenceText: controller.reference[i].referenceText.text)
-                  ],
-                )),
-          ],
-        ),
-      ],
-    );
+     pw.Divider(
+       height: 20,
+       //color: Color(0XFF4E4949),
+     ),
+     pw.Row(
+       crossAxisAlignment: pw.CrossAxisAlignment.start,
+       children: [
+         pw.Expanded(
+           flex: 1,
+           child: pw.Text('Projects', style: TextStylesPdf.headingText15w600),
+         ),
+         pw.Expanded(
+             flex: 2,
+             child: pw.Column(
+               crossAxisAlignment: pw.CrossAxisAlignment.start,
+               mainAxisAlignment: pw.MainAxisAlignment.start,
+               children: [
+                 for (int i = 0; i < controller.projects.length; i++)
+                   PdfProjectWidget(
+                     title: controller.projects[i].title.text,
+                     description: controller.projects[i].description.text,
+                   )
+               ],
+             )),
+       ],
+     ),
+     if(controller.reference.isNotEmpty)    pw.Divider(
+       height: 20,
+       //color: Color(0XFF4E4949),
+     ),
+     pw.Row(
+       crossAxisAlignment: pw.CrossAxisAlignment.start,
+       children: [
+         if(controller.reference.isNotEmpty)   pw.Expanded(
+           flex: 1,
+           child: pw.Text('Reference', style: TextStylesPdf.headingText15w600),
+         ),
+         pw.Expanded(
+             flex: 2,
+             child: pw.Column(
+               crossAxisAlignment: pw.CrossAxisAlignment.start,
+               mainAxisAlignment: pw.MainAxisAlignment.start,
+               children: [
+                 for (int i = 0; i < controller.reference.length; i++)
+                   PdfReferenceWidget(
+                       personName: controller.reference[i].personName.text,
+                       contactNumber: controller.reference[i].contactNumber.text,
+                       referenceText: controller.reference[i].referenceText.text)
+               ],
+             )),
+       ],
+     ),
+   ];
+
+    return widgets;
   }
 }
 
@@ -1321,7 +1312,7 @@ class PdfEmploymentHistory6 extends pw.StatelessWidget {
   @override
   pw.Widget build(pw.Context context) {
     return pw.Container(
-        width: 550,
+        width: 480,
         child: pw.Column(
           mainAxisAlignment: pw.MainAxisAlignment.start,
           crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -1398,7 +1389,7 @@ class PdfEducationHistory6 extends pw.StatelessWidget {
   @override
   pw.Widget build(pw.Context context) {
     return pw.Container(
-        width: 550,
+        width: 480,
         child: pw.Column(
           mainAxisAlignment: pw.MainAxisAlignment.start,
           crossAxisAlignment: pw.CrossAxisAlignment.start,

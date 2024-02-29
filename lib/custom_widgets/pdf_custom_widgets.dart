@@ -26,7 +26,7 @@ class PdfEmploymentHistoryWidget extends pw.StatelessWidget {
   @override
   pw.Widget build(pw.Context context) {
     return pw.Container(
-      width: 370,
+      width: 360,
       child: pw.Expanded(
         child: pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -84,7 +84,7 @@ class PdfEducationHistoryWidget extends pw.StatelessWidget {
   @override
   pw.Widget build(pw.Context context) {
     return pw.Container(
-      width: 370,
+      width: 360,
       child: pw.Expanded(
         child: pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -131,23 +131,26 @@ class PdfReferenceWidget extends pw.StatelessWidget {
 
   @override
   pw.Widget build(pw.Context context) {
-    return pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        mainAxisAlignment: pw.MainAxisAlignment.start,
-        children: [
-          pw.Text(
-            personName,
-            textAlign: pw.TextAlign.start,
-            style: TextStylesPdf.bodyText12w600,
-          ),
-          pw.SizedBox(height: 3),
-          pw.Text(contactNumber,
-              textAlign: pw.TextAlign.start, style: TextStylesPdf.bodyText11Simple),
-          pw.SizedBox(height: 2),
-          pw.Text(referenceText,
-              textAlign: pw.TextAlign.start, style: TextStylesPdf.bodyText12Simple),
-          pw.SizedBox(height: 10)
-        ]);
+    return pw.SizedBox(
+      width: 360,
+      child: pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          mainAxisAlignment: pw.MainAxisAlignment.start,
+          children: [
+            pw.Text(
+              personName,
+              textAlign: pw.TextAlign.start,
+              style: TextStylesPdf.bodyText12w600,
+            ),
+            pw.SizedBox(height: 3),
+            pw.Text(contactNumber,
+                textAlign: pw.TextAlign.start, style: TextStylesPdf.bodyText11Simple),
+            pw.SizedBox(height: 2),
+            pw.Text(referenceText,
+                textAlign: pw.TextAlign.start, style: TextStylesPdf.bodyText12Simple),
+            pw.SizedBox(height: 10)
+          ])
+    );
   }
 }
 
@@ -162,20 +165,23 @@ class PdfProjectWidget extends pw.StatelessWidget {
 
   @override
   pw.Widget build(pw.Context context) {
-    return pw.Column(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
-        mainAxisAlignment: pw.MainAxisAlignment.start,
-        children: [
-          pw.Text(
-            title,
-            textAlign: pw.TextAlign.start,
-            style: TextStylesPdf.bodyText12w600,
-          ),
-          pw.SizedBox(height: 3),
-          pw.Text(description,
-              textAlign: pw.TextAlign.start, style: TextStylesPdf.bodyText12Simple),
-          pw.SizedBox(height: 10)
-        ]);
+    return pw.SizedBox(
+      width: 360,
+      child: pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          mainAxisAlignment: pw.MainAxisAlignment.start,
+          children: [
+            pw.Text(
+              title,
+              textAlign: pw.TextAlign.start,
+              style: TextStylesPdf.bodyText12w600,
+            ),
+            pw.SizedBox(height: 3),
+            pw.Text(description,
+                textAlign: pw.TextAlign.start, style: TextStylesPdf.bodyText12Simple),
+            pw.SizedBox(height: 10)
+          ])
+    );
   }
 }
 

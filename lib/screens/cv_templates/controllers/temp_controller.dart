@@ -17,10 +17,11 @@ class TempController extends GetxController {
     refreshController();
     profileImage = getProfilePic();
   }
+
   int saveCvId = 0;
   File cvImage = File('');
   String cvImagePath = profileImage;
-  bool isChatData=false;
+  bool isChatData = false;
   bool profilePicState = true;
   TextEditingController nameController = TextEditingController(text: 'Adnan Ashraf');
   TextEditingController designationController = TextEditingController(text: 'Manager');
@@ -33,11 +34,9 @@ class TempController extends GetxController {
         'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
   );
 
-
-
   final List<Projects> projects = [
     Projects(
-      keyController: GlobalKey(),
+        keyController: GlobalKey(),
         title: TextEditingController(text: 'Lorem Ipsum'),
         description: TextEditingController(
             text:
@@ -89,7 +88,6 @@ class TempController extends GetxController {
       keyController: GlobalKey(),
     )
   ];
-
 
   List<Map<String, dynamic>> _prepareSkillsData() {
     return skills.map((skill) {
@@ -146,7 +144,6 @@ class TempController extends GetxController {
       return referenceList;
     }).toList();
   }
-
 
   List<Map<String, dynamic>> _prepareProjectsData(List<Projects> projectsList) {
     return projectsList.map((history) {
@@ -253,9 +250,7 @@ class TempController extends GetxController {
     }
   }
 
-
   Future<Map<String, dynamic>?> fetchCvObjectFromBackend(int cvId, String templateId) async {
-
     try {
       final response = await http.get(
         Uri.parse('https://api-cvlab.crewdog.ai/api/getCv/?cv_id=$cvId&template_id=$templateId'),
@@ -266,7 +261,7 @@ class TempController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        isChatData=false;
+        isChatData = false;
         refreshController();
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final Map<String, dynamic> cvData = responseData['cv']['cv'];
@@ -284,7 +279,6 @@ class TempController extends GetxController {
   }
 
   Future<void> fillControllerFromCvObject(Map<String, dynamic> cvData) async {
-
     final Map<String, dynamic> personalData = cvData['personal_information'];
     nameController.text = personalData['name'] ?? '';
     mailController.text = personalData['email'] ?? '';
@@ -293,7 +287,7 @@ class TempController extends GetxController {
     designationController.text = personalData['job_title'] ?? '';
     personalInformation.text = personalData['summary'] ?? '';
     cvImagePath = personalData['profile_pic'] ?? '';
-    isChatData=true;
+    isChatData = true;
     // profilePicState = responseData['cv']['profile_pic_state'] ?? true;
     // saveCvId = cvId;
 
@@ -309,11 +303,11 @@ class TempController extends GetxController {
     reference.clear();
     for (var ref in referenceDataList) {
       final TextEditingController personNameController =
-      TextEditingController(text: ref['person_name'] ?? '');
+          TextEditingController(text: ref['person_name'] ?? '');
       final TextEditingController contactNumberController =
-      TextEditingController(text: ref['contact_number'] ?? '');
+          TextEditingController(text: ref['contact_number'] ?? '');
       final TextEditingController referenceTextController =
-      TextEditingController(text: ref['reference_text'] ?? '');
+          TextEditingController(text: ref['reference_text'] ?? '');
       final GlobalKey key = GlobalKey();
       reference.add(References(
         personName: personNameController,
@@ -323,36 +317,32 @@ class TempController extends GetxController {
       ));
     }
 
-
     final List<dynamic> projectsDataList = cvData['projects'] ?? [];
     projects.clear();
     for (var pro in projectsDataList) {
-      final TextEditingController title =
-      TextEditingController(text: pro['title'] ?? '');
+      final TextEditingController title = TextEditingController(text: pro['title'] ?? '');
       final TextEditingController description =
-      TextEditingController(text: pro['description'] ?? '');
+          TextEditingController(text: pro['description'] ?? '');
       final GlobalKey key = GlobalKey();
-      projects.add(
-          Projects(title: title, description: description,keyController: key));
+      projects.add(Projects(title: title, description: description, keyController: key));
     }
 
     final List<dynamic> educationDataList = cvData['education'] ?? [];
     education.clear();
     for (var edu in educationDataList) {
       final TextEditingController fieldOfStudyController =
-      TextEditingController(text: edu['field_of_study'] ?? '');
+          TextEditingController(text: edu['field_of_study'] ?? '');
       final TextEditingController descriptionController =
-      TextEditingController(text: edu['description'] ?? '');
+          TextEditingController(text: edu['description'] ?? '');
       final TextEditingController endDateController =
-      TextEditingController(text: edu['end_date'] ?? '');
+          TextEditingController(text: edu['end_date'] ?? '');
       final TextEditingController startDateController =
-      TextEditingController(text: edu['start_date'] ?? '');
-      final TextEditingController cityController =
-      TextEditingController(text: edu['city'] ?? '');
+          TextEditingController(text: edu['start_date'] ?? '');
+      final TextEditingController cityController = TextEditingController(text: edu['city'] ?? '');
       final TextEditingController countryController =
-      TextEditingController(text: edu['country'] ?? '');
+          TextEditingController(text: edu['country'] ?? '');
       final TextEditingController instituteNameController =
-      TextEditingController(text: edu['institute_name'] ?? '');
+          TextEditingController(text: edu['institute_name'] ?? '');
       final GlobalKey key = GlobalKey();
       education.add(EducationHistory(
         fieldOfStudy: fieldOfStudyController,
@@ -370,19 +360,19 @@ class TempController extends GetxController {
     employmentHistory.clear();
     for (var employment in employmentDataList) {
       final TextEditingController jobTitleController =
-      TextEditingController(text: employment['job_title'] ?? '');
+          TextEditingController(text: employment['job_title'] ?? '');
       final TextEditingController descriptionController =
-      TextEditingController(text: employment['description'] ?? '');
+          TextEditingController(text: employment['description'] ?? '');
       final TextEditingController endDateController =
-      TextEditingController(text: employment['end_date'] ?? '');
+          TextEditingController(text: employment['end_date'] ?? '');
       final TextEditingController startDateController =
-      TextEditingController(text: employment['start_date'] ?? '');
+          TextEditingController(text: employment['start_date'] ?? '');
       final TextEditingController cityController =
-      TextEditingController(text: employment['city'] ?? '');
+          TextEditingController(text: employment['city'] ?? '');
       final TextEditingController countryController =
-      TextEditingController(text: employment['country'] ?? '');
+          TextEditingController(text: employment['country'] ?? '');
       final TextEditingController companyNameController =
-      TextEditingController(text: employment['company_name'] ?? '');
+          TextEditingController(text: employment['company_name'] ?? '');
       final GlobalKey key = GlobalKey();
       employmentHistory.add(EmploymentHistory(
         jobTitle: jobTitleController,
@@ -397,11 +387,9 @@ class TempController extends GetxController {
     }
 
     update();
-
   }
 
   Future<void> fetchDataFromBackend(int cvId, String templateId) async {
-
     try {
       final response = await http.get(
         Uri.parse('https://api-cvlab.crewdog.ai/api/getCv/?cv_id=$cvId&template_id=$templateId'),
@@ -412,7 +400,7 @@ class TempController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        isChatData=false;
+        isChatData = false;
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final Map<String, dynamic> cvData = responseData['cv']['cv'];
 
@@ -453,17 +441,14 @@ class TempController extends GetxController {
           ));
         }
 
-
         final List<dynamic> projectsDataList = cvData['projects'] ?? [];
         projects.clear();
         for (var pro in projectsDataList) {
-          final TextEditingController title =
-          TextEditingController(text: pro['title'] ?? '');
+          final TextEditingController title = TextEditingController(text: pro['title'] ?? '');
           final TextEditingController description =
-          TextEditingController(text: pro['description'] ?? '');
+              TextEditingController(text: pro['description'] ?? '');
           final GlobalKey key = GlobalKey();
-          projects.add(
-             Projects(title: title, description: description,keyController: key));
+          projects.add(Projects(title: title, description: description, keyController: key));
         }
 
         final List<dynamic> educationDataList = cvData['education'] ?? [];
@@ -541,7 +526,7 @@ class TempController extends GetxController {
   void refreshController() {
     print("Controller Refreshed");
     profilePicState = true;
-    isChatData=false;
+    isChatData = false;
     profileImage = getProfilePic();
     if (profileImage.contains("https://api-cvlab.crewdog.ai")) {
       profileImage = profileImage.substring(28);
@@ -554,7 +539,7 @@ class TempController extends GetxController {
     cvImagePath = profileImage;
     saveCvId = 0;
     personalInformation.text =
-    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.';
+        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.';
 
     // Refresh skills
     skills.clear();
@@ -568,12 +553,11 @@ class TempController extends GetxController {
     projects.clear();
     projects.addAll([
       Projects(
-        keyController: GlobalKey(),
-      title: TextEditingController(text: 'Lorem Ipsum'),
-    description: TextEditingController(
-    text:
-    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
-
+          keyController: GlobalKey(),
+          title: TextEditingController(text: 'Lorem Ipsum'),
+          description: TextEditingController(
+              text:
+                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
     ]);
 
     // Refresh education
@@ -583,7 +567,7 @@ class TempController extends GetxController {
         fieldOfStudy: TextEditingController(text: 'Lorem Ipsum'),
         description: TextEditingController(
           text:
-          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
+              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
         ),
         endDate: TextEditingController(text: 'November 2015'),
         startDate: TextEditingController(text: 'September 2019'),
@@ -601,7 +585,7 @@ class TempController extends GetxController {
         jobTitle: TextEditingController(text: 'Lorem Ipsum'),
         description: TextEditingController(
           text:
-          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
+              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
         ),
         endDate: TextEditingController(text: 'November 2015'),
         startDate: TextEditingController(text: 'September 2019'),
@@ -612,16 +596,18 @@ class TempController extends GetxController {
       )
     ]);
 
-    // Refresh references
-    for (var ref in reference) {
-      ref.personName.text = 'Lorem Ipsum';
-      ref.contactNumber.text = '+92 3123456789';
-      ref.referenceText.text =
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text';
-    }
+    reference.clear();
+    reference.addAll([
+      References(
+        personName: TextEditingController(text: 'Lorem Ipsum'),
+        contactNumber: TextEditingController(text: '+92 3123456789'),
+        referenceText: TextEditingController(text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text'),
+      keyController: GlobalKey()
+      )
+    ]);
+
+
   }
-
-
 }
 
 class EmploymentHistory {
