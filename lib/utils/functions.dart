@@ -11,11 +11,15 @@ Future<void> requestPermissions() async {
   print('###PermissionStatus$permissionStatus');
 }
 
-Future<void> makePdf(pw.Widget widget, String templateName) async {
+Future<void> makePdf(List<pw.Widget> widget, String templateName) async {
+  const double marginTop = 2.0 * 72.0 / 2.54;
+  const double marginBottom = 2.0 *30.0 / 2.54;
+  const double marginLeft = 2.0 * 72.0 / 2.54;
+  const double marginRight = 2.0 * 72.0 / 2.54;
   final pdf = pw.Document();
   pdf.addPage(
-    pw.Page(
-        margin: const pw.EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+    pw.MultiPage(
+      margin:  const pw.EdgeInsets.fromLTRB(marginLeft, marginTop, marginRight, marginBottom),
         pageFormat: PdfPageFormat.a4,
         build: (pw.Context context) => widget),
   );
