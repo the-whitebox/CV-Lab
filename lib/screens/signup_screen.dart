@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import '../custom_widgets/rotating_image.dart';
 import '../utils/constants.dart';
-import '../utils/functions.dart';
+import '../utils/app_functions.dart';
 import '../utils/local_db.dart';
 import 'controllers/google_signin_controller.dart';
 

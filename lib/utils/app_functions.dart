@@ -28,7 +28,6 @@ Future<void> makePdf(List<pw.Widget> widget, String templateName) async {
   if (Platform.isAndroid) {
     directoryPath = Directory('/storage/emulated/0/Download');
 
-    // Put file in global download folder, if it didn't exist, fallback to getExternalStorageDirectory
     if (!await directoryPath.exists()) {
       directoryPath = await getExternalStorageDirectory();
     }
@@ -39,15 +38,6 @@ Future<void> makePdf(List<pw.Widget> widget, String templateName) async {
   final downloadsDirectory = Directory(directoryPath!.path);
   final file = File('${downloadsDirectory.path}/$templateName.pdf');
   await file.writeAsBytes(await pdf.save());
-
-  // final Directory? directoryPath;
-  // if (Platform.isAndroid) {
-  //   directoryPath = await getExternalStorageDirectory();
-  // } else {
-  //   directoryPath = await getApplicationDocumentsDirectory();
-  // }
-  // final file = File('${directoryPath!.path}/$templateName.pdf');
-  // await file.writeAsBytes(await pdf.save());
 }
 
 final emailRegex = RegExp(

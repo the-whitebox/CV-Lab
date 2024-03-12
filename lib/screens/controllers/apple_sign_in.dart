@@ -1,13 +1,11 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:http/http.dart' as http;
 import 'package:crewdog_cv_lab/utils/constants.dart';
 import '../../routes/app_routes.dart';
 import '../../utils/app_snackbar.dart';
-import '../../utils/functions.dart';
-import '../../utils/local_db.dart';
+import '../../utils/app_functions.dart';
 
 void appleSignIn() async {
   if (await isInternetConnected()){

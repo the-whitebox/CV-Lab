@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import '../custom_widgets/rotating_image.dart';
 import '../utils/constants.dart';
-import '../utils/functions.dart';
+import '../utils/app_functions.dart';
 import '../utils/local_db.dart';
 import 'controllers/google_signin_controller.dart';
 import 'package:crewdog_cv_lab/screens/controllers/apple_sign_in.dart';

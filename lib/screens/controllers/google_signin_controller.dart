@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import '../../routes/app_routes.dart';
 import '../../utils/app_snackbar.dart';
 import '../../utils/constants.dart';
-import '../../utils/functions.dart';
+import '../../utils/app_functions.dart';
 
 class GoogleSignInApi {
   static final _googleSignIn = GoogleSignIn();

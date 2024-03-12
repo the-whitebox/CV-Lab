@@ -9,7 +9,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../custom_widgets/rotating_image.dart';
 import '../utils/constants.dart';
-import '../utils/functions.dart';
+import '../utils/app_functions.dart';
 
 enum ResetPasswordResult {
   successful,
