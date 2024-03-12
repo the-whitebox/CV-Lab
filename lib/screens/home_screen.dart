@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:crewdog_cv_lab/screens/saved_cv.dart';
-import 'package:crewdog_cv_lab/utils/functions.dart';
+import 'package:crewdog_cv_lab/utils/app_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
@@ -1867,7 +1867,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: speechToText.isListening
                                       ? Image.asset(
-                                          'assets/images/gifs/mic_gif.gif',
+                                          'assets/images/mic_gif.gif',
                                           width: 20,
                                           height: 20,
                                         )

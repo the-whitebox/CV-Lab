@@ -10,10 +10,6 @@ class PwAssets {
   static late Uint8List speakerImage;
   static late Uint8List phoneImage;
   static late Uint8List locationImage;
-  static late Uint8List cv1Image;
-  static late Uint8List cv2Image;
-  static late Uint8List cv4Image;
-  static late Uint8List cv5Image;
   static late Uint8List cvDemoImage;
 
   static Future<void> initializeAssets() async {
@@ -30,18 +26,6 @@ class PwAssets {
     phoneImage =
         (await rootBundle.load('assets/images/phone.png')).buffer.asUint8List();
     locationImage = (await rootBundle.load('assets/images/location.png'))
-        .buffer
-        .asUint8List();
-    cv1Image = (await rootBundle.load('assets/images/profiles/temp1.png'))
-        .buffer
-        .asUint8List();
-    cv2Image = (await rootBundle.load('assets/images/profiles/temp2.png'))
-        .buffer
-        .asUint8List();
-    cv4Image = (await rootBundle.load('assets/images/profiles/temp4.png'))
-        .buffer
-        .asUint8List();
-    cv5Image = (await rootBundle.load('assets/images/profiles/temp5.png'))
         .buffer
         .asUint8List();
     cvDemoImage = (await rootBundle.load('assets/images/icon-profile.png'))

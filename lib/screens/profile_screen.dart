@@ -10,7 +10,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:image_picker/image_picker.dart';
 import '../custom_widgets/rotating_image.dart';
 import '../utils/constants.dart';
-import '../utils/functions.dart';
+import '../utils/app_functions.dart';
 import '../utils/local_db.dart';
 import 'controllers/profile_controller.dart';
 
@@ -308,11 +308,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   ) {
     if (userData['profile_pic'] != null) {
       imageNetwork = baseUrl + userData['profile_pic'];
-      print("Profile Pic Stored===$imageNetwork");
+      print("Profile Pic Stored:$imageNetwork");
       storeProfilePic(imageNetwork!);
     } else if (userData['avatar_url'] != null) {
       avatarIndexNetwork = int.parse(userData['avatar_url']);
-      print("Profile Pic is empty=====");
+      print("Profile Pic is empty");
       storeProfilePic("");
     }
     return Container(

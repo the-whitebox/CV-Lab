@@ -26,11 +26,9 @@ class _SplashScreenState extends State<SplashScreen> {
     if (token.isEmpty) {
       Get.offAllNamed(AppRoutes.welcome);
     } else if (token.isNotEmpty) {
-      print("token:: $token");
       var responseData = await fetchProfile(token);
       var profilePic = responseData['profile_pic'];
       if (profilePic != null) {
-        print("token:: $token");
         storeProfilePic(profilePic);
       }
       Get.offAllNamed(AppRoutes.bottomBar);

@@ -9,7 +9,7 @@ import '../../custom_widgets/pdf_custom_widgets.dart';
 import '../../custom_widgets/pw_assets.dart';
 import '../../utils/app_snackbar.dart';
 import '../../utils/constants.dart';
-import '../../utils/functions.dart';
+import '../../utils/app_functions.dart';
 import '../controllers/profile_controller.dart';
 import 'controllers/temp_controller.dart';
 

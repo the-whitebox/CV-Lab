@@ -141,11 +141,8 @@ Future<List<Map<String, dynamic>>> fetchMyCVsData(String token) async {
             .map((cv) {
           final Map<String, dynamic> templateData = cv['template'];
           cv['templateName'] = templateData['name'];
-          print('cv data -: $cv\n');
           return cv;
         }).toList();
-
-        print('cv List : $cvList\n');
         return cvList;
       } else {
         print('Error: Response data is null');

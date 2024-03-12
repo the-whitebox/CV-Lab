@@ -11,7 +11,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../../utils/app_snackbar.dart';
 import '../../utils/constants.dart';
-import '../../utils/functions.dart';
+import '../../utils/app_functions.dart';
 import '../controllers/profile_controller.dart';
 import 'controllers/temp_controller.dart';
 
