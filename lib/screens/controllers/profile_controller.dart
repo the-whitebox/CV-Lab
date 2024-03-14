@@ -102,7 +102,7 @@ Future<String> uploadDataAndImage(
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('https://api-cvlab.crewdog.ai/api/save/picture/'),
+      Uri.parse('$baseUrl/api/save/picture/'),
     );
 
     // Add form data

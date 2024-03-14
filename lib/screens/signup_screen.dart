@@ -72,12 +72,18 @@ class _SignupScreenState extends State<SignupScreen> {
 
           if (errorMessage != null) {
             appSnackBar(" Error", errorMessage);
-          } else {
+          }
+          else if(errorData['message']=='Email address already exists'){
+            appSnackBar("Error", "Email address already exists.");
+          }
+
+          else {
             setState(() {
               _registrationSuccessful = false;
             });
             print('Signup failed: ${response.body}');
-            appSnackBar(" Error", "Signup failed. Please try again.");
+
+            appSnackBar("Error", "Signup failed. Please try again.");
           }
         }
       } catch (e) {

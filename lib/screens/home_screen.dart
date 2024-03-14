@@ -13,6 +13,7 @@ import '../custom_widgets/rotating_image.dart';
 import '../routes/app_routes.dart';
 import '../utils/app_snackbar.dart';
 import '../utils/constants.dart';
+import '../utils/local_db.dart';
 import 'cv_templates/controllers/temp_controller.dart';
 
 List<String> pdfImages = [
@@ -92,15 +93,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // variables for use my saved cv dialog
-  // void clearMessages() {
-  //   setState(() {
-  //     _messages.clear();
-  //     _messagesFromAPI.clear();
-  //     _allMessages.clear();
-  //     _firstApiCalled = false;
-  //   });
-  // }
 
   final tempController = Get.put(TempController());
 
@@ -152,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<Map<String, dynamic>?> _callUploadCVApi() async {
     try {
-      final url = Uri.parse('https://api-cvlab.crewdog.ai/api/process_data/');
+      final url = Uri.parse('$baseUrl/api/process_data/');
       var request = http.MultipartRequest('POST', url);
 
       request.headers['Authorization'] = 'Bearer $token';
@@ -183,12 +175,14 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         print(
             'API call failed with status code ${response.statusCode} and response $response');
-        print(await response.stream.bytesToString());
-        return null; // Return null if the API call fails
+
+        String apiResponse = await response.stream.bytesToString();
+        print(apiResponse);
+        return null;
       }
     } catch (e) {
       print('Error in API call: $e');
-      return null; // Return null if there's an error
+      return null;
     }
   }
 
@@ -615,6 +609,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                               ),
                                               backgroundColor: Colors.white,
+                                              titlePadding: const EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+                                              title: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Please upload CV',
+                                                    style: kFont14Black
+                                                        .copyWith(
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .w600),
+                                                  ),
+                                                 InkWell(
+                                                 onTap: (){
+                                                  Get.back();
+                                                 },
+                                                   child: const Icon(Icons.close_rounded, size: 16),
+                                                 )
+                                                ],
+                                              ),
                                               content: SingleChildScrollView(
                                                 child: Column(
                                                   crossAxisAlignment:
@@ -625,17 +639,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Text(
-                                                          'Please upload CV',
-                                                          style: kFont14Black
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 5.0,
-                                                        ),
                                                         DottedBorder(
                                                           color: kPurple,
                                                           borderType:
@@ -1895,7 +1898,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _chatApi(Map<String, dynamic> cvObj, String jobDescription,
       String userQuery, String token) async {
-    final chatApiUrl = Uri.parse('https://api-cvlab.crewdog.ai/api/chat/');
+    final chatApiUrl = Uri.parse('$baseUrl/api/chat/');
     final client = http.Client();
 
     try {
