@@ -825,13 +825,11 @@ class ProjectWidget extends StatelessWidget {
     required this.title,
     required this.description,
     required this.onRemoveTap,
-    this.isRemovable = true,
   });
 
   final TextEditingController title;
   final TextEditingController description;
   final VoidCallback onRemoveTap;
-  final bool isRemovable;
 
   @override
   Widget build(BuildContext context) {
@@ -853,8 +851,7 @@ class ProjectWidget extends StatelessWidget {
                fontFamily: 'Inter',
              ),
            ),),
-            isRemovable
-                ? Padding(
+          Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: GestureDetector(
                       onTap: onRemoveTap,
@@ -865,14 +862,6 @@ class ProjectWidget extends StatelessWidget {
                       ),
                     ),
                   )
-                : const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: Icon(
-                Icons.remove_circle_outline,
-                size: 12,
-                color: Colors.grey,
-              ),
-            ),
           ],
         ),
         const SizedBox(height: 5),

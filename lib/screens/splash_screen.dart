@@ -32,6 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
         storeProfilePic(profilePic);
       }
       Get.offAllNamed(AppRoutes.bottomBar);
+      print(token);
     }
   }
 

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
+import '../../../utils/constants.dart';
+
 String token = getAccessToken();
 String userId = getUserId();
 String profileImage = "";
@@ -35,12 +37,12 @@ class TempController extends GetxController {
   );
 
   final List<Projects> projects = [
-    Projects(
-        keyController: GlobalKey(),
-        title: TextEditingController(text: 'Lorem Ipsum'),
-        description: TextEditingController(
-            text:
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
+    // Projects(
+    //     keyController: GlobalKey(),
+    //     title: TextEditingController(text: 'Lorem Ipsum'),
+    //     description: TextEditingController(
+    //         text:
+    //             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
   ];
 
   final List<Map<TextEditingController, double>> skills = [
@@ -180,7 +182,7 @@ class TempController extends GetxController {
       };
 
       final response = await http.post(
-        Uri.parse('https://api-cvlab.crewdog.ai/api/save/cv/'),
+        Uri.parse('$baseUrl/api/save/cv/'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -228,7 +230,7 @@ class TempController extends GetxController {
       };
 
       final response = await http.put(
-        Uri.parse('https://api-cvlab.crewdog.ai/api/updateCV/'),
+        Uri.parse('$baseUrl/api/updateCV/'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -253,7 +255,7 @@ class TempController extends GetxController {
   Future<Map<String, dynamic>?> fetchCvObjectFromBackend(int cvId, String templateId) async {
     try {
       final response = await http.get(
-        Uri.parse('https://api-cvlab.crewdog.ai/api/getCv/?cv_id=$cvId&template_id=$templateId'),
+        Uri.parse('$baseUrl/api/getCv/?cv_id=$cvId&template_id=$templateId'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -392,7 +394,7 @@ class TempController extends GetxController {
   Future<void> fetchDataFromBackend(int cvId, String templateId) async {
     try {
       final response = await http.get(
-        Uri.parse('https://api-cvlab.crewdog.ai/api/getCv/?cv_id=$cvId&template_id=$templateId'),
+        Uri.parse('$baseUrl/api/getCv/?cv_id=$cvId&template_id=$templateId'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -551,14 +553,16 @@ class TempController extends GetxController {
     ]);
 
     projects.clear();
-    projects.addAll([
-      Projects(
-          keyController: GlobalKey(),
-          title: TextEditingController(text: 'Lorem Ipsum'),
-          description: TextEditingController(
-              text:
-                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
-    ]);
+    projects.addAll(
+        [
+      // Projects(
+      //     keyController: GlobalKey(),
+      //     title: TextEditingController(text: 'Lorem Ipsum'),
+      //     description: TextEditingController(
+      //         text:
+      //             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
+    ]
+    );
 
     // Refresh education
     education.clear();

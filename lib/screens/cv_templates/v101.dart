@@ -453,6 +453,7 @@ bool isCanPop=true;
                           ],
                         ),
                         const SizedBox(height: 2),
+                        if(controller.projects.isNotEmpty)
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
@@ -490,7 +491,6 @@ bool isCanPop=true;
                                 children: [
                                   for (int i = 0; i < controller.projects.length; i++)
                                     ProjectWidget(
-                                      isRemovable: controller.projects.length>1,
                                       title: controller.projects[i].title,
                                       description: controller.projects[i].description,
                                       onRemoveTap: () {
@@ -810,7 +810,8 @@ bool isCanPop=true;
         ],
       ),
       pw.SizedBox(height: 8),
-      pw.Row(
+      if(controller.projects.isNotEmpty)
+        pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Expanded(
@@ -831,7 +832,7 @@ bool isCanPop=true;
                 ],
               )),
         ],
-      ),
+        ),
       pw.SizedBox(height: 8),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
