@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import '../../custom_widgets/custom_widgets.dart';
 import '../../custom_widgets/pdf_custom_widgets.dart';
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../../custom_widgets/pw_assets.dart';
 import '../../utils/app_snackbar.dart';
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
+import '../../utils/local_db.dart';
 import '../controllers/profile_controller.dart';
 import 'controllers/temp_controller.dart';
 
@@ -23,8 +23,18 @@ class V103 extends StatefulWidget {
 
 class _V103State extends State<V103> {
   final controller = Get.put(TempController());
-  bool isCanPop=true;
+  bool isCanPop = true;
   File? selectedImage;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.cvImagePath = getProfilePic();
+    if (controller.cvImagePath
+        .contains("https://cvlab-staging-backend.crewdog.ai")) {
+      controller.cvImagePath = controller.cvImagePath.substring(40);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,217 +62,247 @@ class _V103State extends State<V103> {
         onPopInvoked: (didPop) {
           if (didPop && controller.isChatData == true) {
             print("Came from Home Screen");
-            isCanPop=false;
+            isCanPop = false;
             // Perform actions specific to coming from the Home Screen
           } else {
             controller.refreshController();
           }
         },
         child: Scaffold(
-      body: SafeArea(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/bg_paws.png'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          child: Column(
-            children: [
-              const Text(
-                "Customise your CV",
-                style: kHeadingTextStyle600,
+          body: SafeArea(
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/bg_paws.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(color: const Color(0XFFF2F2F2), boxShadow: [
-                    BoxShadow(color: Colors.lightBlue.shade100, spreadRadius: 0.1, blurRadius: 20),
-                  ]),
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              child: Column(
+                children: [
+                  const Text(
+                    "Customise your CV",
+                    style: kHeadingTextStyle600,
+                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: const Color(0XFFF2F2F2),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.lightBlue.shade100,
+                                spreadRadius: 0.1,
+                                blurRadius: 20),
+                          ]),
+                      padding: const EdgeInsets.all(8.0),
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Column(
                             children: [
-                              Flexible(
-                                flex: 3,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    controller.profilePicState
-                                        ? const SizedBox()
-                                        : GestureDetector(
-                                      onTap: () {
-                                        openGallery();
-                                        controller.profilePicState = true;
-                                      },
-                                      child: const Text("Add Image",
-                                          style: TextStyle(
-                                            color: Color(0XFFC6A4FF),
-                                            fontSize: 10,
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Flexible(
+                                    flex: 3,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        controller.profilePicState
+                                            ? const SizedBox()
+                                            : GestureDetector(
+                                                onTap: () {
+                                                  openGallery();
+                                                  controller.profilePicState =
+                                                      true;
+                                                },
+                                                child: const Text("Add Image",
+                                                    style: TextStyle(
+                                                      color: Color(0XFFC6A4FF),
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    )),
+                                              ),
+                                        controller.profilePicState
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  openGallery();
+                                                },
+                                                child: ClipOval(
+                                                  child: SizedBox(
+                                                    height: 60,
+                                                    width: 60,
+                                                    child: Image(
+                                                      image: controller
+                                                              .cvImagePath
+                                                              .isNotEmpty
+                                                          ? NetworkImage(
+                                                              '$baseUrl${controller.cvImagePath}')
+                                                          : const AssetImage(
+                                                                  'assets/images/icon-profile.png')
+                                                              as ImageProvider,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : const SizedBox(),
+                                        const SizedBox(height: 5),
+                                        controller.profilePicState
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  controller.profilePicState =
+                                                      false;
+                                                  controller.cvImagePath = '';
+                                                  controller.cvImage = File('');
+                                                  selectedImage == null;
+                                                  setState(() {});
+                                                },
+                                                child: const Text(
+                                                    "Remove Image",
+                                                    style: TextStyle(
+                                                      color: Color(0XFFC6A4FF),
+                                                      fontSize: 10,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    )),
+                                              )
+                                            : const SizedBox(),
+                                        const SizedBox(height: 15),
+                                        CustomEditableText(
+                                          controller:
+                                              controller.designationController,
+                                          backgroundColor:
+                                              const Color(0XFFF2F2F2),
+                                          style: const TextStyle(
+                                            color: Color(0XFF4E4949),
+                                            fontSize: 8,
                                             fontWeight: FontWeight.w600,
-                                          )),
-                                    ),
-                                    controller.profilePicState
-                                        ? GestureDetector(
-                                      onTap: () {
-                                        openGallery();
-                                      },
-                                      child: ClipOval(
-                                        child: SizedBox(
-                                          height: 60,
-                                          width: 60,
-                                          child: Image(
-                                            image: controller.cvImagePath.isNotEmpty
-                                                ? NetworkImage(
-                                                '$baseUrl${controller.cvImagePath}')
-                                                : const AssetImage(
-                                                'assets/images/icon-profile.png')
-                                            as ImageProvider,
-                                            fit: BoxFit.cover,
+                                            fontFamily: 'Inter',
                                           ),
                                         ),
-                                      ),
-                                    )
-                                        : const SizedBox(),
-                                    const SizedBox(height: 5),
-                                    controller.profilePicState
-                                        ? GestureDetector(
-                                      onTap: () {
-                                        controller.profilePicState = false;
-                                        controller.cvImagePath = '';
-                                        controller.cvImage = File('');
-                                        selectedImage == null;
-                                        setState(() {});
-                                      },
-                                      child: const Text("Remove Image",
-                                          style: TextStyle(
-                                            color: Color(0XFFC6A4FF),
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w600,
-                                          )),
-                                    )
-                                        : const SizedBox(),
-                                    const SizedBox(height: 15),
-                                    CustomEditableText(
-                                      controller: controller.designationController,
-                                      backgroundColor: const Color(0XFFF2F2F2),
-                                      style: const TextStyle(
-                                        color: Color(0XFF4E4949),
-                                        fontSize: 8,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'Inter',
-                                      ),
+                                        CustomEditableText(
+                                          controller: controller.mailController,
+                                          backgroundColor:
+                                              const Color(0XFFF2F2F2),
+                                          style: const TextStyle(
+                                            color: Color(0XFF4E4949),
+                                            fontSize: 6,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Inter',
+                                          ),
+                                        ),
+                                        CustomEditableText(
+                                          controller:
+                                              controller.contactController,
+                                          backgroundColor:
+                                              const Color(0XFFF2F2F2),
+                                          style: const TextStyle(
+                                            color: Color(0XFF4E4949),
+                                            fontSize: 6,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Inter',
+                                          ),
+                                        ),
+                                        CustomEditableText(
+                                          controller:
+                                              controller.addressController,
+                                          backgroundColor:
+                                              const Color(0XFFF2F2F2),
+                                          style: const TextStyle(
+                                            color: Color(0XFF4E4949),
+                                            fontSize: 6,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'Inter',
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    CustomEditableText(
-                                      controller: controller.mailController,
-                                      backgroundColor: const Color(0XFFF2F2F2),
-                                      style: const TextStyle(
-                                        color: Color(0XFF4E4949),
-                                        fontSize: 6,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: 'Inter',
-                                      ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  Flexible(
+                                    flex: 7,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.baseline,
+                                      textBaseline: TextBaseline.alphabetic,
+                                      children: [
+                                        CustomEditableText(
+                                          controller: controller.nameController,
+                                          backgroundColor:
+                                              const Color(0XFFF2F2F2),
+                                          style: const TextStyle(
+                                            color: Color(0XFF4E4949),
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'Inter',
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 15),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 5),
+                                          decoration: BoxDecoration(
+                                              color: const Color(0XFFE1E1E1),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  "Profile",
+                                                  style: TextStyle(
+                                                    color: Color(0XFF4E4949),
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'Inter',
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 3),
+                                                CustomEditableText(
+                                                  controller: controller
+                                                      .personalInformation,
+                                                  backgroundColor:
+                                                      const Color(0XFFE1E1E1),
+                                                  style: const TextStyle(
+                                                    color: Color(0XFF4E4949),
+                                                    fontSize: 8,
+                                                    fontWeight: FontWeight.w500,
+                                                    fontFamily: 'Inter',
+                                                  ),
+                                                ),
+                                              ]),
+                                        )
+                                      ],
                                     ),
-                                    CustomEditableText(
-                                      controller: controller.contactController,
-                                      backgroundColor: const Color(0XFFF2F2F2),
-                                      style: const TextStyle(
-                                        color: Color(0XFF4E4949),
-                                        fontSize: 6,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: 'Inter',
-                                      ),
-                                    ),
-                                    CustomEditableText(
-                                      controller: controller.addressController,
-                                      backgroundColor: const Color(0XFFF2F2F2),
-                                      style: const TextStyle(
-                                        color: Color(0XFF4E4949),
-                                        fontSize: 6,
-                                        fontWeight: FontWeight.w500,
-                                        fontFamily: 'Inter',
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  )
+                                ],
                               ),
-                              const SizedBox(width: 5),
-                              Flexible(
-                                flex: 7,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                                  textBaseline: TextBaseline.alphabetic,
-                                  children: [
-                                    CustomEditableText(
-                                      controller: controller.nameController,
-                                      backgroundColor: const Color(0XFFF2F2F2),
-                                      style: const TextStyle(
-                                        color: Color(0XFF4E4949),
-                                        fontSize: 19,
-                                        fontWeight: FontWeight.w700,
-                                        fontFamily: 'Inter',
-                                      ),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(vertical: 15),
-                                      padding:
-                                      const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                                      decoration: BoxDecoration(
-                                          color: const Color(0XFFE1E1E1),
-                                          borderRadius: BorderRadius.circular(10)),
-                                      child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            const Text(
-                                              "Profile",
-                                              style: TextStyle(
-                                                color: Color(0XFF4E4949),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'Inter',
-                                              ),
-                                            ),
-                                            const SizedBox(height: 3),
-                                            CustomEditableText(
-                                              controller: controller.personalInformation,
-                                              backgroundColor: const Color(0XFFE1E1E1),
-                                              style: const TextStyle(
-                                                color: Color(0XFF4E4949),
-                                                fontSize: 8,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: 'Inter',
-                                              ),
-                                            ),
-                                          ]),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          const Divider(
-                            height: 20,
-                            color: Color(0XFFE1E1E1),
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                // flex: 5,
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                              const Divider(
+                                height: 20,
+                                color: Color(0XFFE1E1E1),
+                              ),
+                              Row(
+                                children: [
+                                  Flexible(
+                                      // flex: 5,
+                                      child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Flexible(
                                         flex: 4,
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
                                           children: [
                                             Row(
                                               children: [
@@ -279,22 +319,39 @@ class _V103State extends State<V103> {
                                                 CvAddButton(
                                                   onTap: () {
                                                     setState(() {
-                                                      controller.employmentHistory.add(
+                                                      controller
+                                                          .employmentHistory
+                                                          .add(
                                                         EmploymentHistory(
-                                                          keyController: GlobalKey(),
-                                                          jobTitle: TextEditingController(
-                                                              text: 'Lorem Ipsum'),
-                                                          description: TextEditingController(
-                                                              text:
-                                                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
-                                                          endDate: TextEditingController(
-                                                              text: 'November 2015'),
-                                                          startDate: TextEditingController(
-                                                              text: 'September 2019'),
-                                                          city: TextEditingController(text: 'London'),
-                                                          country: TextEditingController(text: 'UK'),
+                                                          keyController:
+                                                              GlobalKey(),
+                                                          jobTitle:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'Lorem Ipsum'),
+                                                          description:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+                                                          endDate:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'November 2015'),
+                                                          startDate:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'September 2019'),
+                                                          city:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'London'),
+                                                          country:
+                                                              TextEditingController(
+                                                                  text: 'UK'),
                                                           companyName:
-                                                          TextEditingController(text: 'WhiteBox'),
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'WhiteBox'),
                                                         ),
                                                       );
                                                     });
@@ -304,27 +361,46 @@ class _V103State extends State<V103> {
                                             ),
                                             const SizedBox(height: 5.0),
                                             for (int i = 0;
-                                            i < controller.employmentHistory.length;
-                                            i++)
+                                                i <
+                                                    controller.employmentHistory
+                                                        .length;
+                                                i++)
                                               Row(
                                                 children: [
                                                   EmploymentHistoryWidget(
-                                                    isRemovable: controller.employmentHistory.length>1,
-
-                                                    backgroundColor: const Color(0XFFF2F2F2),
+                                                    isRemovable: controller
+                                                            .employmentHistory
+                                                            .length >
+                                                        1,
+                                                    backgroundColor:
+                                                        const Color(0XFFF2F2F2),
                                                     durationFontSize: 8,
-                                                    description:
-                                                    controller.employmentHistory[i].description,
-                                                    title: controller.employmentHistory[i].jobTitle,
-                                                    from: controller.employmentHistory[i].startDate,
-                                                    till: controller.employmentHistory[i].endDate,
-                                                    country: controller.employmentHistory[i].country,
-                                                    city: controller.employmentHistory[i].city,
-                                                    companyName:
-                                                    controller.employmentHistory[i].companyName,
+                                                    description: controller
+                                                        .employmentHistory[i]
+                                                        .description,
+                                                    title: controller
+                                                        .employmentHistory[i]
+                                                        .jobTitle,
+                                                    from: controller
+                                                        .employmentHistory[i]
+                                                        .startDate,
+                                                    till: controller
+                                                        .employmentHistory[i]
+                                                        .endDate,
+                                                    country: controller
+                                                        .employmentHistory[i]
+                                                        .country,
+                                                    city: controller
+                                                        .employmentHistory[i]
+                                                        .city,
+                                                    companyName: controller
+                                                        .employmentHistory[i]
+                                                        .companyName,
                                                     onRemoveTap: () {
                                                       setState(() {
-                                                        controller.employmentHistory.removeAt(i);
+                                                        controller
+                                                            .employmentHistory
+                                                            .removeAt(i);
                                                       });
                                                     },
                                                   ),
@@ -350,21 +426,35 @@ class _V103State extends State<V103> {
                                                     setState(() {
                                                       controller.education.add(
                                                         EducationHistory(
-                                                          fieldOfStudy: TextEditingController(
-                                                              text:
-                                                              'Lorem Ipsum is simply dummy text of the printing and'),
-                                                          description: TextEditingController(
-                                                              text:
-                                                              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
-                                                          endDate: TextEditingController(
-                                                              text: 'November 2015'),
-                                                          startDate: TextEditingController(
-                                                              text: 'September 2019'),
-                                                          city: TextEditingController(text: 'London'),
-                                                          country: TextEditingController(text: 'UK'),
+                                                          fieldOfStudy:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'Lorem Ipsum is simply dummy text of the printing and'),
+                                                          description:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+                                                          endDate:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'November 2015'),
+                                                          startDate:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'September 2019'),
+                                                          city:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'London'),
+                                                          country:
+                                                              TextEditingController(
+                                                                  text: 'UK'),
                                                           instituteName:
-                                                          TextEditingController(text: 'WhiteBox'),
-                                                          keyController: GlobalKey(),
+                                                              TextEditingController(
+                                                                  text:
+                                                                      'WhiteBox'),
+                                                          keyController:
+                                                              GlobalKey(),
                                                         ),
                                                       );
                                                     });
@@ -373,25 +463,39 @@ class _V103State extends State<V103> {
                                               ],
                                             ),
                                             const SizedBox(height: 5.0),
-                                            for (int i = 0; i < controller.education.length; i++)
+                                            for (int i = 0;
+                                                i < controller.education.length;
+                                                i++)
                                               Row(
                                                 children: [
                                                   EducationHistoryWidget(
-                                                    isRemovable: controller.education.length>1,
-
+                                                    isRemovable: controller
+                                                            .education.length >
+                                                        1,
                                                     durationFontSize: 8,
-                                                    backgroundColor: const Color(0XFFF2F2F2),
-                                                    description: controller.education[i].description,
-                                                    title: controller.education[i].fieldOfStudy,
-                                                    from: controller.education[i].startDate,
-                                                    till: controller.education[i].endDate,
-                                                    city: controller.education[i].city,
-                                                    country: controller.education[i].country,
-                                                    instituteName:
-                                                    controller.education[i].instituteName,
+                                                    backgroundColor:
+                                                        const Color(0XFFF2F2F2),
+                                                    description: controller
+                                                        .education[i]
+                                                        .description,
+                                                    title: controller
+                                                        .education[i]
+                                                        .fieldOfStudy,
+                                                    from: controller
+                                                        .education[i].startDate,
+                                                    till: controller
+                                                        .education[i].endDate,
+                                                    city: controller
+                                                        .education[i].city,
+                                                    country: controller
+                                                        .education[i].country,
+                                                    instituteName: controller
+                                                        .education[i]
+                                                        .instituteName,
                                                     onRemoveTap: () {
                                                       setState(() {
-                                                        controller.education.removeAt(i);
+                                                        controller.education
+                                                            .removeAt(i);
                                                       });
                                                     },
                                                   ),
@@ -415,24 +519,32 @@ class _V103State extends State<V103> {
                                                     setState(() {
                                                       controller.projects.add(Projects(
                                                           title: TextEditingController(
-                                                              text: "Your project title"),
-                                                          description: TextEditingController(
                                                               text:
-                                                              "Write your project description here")));
+                                                                  "Your project title"),
+                                                          description:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      "Write your project description here")));
                                                     });
                                                   },
                                                 ),
                                               ],
                                             ),
-                                            for (int i = 0; i < controller.projects.length; i++)
+                                            for (int i = 0;
+                                                i < controller.projects.length;
+                                                i++)
                                               ProjectWidget(
-                                                isRemovable: controller.projects.length>1,
-
-                                                title: controller.projects[i].title,
-                                                description: controller.projects[i].description,
+                                                isRemovable:
+                                                    controller.projects.length >
+                                                        1,
+                                                title: controller
+                                                    .projects[i].title,
+                                                description: controller
+                                                    .projects[i].description,
                                                 onRemoveTap: () {
                                                   setState(() {
-                                                    controller.projects.removeAt(i);
+                                                    controller.projects
+                                                        .removeAt(i);
                                                   });
                                                 },
                                               ),
@@ -440,27 +552,39 @@ class _V103State extends State<V103> {
                                             const SizedBox(height: 10),
                                             Row(
                                               children: [
-                                                if(controller.reference.isNotEmpty)     const Text(
-                                                  'Reference',
-                                                  style: TextStyle(
-                                                    color: Color(0XFF4E4949),
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: 'Inter',
+                                                if (controller
+                                                    .reference.isNotEmpty)
+                                                  const Text(
+                                                    'Reference',
+                                                    style: TextStyle(
+                                                      color: Color(0XFF4E4949),
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontFamily: 'Inter',
+                                                    ),
                                                   ),
-                                                ),
                                                 const Spacer(),
                                                 CvAddButton(
-                                                  buttonText: controller.reference.isNotEmpty ?"Add":"Add Reference",
+                                                  buttonText: controller
+                                                          .reference.isNotEmpty
+                                                      ? "Add"
+                                                      : "Add Reference",
                                                   onTap: () {
                                                     setState(() {
                                                       controller.reference.add(References(
-                                                          personName: TextEditingController(
-                                                              text: "Reference Name"),
-                                                          contactNumber: TextEditingController(
-                                                              text: "Contact Number"),
-                                                          referenceText: TextEditingController(
-                                                              text: "Reference Text")));
+                                                          personName:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      "Reference Name"),
+                                                          contactNumber:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      "Contact Number"),
+                                                          referenceText:
+                                                              TextEditingController(
+                                                                  text:
+                                                                      "Reference Text")));
                                                     });
                                                   },
                                                 ),
@@ -468,19 +592,30 @@ class _V103State extends State<V103> {
                                             ),
                                             const SizedBox(height: 5),
                                             Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
                                               children: [
-                                                for (int i = 0; i < controller.reference.length; i++)
+                                                for (int i = 0;
+                                                    i <
+                                                        controller
+                                                            .reference.length;
+                                                    i++)
                                                   ReferenceWidget(
-                                                    personName: controller.reference[i].personName,
-                                                    contactNumber:
-                                                    controller.reference[i].contactNumber,
-                                                    referenceText:
-                                                    controller.reference[i].referenceText,
+                                                    personName: controller
+                                                        .reference[i]
+                                                        .personName,
+                                                    contactNumber: controller
+                                                        .reference[i]
+                                                        .contactNumber,
+                                                    referenceText: controller
+                                                        .reference[i]
+                                                        .referenceText,
                                                     onRemoveTap: () {
                                                       setState(() {
-                                                        controller.reference.removeAt(i);
+                                                        controller.reference
+                                                            .removeAt(i);
                                                       });
                                                     },
                                                   )
@@ -493,39 +628,52 @@ class _V103State extends State<V103> {
                                       Flexible(
                                           flex: 2,
                                           child: Container(
-                                            padding:
-                                            const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 5),
                                             decoration: BoxDecoration(
                                               color: const Color(0XFFE1E1E1),
-                                              borderRadius: BorderRadius.circular(10),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 const Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
                                                     Text(
                                                       'Skills',
                                                       style: TextStyle(
-                                                        color: Color(0XFF4E4949),
+                                                        color:
+                                                            Color(0XFF4E4949),
                                                         fontSize: 14,
-                                                        fontWeight: FontWeight.w600,
+                                                        fontWeight:
+                                                            FontWeight.w600,
                                                         fontFamily: 'Inter',
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                                 const SizedBox(height: 5),
-                                                for (int i = 0; i < controller.skills.length; i++)
+                                                for (int i = 0;
+                                                    i <
+                                                        controller
+                                                            .skills.length;
+                                                    i++)
                                                   SkillCircullarWidget(
-                                                    isRemovable: controller.skills.length>1,
-
+                                                    isRemovable: controller
+                                                            .skills.length >
+                                                        1,
                                                     leftPadding: 0,
-                                                    skill: controller.skills[i].keys.first,
+                                                    skill: controller
+                                                        .skills[i].keys.first,
                                                     onButtonTap: () {
                                                       setState(() {
-                                                        controller.skills.removeAt(i);
+                                                        controller.skills
+                                                            .removeAt(i);
                                                       });
                                                     },
                                                   ),
@@ -533,7 +681,9 @@ class _V103State extends State<V103> {
                                                   onTap: () {
                                                     setState(() {
                                                       controller.skills.add({
-                                                        TextEditingController(text: "Your Skill"): 0.7
+                                                        TextEditingController(
+                                                            text:
+                                                                "Your Skill"): 0.7
                                                       });
                                                     });
                                                   },
@@ -543,55 +693,57 @@ class _V103State extends State<V103> {
                                           ))
                                     ],
                                   )),
+                                ],
+                              )
                             ],
-                          )
-                        ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                  SaveDownloadButtonsRow(
+                    isUpdateCV: controller.saveCvId != 0,
+                    onSavePressed: () async {
+                      if (controller.saveCvId != 0) {
+                        await controller.updateCv(
+                            ('v103'), controller.saveCvId);
+                      } else {
+                        await controller.saveCv('v103');
+                        if (controller.isChatData == false) {
+                          controller.refreshController();
+                        }
+                      }
+                    },
+                    onDownloadPressed: () async {
+                      await requestPermissions();
+                      await PwAssets.initializeAssets();
+                      await PwFonts.initializeFonts();
+                      pw.ImageProvider netImage = await networkImage(
+                          'https://cvlab.crewdog.ai/static/media/profilepic.1854a1d1129a7d85e324.png');
+                      if (controller.cvImagePath.isNotEmpty) {
+                        netImage = await networkImage(
+                            '$baseUrl${controller.cvImagePath}');
+                      }
+                      await makePdf(
+                          buildTemplate5Pdf(
+                            controller,
+                            netImage,
+                          ),
+                          controller.nameController.text);
+                      if (controller.isChatData == false) {
+                        controller.refreshController();
+                      }
+                      Get.back();
+                      appSuccessSnackBar(
+                          "Success", 'Your CV has been Downloaded');
+                    },
+                  ),
+                ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-              SaveDownloadButtonsRow(
-                isUpdateCV: controller.saveCvId != 0,
-                onSavePressed: () async {
-                  if (controller.saveCvId != 0) {
-                    await controller.updateCv(('v103'), controller.saveCvId);
-                  } else {
-
-                    await controller.saveCv('v103');
-                    if(controller.isChatData==false) {
-                      controller.refreshController();
-                    }
-                  }
-                },
-                onDownloadPressed: () async {
-                  await requestPermissions();
-                  await PwAssets.initializeAssets();
-                  await PwFonts.initializeFonts();
-                  pw.ImageProvider netImage = await networkImage(
-                      'https://cvlab.crewdog.ai/static/media/profilepic.1854a1d1129a7d85e324.png');
-                  if (controller.cvImagePath.isNotEmpty) {
-                    netImage = await networkImage('$baseUrl${controller.cvImagePath}');
-                  }
-                  await makePdf(
-                      buildTemplate5Pdf(
-                        controller,
-                        netImage,
-                      ),
-                      controller.nameController.text);
-                  if(controller.isChatData==false) {
-                    controller.refreshController();
-                  }
-                  Get.back();
-                  appSuccessSnackBar("Success", 'Your CV has been Downloaded');
-                },
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 
   List<pw.Widget> buildTemplate5Pdf(
@@ -617,8 +769,9 @@ class _V103State extends State<V103> {
                         child: (!controller.profilePicState)
                             ? pw.SizedBox()
                             : controller.cvImagePath.isNotEmpty
-                            ? pw.Image(netImage, fit: pw.BoxFit.cover)
-                            : pw.Image(pw.MemoryImage(PwAssets.cvDemoImage)),
+                                ? pw.Image(netImage, fit: pw.BoxFit.cover)
+                                : pw.Image(
+                                    pw.MemoryImage(PwAssets.cvDemoImage)),
                       ),
                     )
                   ],
@@ -649,11 +802,12 @@ class _V103State extends State<V103> {
                   style: TextStylesPdf.headingText22w700,
                 ),
                 pw.Padding(
-                  padding: const pw.EdgeInsets.only(left: 10,top: 10),
+                  padding: const pw.EdgeInsets.only(left: 10, top: 10),
                   child: pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text('Profile', style: TextStylesPdf.headingText20w600),
+                      pw.Text('Profile',
+                          style: TextStylesPdf.headingText20w600),
                       pw.SizedBox(height: 3),
                       pw.Text(controller.personalInformation.text,
                           style: TextStylesPdf.bodyText12w500),
@@ -677,7 +831,8 @@ class _V103State extends State<V103> {
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               mainAxisAlignment: pw.MainAxisAlignment.start,
               children: [
-                pw.Text('Employment History', style: TextStylesPdf.headingText20w600),
+                pw.Text('Employment History',
+                    style: TextStylesPdf.headingText20w600),
                 pw.SizedBox(height: 5),
                 for (int i = 0; i < controller.employmentHistory.length; i++)
                   pw.Row(
@@ -685,12 +840,14 @@ class _V103State extends State<V103> {
                       PdfEmploymentHistoryWidget(
                         city: controller.employmentHistory[i].city.text,
                         country: controller.employmentHistory[i].country.text,
-                        companyName: controller.employmentHistory[i].companyName.text,
+                        companyName:
+                            controller.employmentHistory[i].companyName.text,
                         durationFontStyle: TextStylesPdf.bodyText10Simple,
                         title: controller.employmentHistory[i].jobTitle.text,
                         from: controller.employmentHistory[i].startDate.text,
                         till: controller.employmentHistory[i].endDate.text,
-                        description: controller.employmentHistory[i].description.text,
+                        description:
+                            controller.employmentHistory[i].description.text,
                       )
                     ],
                   ),
@@ -701,7 +858,8 @@ class _V103State extends State<V103> {
                   pw.Row(
                     children: [
                       PdfEducationHistoryWidget(
-                        instituteName: controller.education[i].instituteName.text,
+                        instituteName:
+                            controller.education[i].instituteName.text,
                         city: controller.education[i].city.text,
                         country: controller.education[i].country.text,
                         durationFontStyle: TextStylesPdf.bodyText10Simple,
@@ -730,10 +888,11 @@ class _V103State extends State<V103> {
                   ],
                 ),
                 pw.SizedBox(height: 5),
-                if( controller.reference.isNotEmpty)   pw.Text(
-                  'Reference',
-                  style: TextStylesPdf.headingText20w600,
-                ),
+                if (controller.reference.isNotEmpty)
+                  pw.Text(
+                    'Reference',
+                    style: TextStylesPdf.headingText20w600,
+                  ),
                 pw.SizedBox(height: 5),
                 pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -742,8 +901,10 @@ class _V103State extends State<V103> {
                     for (int i = 0; i < controller.reference.length; i++)
                       PdfReferenceWidget(
                           personName: controller.reference[i].personName.text,
-                          contactNumber: controller.reference[i].contactNumber.text,
-                          referenceText: controller.reference[i].referenceText.text)
+                          contactNumber:
+                              controller.reference[i].contactNumber.text,
+                          referenceText:
+                              controller.reference[i].referenceText.text)
                   ],
                 )
               ],
@@ -762,7 +923,8 @@ class _V103State extends State<V103> {
                     skill: controller.skills[i].keys.first.text,
                   ),
               ],
-            ),)
+            ),
+          )
         ],
       )
     ];

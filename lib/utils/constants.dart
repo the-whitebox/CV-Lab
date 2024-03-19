@@ -283,6 +283,15 @@ ButtonStyle kElevatedButtonPrimaryBG = ElevatedButton.styleFrom(
     side: const BorderSide(color: Color(0xFFFF5E59)),
   ),
 );
+ButtonStyle kElevatedButtonPrimaryBGSmall = ElevatedButton.styleFrom(
+  minimumSize: Size.zero, // Set this
+  padding: EdgeInsets.zero, // and this
+  backgroundColor: const Color(0xFFFF5E59),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(5.0),
+    side: const BorderSide(color: Color(0xFFFF5E59)),
+  ),
+);
 
 ButtonStyle kCheckIn = ElevatedButton.styleFrom(
   backgroundColor: Colors.white,
@@ -311,5 +320,14 @@ ButtonStyle kApplyLeave = ElevatedButton.styleFrom(
   shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(5.0),
     side: const BorderSide(color: Colors.black),
+  ),
+);
+
+
+final OutlineInputBorder customBorderHome = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(10.0),
+  borderSide: const BorderSide(
+    color: kPurple,
+    width: 1,
   ),
 );

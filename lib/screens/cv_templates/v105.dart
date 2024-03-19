@@ -10,6 +10,7 @@ import '../../custom_widgets/pw_assets.dart';
 import '../../utils/app_snackbar.dart';
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
+import '../../utils/local_db.dart';
 import '../controllers/profile_controller.dart';
 import 'controllers/temp_controller.dart';
 
@@ -42,6 +43,16 @@ class _V105State extends State<V105> {
         controller.cvImage = File(pickedFile.path);
         controller.cvImagePath = '/media/$cvImagePath';
       });
+    }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    controller.cvImagePath = getProfilePic();
+    if (controller.cvImagePath.contains("https://cvlab-staging-backend.crewdog.ai")) {
+      controller.cvImagePath = controller.cvImagePath.substring(40);
     }
   }
 

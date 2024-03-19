@@ -1,5 +1,6 @@
 import 'package:crewdog_cv_lab/screens/cv_templates/controllers/temp_controller.dart';
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
+import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:printing/printing.dart';
@@ -7,7 +8,6 @@ import 'dart:io';
 import '../../custom_widgets/custom_widgets.dart';
 import '../../custom_widgets/pdf_custom_widgets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../../custom_widgets/pw_assets.dart';
 import '../../utils/constants.dart';
@@ -18,15 +18,27 @@ class V101 extends StatefulWidget {
   const V101({super.key});
 
 
+
+
   @override
   State<V101> createState() => _V101State();
 }
 
 class _V101State extends State<V101> {
-
   final controller = Get.put(TempController());
   File? selectedImage;
-bool isCanPop=true;
+  bool isCanPop=true;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.cvImagePath = getProfilePic();
+    if (controller.cvImagePath.contains("https://cvlab-staging-backend.crewdog.ai")) {
+      controller.cvImagePath = controller.cvImagePath.substring(40);
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +48,6 @@ bool isCanPop=true;
         if (didPop && controller.isChatData == true) {
           print("Came from Home Screen");
           isCanPop=false;
-          // Perform actions specific to coming from the Home Screen
         } else {
           controller.refreshController();
         }

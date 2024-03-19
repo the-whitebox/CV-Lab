@@ -9,6 +9,7 @@ import '../../custom_widgets/pw_assets.dart';
 import '../../utils/app_snackbar.dart';
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
+import '../../utils/local_db.dart';
 import '../controllers/profile_controller.dart';
 import 'controllers/temp_controller.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -24,9 +25,17 @@ class _V102State extends State<V102> {
 
   final controller = Get.put(TempController());
   bool isCanPop=true;
-
-
   File? selectedImage;
+
+
+  @override
+  void initState() {
+    super.initState();
+    controller.cvImagePath = getProfilePic();
+    if (controller.cvImagePath.contains("https://cvlab-staging-backend.crewdog.ai")) {
+      controller.cvImagePath = controller.cvImagePath.substring(40);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

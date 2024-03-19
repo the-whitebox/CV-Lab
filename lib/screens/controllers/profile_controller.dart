@@ -30,20 +30,17 @@ Future<void> updateProfile(
         filename: basename(profilePic.path),
         contentType: MediaType('image', 'jpeg'),
       );
-      print("jUST Image....................");
 
       request.files.add(multipartFile);
       request.fields['first_name'] = firstName;
       request.fields['last_name'] = lastName;
       request.fields['avatar_url'] = '';
     } else if (avatarIndex != null && avatarIndex != 0) {
-      print("Avatar Index");
       request.fields['first_name'] = firstName;
       request.fields['last_name'] = lastName;
       request.fields['avatar_url'] = avatarIndex.toString();
       request.fields['profile_pic'] = '';
     } else {
-      print("jUST namesssss");
       request.fields['first_name'] = firstName;
       request.fields['last_name'] = lastName;
     }

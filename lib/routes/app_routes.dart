@@ -56,7 +56,7 @@ class AppRoutes {
       ),
       GetPage(
         name: bottomBar,
-        page: () => const BottomBar(),
+        page: () =>  BottomBar(),
       ),
       GetPage(
         name: v101,

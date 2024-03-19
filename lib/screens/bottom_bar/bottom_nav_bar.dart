@@ -1,98 +1,76 @@
+import 'package:crewdog_cv_lab/screens/cv_templates/controllers/temp_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../home_screen.dart';
 import '../profile_screen.dart';
 import '../saved_cv.dart';
 
-class BottomBar extends StatefulWidget {
-  const BottomBar({super.key});
+class BottomBarController extends GetxController {
+  var currentIndex = 0.obs;
 
-  @override
-  BottomBarState createState() => BottomBarState();
+  void changePage(int index) {
+    // if (currentIndex.value == 1 && index != 1) {
+    //  final controller=Get.put(TempController());
+    //  controller.refreshController();
+    // }
+    currentIndex.value = index;
+  }
 }
 
-class BottomBarState extends State<BottomBar> {
-  int _currentIndex = 0;
-
-  List<String> selectedIcons = [
-    'assets/images/selected_chat.png',
-    'assets/images/selected_heart.png',
-    'assets/images/selected_profile.png',
-  ];
-
-  List<String> unselectedIcons = [
-    'assets/images/unselected_chat.png',
-    'assets/images/unselected_heart.png',
-    'assets/images/unselected_profile.png',
-  ];
+class BottomBar extends StatelessWidget {
+  final BottomBarController controller = Get.put(BottomBarController());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Obx(() => Scaffold(
       body: Center(
-        child: _buildPage(_currentIndex),
+        child: buildPage(controller.currentIndex.value),
       ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
         backgroundColor: const Color(0xFFFFFAFA),
-        currentIndex: _currentIndex,
+        currentIndex: controller.currentIndex.value,
         onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          controller.changePage(index);
         },
         items: [
           BottomNavigationBarItem(
-            icon: GestureDetector(
-              onTap: () {
-                _handleIconTap(0);
-              },
-              child: Image.asset(
-                _currentIndex == 0 ? selectedIcons[0] : unselectedIcons[0],
-                height: 25,
-                width: 30,
-              ),
+            icon: Image.asset(
+              controller.currentIndex.value == 0
+                  ? 'assets/images/selected_chat.png'
+                  : 'assets/images/unselected_chat.png',
+              height: 25,
+              width: 30,
             ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: GestureDetector(
-              onTap: () {
-                _handleIconTap(1);
-              },
-              child: Image.asset(
-                _currentIndex == 1 ? selectedIcons[1] : unselectedIcons[1],
-                height: 25,
-                width: 30,
-              ),
+            icon: Image.asset(
+              controller.currentIndex.value == 1
+                  ? 'assets/images/selected_heart.png'
+                  : 'assets/images/unselected_heart.png',
+              height: 25,
+              width: 30,
             ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: GestureDetector(
-              onTap: () {
-                _handleIconTap(2);
-              },
-              child: Image.asset(
-                _currentIndex == 2 ? selectedIcons[2] : unselectedIcons[2],
-                height: 25,
-                width: 30,
-              ),
+            icon: Image.asset(
+              controller.currentIndex.value == 2
+                  ? 'assets/images/selected_profile.png'
+                  : 'assets/images/unselected_profile.png',
+              height: 25,
+              width: 30,
             ),
             label: '',
           ),
         ],
       ),
-    );
+    ));
   }
 
-  void _handleIconTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
-  Widget _buildPage(int index) {
+  Widget buildPage(int index) {
     switch (index) {
       case 0:
         return const HomeScreen();
@@ -105,3 +83,4 @@ class BottomBarState extends State<BottomBar> {
     }
   }
 }
+

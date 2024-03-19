@@ -23,12 +23,16 @@ class TempController extends GetxController {
   String cvImagePath = profileImage;
   bool isChatData = false;
   bool profilePicState = true;
-  TextEditingController nameController = TextEditingController(text: 'Adnan Ashraf');
-  TextEditingController designationController = TextEditingController(text: 'Manager');
+  TextEditingController nameController =
+      TextEditingController(text: 'Adnan Ashraf');
+  TextEditingController designationController =
+      TextEditingController(text: 'Manager');
   TextEditingController addressController =
       TextEditingController(text: '2980 Smith Street, Massachusetts, USA');
-  TextEditingController contactController = TextEditingController(text: '+1 508-831-1827');
-  TextEditingController mailController = TextEditingController(text: 'lorem@gmail.com');
+  TextEditingController contactController =
+      TextEditingController(text: '+1 508-831-1827');
+  TextEditingController mailController =
+      TextEditingController(text: 'lorem@gmail.com');
   TextEditingController personalInformation = TextEditingController(
     text:
         'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
@@ -100,7 +104,8 @@ class TempController extends GetxController {
     }).toList();
   }
 
-  List<Map<String, dynamic>> _prepareHistoryData(List<EmploymentHistory> historyList) {
+  List<Map<String, dynamic>> _prepareHistoryData(
+      List<EmploymentHistory> historyList) {
     return historyList.map((history) {
       final Map<String, dynamic> historyData = {
         'company_name': history.companyName.text,
@@ -116,7 +121,8 @@ class TempController extends GetxController {
     }).toList();
   }
 
-  List<Map<String, dynamic>> _prepareEducationHistoryData(List<EducationHistory> historyList) {
+  List<Map<String, dynamic>> _prepareEducationHistoryData(
+      List<EducationHistory> historyList) {
     return historyList.map((history) {
       final Map<String, dynamic> historyData = {
         'field_of_study': history.fieldOfStudy.text,
@@ -133,7 +139,8 @@ class TempController extends GetxController {
     }).toList();
   }
 
-  List<Map<String, dynamic>> _prepareReferenceData(List<References> referenceList) {
+  List<Map<String, dynamic>> _prepareReferenceData(
+      List<References> referenceList) {
     return referenceList.map((history) {
       final Map<String, dynamic> referenceList = {
         'person_name': history.personName.text,
@@ -148,7 +155,7 @@ class TempController extends GetxController {
   List<Map<String, dynamic>> _prepareProjectsData(List<Projects> projectsList) {
     return projectsList.map((history) {
       final Map<String, dynamic> projectsList = {
-        'title': history.title.text,
+        'project_name': history.title.text,
         'description': history.description.text,
       };
       return projectsList;
@@ -250,10 +257,12 @@ class TempController extends GetxController {
     }
   }
 
-  Future<Map<String, dynamic>?> fetchCvObjectFromBackend(int cvId, String templateId) async {
+  Future<Map<String, dynamic>?> fetchCvObjectFromBackend(
+      int cvId, String templateId) async {
     try {
       final response = await http.get(
-        Uri.parse('https://api-cvlab.crewdog.ai/api/getCv/?cv_id=$cvId&template_id=$templateId'),
+        Uri.parse(
+            'https://api-cvlab.crewdog.ai/api/getCv/?cv_id=$cvId&template_id=$templateId'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -294,7 +303,8 @@ class TempController extends GetxController {
     final List<dynamic> skillsDataList = cvData['skills'] ?? [];
     skills.clear();
     for (var skill in skillsDataList) {
-      final TextEditingController controller = TextEditingController(text: skill['name'] ?? '');
+      final TextEditingController controller =
+          TextEditingController(text: skill['name'] ?? '');
       final double level = skill['level'] ?? 0;
       skills.add({controller: level});
     }
@@ -320,11 +330,13 @@ class TempController extends GetxController {
     final List<dynamic> projectsDataList = cvData['projects'] ?? [];
     projects.clear();
     for (var pro in projectsDataList) {
-      final TextEditingController title = TextEditingController(text: pro['title'] ?? '');
+      final TextEditingController title =
+          TextEditingController(text: pro['project_name'] ?? '');
       final TextEditingController description =
           TextEditingController(text: pro['description'] ?? '');
       final GlobalKey key = GlobalKey();
-      projects.add(Projects(title: title, description: description, keyController: key));
+      projects.add(
+          Projects(title: title, description: description, keyController: key));
     }
 
     final List<dynamic> educationDataList = cvData['education'] ?? [];
@@ -338,7 +350,8 @@ class TempController extends GetxController {
           TextEditingController(text: edu['end_date'] ?? '');
       final TextEditingController startDateController =
           TextEditingController(text: edu['start_date'] ?? '');
-      final TextEditingController cityController = TextEditingController(text: edu['city'] ?? '');
+      final TextEditingController cityController =
+          TextEditingController(text: edu['city'] ?? '');
       final TextEditingController countryController =
           TextEditingController(text: edu['country'] ?? '');
       final TextEditingController instituteNameController =
@@ -392,7 +405,8 @@ class TempController extends GetxController {
   Future<void> fetchDataFromBackend(int cvId, String templateId) async {
     try {
       final response = await http.get(
-        Uri.parse('https://api-cvlab.crewdog.ai/api/getCv/?cv_id=$cvId&template_id=$templateId'),
+        Uri.parse(
+            'https://api-cvlab.crewdog.ai/api/getCv/?cv_id=$cvId&template_id=$templateId'),
         headers: {
           'Authorization': 'Bearer $token',
           'Content-Type': 'application/json',
@@ -404,7 +418,8 @@ class TempController extends GetxController {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final Map<String, dynamic> cvData = responseData['cv']['cv'];
 
-        final Map<String, dynamic> personalData = cvData['personal_information'];
+        final Map<String, dynamic> personalData =
+            cvData['personal_information'];
         nameController.text = personalData['name'] ?? '';
         mailController.text = personalData['email'] ?? '';
         contactController.text = personalData['number'] ?? '';
@@ -418,7 +433,8 @@ class TempController extends GetxController {
         final List<dynamic> skillsDataList = cvData['skills'] ?? [];
         skills.clear();
         for (var skill in skillsDataList) {
-          final TextEditingController controller = TextEditingController(text: skill['name'] ?? '');
+          final TextEditingController controller =
+              TextEditingController(text: skill['name'] ?? '');
           final double level = skill['level'] ?? 0;
           skills.add({controller: level});
         }
@@ -444,11 +460,13 @@ class TempController extends GetxController {
         final List<dynamic> projectsDataList = cvData['projects'] ?? [];
         projects.clear();
         for (var pro in projectsDataList) {
-          final TextEditingController title = TextEditingController(text: pro['title'] ?? '');
+          final TextEditingController title =
+              TextEditingController(text: pro['project_name'] ?? '');
           final TextEditingController description =
               TextEditingController(text: pro['description'] ?? '');
           final GlobalKey key = GlobalKey();
-          projects.add(Projects(title: title, description: description, keyController: key));
+          projects.add(Projects(
+              title: title, description: description, keyController: key));
         }
 
         final List<dynamic> educationDataList = cvData['education'] ?? [];
@@ -481,7 +499,8 @@ class TempController extends GetxController {
           ));
         }
 
-        final List<dynamic> employmentDataList = cvData['employment_history'] ?? [];
+        final List<dynamic> employmentDataList =
+            cvData['employment_history'] ?? [];
         employmentHistory.clear();
         for (var employment in employmentDataList) {
           final TextEditingController jobTitleController =
@@ -528,8 +547,8 @@ class TempController extends GetxController {
     profilePicState = true;
     isChatData = false;
     profileImage = getProfilePic();
-    if (profileImage.contains("https://api-cvlab.crewdog.ai")) {
-      profileImage = profileImage.substring(28);
+    if (profileImage.contains("https://cvlab-staging-backend.crewdog.ai")) {
+      profileImage = profileImage.substring(40);
     }
     nameController.text = 'Adnan Ashraf';
     designationController.text = 'Manager';
@@ -551,6 +570,7 @@ class TempController extends GetxController {
     ]);
 
     projects.clear();
+
     projects.addAll([
       Projects(
           keyController: GlobalKey(),
@@ -599,14 +619,13 @@ class TempController extends GetxController {
     reference.clear();
     reference.addAll([
       References(
-        personName: TextEditingController(text: 'Lorem Ipsum'),
-        contactNumber: TextEditingController(text: '+92 3123456789'),
-        referenceText: TextEditingController(text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text'),
-      keyController: GlobalKey()
-      )
+          personName: TextEditingController(text: 'Lorem Ipsum'),
+          contactNumber: TextEditingController(text: '+92 3123456789'),
+          referenceText: TextEditingController(
+              text:
+                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text'),
+          keyController: GlobalKey())
     ]);
-
-
   }
 }
 

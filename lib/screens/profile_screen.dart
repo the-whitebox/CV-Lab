@@ -76,20 +76,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   late Future<Map<String, dynamic>> _profileFuture;
 
-  Future<void> _updateProfile(String firstName, String lastName, String token,
-      XFile? profilePic, int? avatarIndex) async {
-    if (await isInternetConnected()) {
-      try {
-        await updateProfile(
-            token, firstName, lastName, profilePic, avatarIndex);
-        print('Profile updated successfully!');
-      } catch (error) {
-        print('Error updating profile: $error');
-      }
-    } else {
-      appSnackBar("Error", "No internet connectivity");
-    }
-  }
 
   Future<void> changePasswordAPI({
     required String oldPassword,
@@ -762,13 +748,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     return;
                   }
 
-                  await _updateProfile(
-                    _firstNameTextController.text.trim(),
-                    _lastNameTextController.text.trim(),
-                    token,
-                    tempImage,
-                    selectedAvatarIndex,
-                  );
+                  if (await isInternetConnected()) {
+                    await updateProfile(
+                        token, _firstNameTextController.text.trim(),
+                        _lastNameTextController.text.trim(),
+                        tempImage,
+                        selectedAvatarIndex);
+                  } else {
+                    appSnackBar("Error", "No internet connectivity");
+                  }
+
                   setState(() {
                     _profileFuture = retrieveProfile(token);
                     _isMyProfile = true;
@@ -776,50 +765,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _isChangePassword = false;
                   });
                 },
-                // onPressed: () async {
-                //   if (_firstNameTextController.text.isEmpty) {
-                //     setState(() {
-                //       _validateFirstName = true;
-                //       _firstNameErrorText = 'Please enter first name';
-                //     });
-                //   } else if (!isNameValid(_firstNameTextController.text.trim())) {
-                //     setState(() {
-                //       _validateFirstName = true;
-                //       _firstNameErrorText = 'Special characters are not allowed';
-                //     });
-                //   }
-                //   if (_lastNameTextController.text.trim().isNotEmpty &&
-                //       !isNameValid(_lastNameTextController.text.trim())) {
-                //     setState(() {
-                //       _validateLastName = true;
-                //       _lastNameErrorText = 'Special characters are not allowed';
-                //     });
-                //   } else {
-                //     setState(() {
-                //       _validateLastName = false;
-                //       _lastNameErrorText = '';
-                //     });
-                //   }
-                //
-                //   if (_validateFirstName || _validateLastName) {
-                //     return;
-                //   }
-                //
-                //   await _updateProfile(
-                //     _firstNameTextController.text.trim(),
-                //     _lastNameTextController.text.trim(),
-                //     token,
-                //     tempImage,
-                //     selectedAvatarIndex,
-                //   );
-                //   setState(() {
-                //     _profileFuture = retrieveProfile(token);
-                //     _isMyProfile = true;
-                //     _isEditProfile = false;
-                //     _isChangePassword = false;
-                //
-                //   });
-                // },
                 style: kElevatedButtonWhiteOpacityBG.copyWith(
                   elevation: MaterialStateProperty.all(0.001),
                   padding: MaterialStateProperty.all(

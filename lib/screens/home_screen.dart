@@ -9,10 +9,12 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
+import '../custom_widgets/bubble_message.dart';
 import '../custom_widgets/rotating_image.dart';
 import '../routes/app_routes.dart';
 import '../utils/app_snackbar.dart';
 import '../utils/constants.dart';
+import 'bottom_bar/bottom_nav_bar.dart';
 import 'cv_templates/controllers/temp_controller.dart';
 
 List<String> pdfImages = [
@@ -43,46 +45,34 @@ bool _newMessage = false;
 bool _errorInChatApi = false;
 String _errorApiMessage =
     'Oops! Something went wrong on our end. Please give us a moment to fix it. Feel free to try again.';
-
-final OutlineInputBorder _customBorder = OutlineInputBorder(
-  borderRadius: BorderRadius.circular(10.0),
-  borderSide: const BorderSide(
-    color: kPurple,
-    width: 1,
-  ),
-);
-
-void updateMessages() {
-  _allMessages.clear();
-
-  int apiIndex = 0;
-  int userIndex = 0;
-
-  while (apiIndex < _messagesFromAPI.length || userIndex < _messages.length) {
-    if (apiIndex < _messagesFromAPI.length) {
-      _allMessages.add({
-        'message': _messagesFromAPI[apiIndex],
-        'isUser': false,
-        //'timestamp': DateTime.now(),
-      });
-      apiIndex++;
-    }
-
-    if (userIndex < _messages.length) {
-      _allMessages.add({
-        'message': _messages[userIndex],
-        'isUser': true,
-        // 'timestamp': DateTime.now(),
-      });
-      userIndex++;
-    }
-  }
-}
-
 Map<String, dynamic> cvObj = {};
 Map<String, dynamic> chatCvObj = {};
 bool _firstApiCalled = false;
-bool _secondApiCalled = false;
+bool _secondApiCalled = true;
+String _selectButton = 'Select';
+bool _isCVSelected = false;
+bool _cvNotSelected = false;
+bool _isJobDescriptionForSavedCVEmpty = false;
+final TextEditingController _jobDescriptionControllerForSavedCV =
+    TextEditingController();
+final TextEditingController _jobDescriptionControllerForUploadCV =
+    TextEditingController();
+int? _tappedIndex;
+double _progress = 0.0;
+String _fileName = '';
+String _fileSize = '';
+String _filePath = '';
+String _timeRemaining = '';
+bool _fileUploaded = false;
+bool _isJobDescriptionEmpty = false;
+bool _isLoading = false;
+bool _isSubmitPressed = false;
+SpeechToText speechToText = SpeechToText();
+bool speechEnabled = false;
+String words = '';
+final TextEditingController _messageController = TextEditingController();
+final FocusNode _focusNode = FocusNode();
+final ScrollController _scrollController = ScrollController();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -92,194 +82,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // variables for use my saved cv dialog
-  // void clearMessages() {
-  //   setState(() {
-  //     _messages.clear();
-  //     _messagesFromAPI.clear();
-  //     _allMessages.clear();
-  //     _firstApiCalled = false;
-  //   });
-  // }
-
   final tempController = Get.put(TempController());
 
-  String _selectButton = 'Select';
-  bool _isCVSelected = false;
-  bool _cvNotSelected = false;
-  bool _isJobDescriptionForSavedCVEmpty = false;
-  final TextEditingController _jobDescriptionControllerForSavedCV =
-      TextEditingController();
-  int? _tappedIndex;
-  //
-  double _progress = 0.0;
-  String _fileName = '';
-  String _fileSize = '';
-  String _filePath = '';
-  String _timeRemaining = '';
-  bool _fileUploaded = false;
-  // bool _fileSelected = false;
-  bool _isJobDescriptionEmpty = false;
-  bool _isLoading = false;
-  bool _isSubmitPressed = false;
-
-  final TextEditingController _jobDescriptionControllerForUploadCV =
-      TextEditingController();
-
-  Future<bool> _openGallery() async {
-    result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'doc', 'docx'],
-    );
-
-    if (result != null) {
-      setState(() {
-        _fileName = result!.files.single.name;
-        _fileSize = _formatFileSize(result!.files.single.size);
-        _fileUploaded = true;
-      });
-
-      // _updateProgress();
-
-      _filePath = result!.files.single.path!;
-      print('File Path: $_filePath');
-
-      return true;
-    } else {
-      return false;
-    }
+  void initSpeech() async {
+    speechEnabled = await speechToText.initialize();
+    setState(() {});
   }
-
-  Future<Map<String, dynamic>?> _callUploadCVApi() async {
-    try {
-      final url = Uri.parse('https://api-cvlab.crewdog.ai/api/process_data/');
-      var request = http.MultipartRequest('POST', url);
-
-      request.headers['Authorization'] = 'Bearer $token';
-
-      var file = File(_filePath);
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'file_upload',
-          file.path,
-        ),
-      );
-      request.fields['job_description'] =
-          _jobDescriptionControllerForUploadCV.text;
-
-      var response = await request.send();
-
-      if (response.statusCode == 200) {
-        setState(() {
-          _firstApiCalled = true;
-        });
-        print('API call successful');
-        String apiResponse = await response.stream.bytesToString();
-        print(apiResponse);
-        //
-        Map<String, dynamic> jsonResponse = json.decode(apiResponse);
-        cvObj = jsonResponse['cv_obj'];
-        return cvObj;
-      } else {
-        print(
-            'API call failed with status code ${response.statusCode} and response $response');
-        print(await response.stream.bytesToString());
-        return null; // Return null if the API call fails
-      }
-    } catch (e) {
-      print('Error in API call: $e');
-      return null; // Return null if there's an error
-    }
-  }
-
-  String _formatMessageDetails(
-      String summary,
-      Map<String, dynamic> cvObj,
-      List<Map<String, dynamic>> skillsList,
-      List<Map<String, dynamic>> educationList,
-      List<Map<String, dynamic>> employmentHistoryList,
-      List<Map<String, dynamic>> projectsList) {
-    final StringBuffer formattedMessage = StringBuffer();
-
-    formattedMessage.writeln('Summary:');
-    formattedMessage.writeln(summary);
-    formattedMessage.writeln();
-
-    formattedMessage.writeln('Personal Info:');
-    formattedMessage.writeln('Name: ${cvObj['personal_information']['name']}');
-    formattedMessage
-        .writeln('Email: ${cvObj['personal_information']['email']}');
-    formattedMessage
-        .writeln('Phone: ${cvObj['personal_information']['phone']}');
-    formattedMessage
-        .writeln('Address: ${cvObj['personal_information']['address']}');
-    formattedMessage.writeln();
-
-    formattedMessage.writeln('Skills:');
-    for (Map<String, dynamic> skill in skillsList) {
-      formattedMessage.writeln('• ${skill['name']}');
-    }
-    formattedMessage.writeln();
-
-    formattedMessage.writeln('Education:');
-    for (Map<String, dynamic> education in educationList) {
-      formattedMessage.writeln('Degree: ${education['degree']}');
-      formattedMessage.writeln('Institute: ${education['institute']}');
-      formattedMessage.writeln('City: ${education['city']}');
-      formattedMessage.writeln('Country: ${education['country']}');
-      formattedMessage.writeln('Start date: ${education['start_date']}');
-      formattedMessage.writeln('End date: ${education['end_date']}');
-      formattedMessage.writeln('Description: ${education['description']}');
-      formattedMessage.writeln();
-    }
-
-    formattedMessage.writeln('Employment History:');
-    for (Map<String, dynamic> employment in employmentHistoryList) {
-      formattedMessage.writeln('Position: ${employment['position']}');
-      formattedMessage.writeln('Company: ${employment['company']}');
-      formattedMessage.writeln('City: ${employment['city']}');
-      formattedMessage.writeln('Country: ${employment['country']}');
-      formattedMessage.writeln('Start date: ${employment['start_date']}');
-      formattedMessage.writeln('End date: ${employment['end_date']}');
-      formattedMessage.writeln('Description: ${employment['description']}');
-      formattedMessage.writeln();
-    }
-
-    formattedMessage.writeln('Projects:');
-    formattedMessage.writeln();
-    for (Map<String, dynamic> project in projectsList) {
-      formattedMessage.writeln('Project Name: ${project['title']}');
-      formattedMessage.writeln('Description: ${project['description']}');
-      formattedMessage.writeln();
-    }
-
-    formattedMessage.writeln();
-
-    return formattedMessage.toString();
-  }
-
-  String _formatFileSize(int bytes) {
-    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-    int i = 0;
-    double fileSize = bytes.toDouble();
-
-    while (fileSize > 1024) {
-      fileSize /= 1024;
-      i++;
-    }
-
-    return '${fileSize.toStringAsFixed(2)} ${sizes[i]}';
-  }
-
-  ///TODO:
-
-  SpeechToText speechToText = SpeechToText();
-  bool speechEnabled = false;
-  String words = '';
-
-  final TextEditingController _messageController = TextEditingController();
-
-  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -287,37 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
     initSpeech();
   }
 
-  void initSpeech() async {
-    speechEnabled = await speechToText.initialize();
-    setState(() {});
-  }
-
-  void startListening() async {
-    if (cvObj.isNotEmpty || chatCvObj.isNotEmpty) {
-      await speechToText.listen(
-        onResult: (result) {
-          return onSpeechResult(result);
-        },
-      );
-      setState(() {});
-    }
-  }
-
-  void onSpeechResult(SpeechRecognitionResult result) {
-    setState(() {
-      _messageController.text = result.recognizedWords;
-    });
-  }
-
-  void stopListening() async {
-    await speechToText.stop();
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     updateMessages();
-
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -431,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ],
                                                 ),
                                                 Text(
-                                                  'Copy and paste the job\ndescription',
+                                                  'Copy and paste the job description',
                                                   style: kFont11.copyWith(
                                                       color: Colors.black),
                                                 )
@@ -615,6 +395,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                               ),
                                               backgroundColor: Colors.white,
+                                              titlePadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10,
+                                                      horizontal: 10),
+                                              title: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Please upload CV',
+                                                    style:
+                                                        kFont14Black.copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      Get.back();
+                                                    },
+                                                    child: const Icon(
+                                                        Icons.close_rounded,
+                                                        size: 16),
+                                                  )
+                                                ],
+                                              ),
                                               content: SingleChildScrollView(
                                                 child: Column(
                                                   crossAxisAlignment:
@@ -879,7 +686,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       height: 5.0,
                                                     ),
                                                     Text(
-                                                      'Copy and paste job description',
+                                                      'Job description',
                                                       style:
                                                           kFont14Black.copyWith(
                                                               fontWeight:
@@ -901,13 +708,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       decoration:
                                                           InputDecoration(
                                                         enabledBorder:
-                                                            _customBorder,
+                                                            customBorderHome,
                                                         focusedBorder:
-                                                            _customBorder,
+                                                            customBorderHome,
                                                         errorBorder:
-                                                            _customBorder,
+                                                            customBorderHome,
                                                         focusedErrorBorder:
-                                                            _customBorder,
+                                                            customBorderHome,
                                                         contentPadding:
                                                             const EdgeInsets
                                                                 .symmetric(
@@ -1106,7 +913,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     _tappedIndex = null;
                                     cvList = await fetchMyCVsData(token);
 
-                                    showDialog<void>(
+                                    showDialog(
                                       builder: (BuildContext context) {
                                         final screenHeight =
                                             MediaQuery.of(context).size.height;
@@ -1116,13 +923,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             builder: (context, state) {
                                           return AlertDialog(
                                             shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                              side: const BorderSide(
-                                                color: Colors.transparent,
-                                                width: 1.0,
-                                              ),
-                                            ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                                side: const BorderSide(
+                                                  color: Colors.transparent,
+                                                  width: 1.0,
+                                                )),
                                             contentPadding: EdgeInsets.zero,
                                             backgroundColor: Colors.white,
                                             content: SingleChildScrollView(
@@ -1140,160 +946,129 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     const SizedBox(
                                                         height: 10.0),
                                                     Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 16.0),
-                                                      child: Text(
-                                                        'Select a CV',
-                                                        style: kFont14Black
-                                                            .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height:
-                                                          screenHeight * 0.22,
-                                                      width: screenWidth * 0.8,
-                                                      child: Container(
                                                         padding:
-                                                            EdgeInsets.only(
-                                                          top: screenHeight *
-                                                              0.01,
-                                                          left: screenWidth *
-                                                              0.04,
-                                                          right: screenWidth *
-                                                              0.04,
-                                                        ),
-                                                        child: cvList.isEmpty
-                                                            ? const Center(
-                                                                child: Text(
-                                                                  'You have not saved any CV yet',
-                                                                  style:
-                                                                      kFont14Black,
-                                                                ),
-                                                              )
-                                                            : GridView.builder(
-                                                                scrollDirection:
-                                                                    Axis.horizontal,
-                                                                shrinkWrap:
-                                                                    true,
-                                                                gridDelegate:
-                                                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                  childAspectRatio:
-                                                                      1.4,
-                                                                  crossAxisCount:
-                                                                      1,
-                                                                  crossAxisSpacing:
-                                                                      8.0,
-                                                                  mainAxisSpacing:
-                                                                      8.0,
-                                                                ),
-                                                                itemCount:
-                                                                    cvList
-                                                                        .length,
-                                                                itemBuilder:
-                                                                    (BuildContext
-                                                                            context,
-                                                                        int index) {
-                                                                  final templateName =
-                                                                      cvList[index]
-                                                                              [
-                                                                              'template']
-                                                                          [
-                                                                          'name'];
-                                                                  int cvId = cvList[
-                                                                          index]
-                                                                      [
-                                                                      'cv']['id'];
-                                                                  final lastDigit =
-                                                                      int.tryParse(templateName.substring(templateName.length -
-                                                                              1)) ??
-                                                                          1;
-                                                                  final templateIndex =
-                                                                      lastDigit -
-                                                                          1;
-
-                                                                  if (templateIndex >=
-                                                                          0 &&
-                                                                      templateIndex <
-                                                                          pdfImages
-                                                                              .length) {
-                                                                    return GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        state(
-                                                                            () {
-                                                                          _selectButton =
-                                                                              'Select';
-                                                                          _tappedIndex =
-                                                                              index;
-                                                                        });
-                                                                      },
-                                                                      child:
-                                                                          Stack(
-                                                                        children: [
-                                                                          Container(
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              borderRadius: BorderRadius.circular(8.0),
-                                                                              image: DecorationImage(
-                                                                                image: AssetImage(pdfImages[templateIndex]),
-                                                                                fit: BoxFit.cover,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          if (_tappedIndex ==
-                                                                              index)
-                                                                            Center(
-                                                                              child: ElevatedButton(
-                                                                                onPressed: () async {
-                                                                                  state(() {
-                                                                                    _selectButton = 'Selected';
-                                                                                    _isCVSelected = true;
-                                                                                    _cvNotSelected = false;
-                                                                                  });
-                                                                                  chatCvObj = (await tempController.fetchCvObjectFromBackend(cvId, templateName))!;
-                                                                                },
-                                                                                style: kElevatedButtonPrimaryBG,
-                                                                                child: Text(
-                                                                                  _selectButton,
-                                                                                  style: const TextStyle(color: Colors.white),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                        ],
-                                                                      ),
-                                                                    );
-                                                                  } else {
-                                                                    return Container(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
-                                                                      color:
-                                                                          kHighlightedColor,
-                                                                      child:
-                                                                          const Center(
-                                                                        child:
-                                                                            Text(
-                                                                          'Invalid template version',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                Colors.white,
-                                                                          ),
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    16.0),
+                                                        child: Text(
+                                                            'Select a CV',
+                                                            style: kFont14Black
+                                                                .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ))),
+                                                    SizedBox(
+                                                        height:
+                                                            screenHeight * 0.3,
+                                                        width:
+                                                            screenWidth * 0.8,
+                                                        child: Container(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                              top:
+                                                                  screenHeight *
+                                                                      0.01,
+                                                              left:
+                                                                  screenWidth *
+                                                                      0.04,
+                                                              right:
+                                                                  screenWidth *
+                                                                      0.04,
+                                                            ),
+                                                            child: cvList
+                                                                    .isEmpty
+                                                                ? const Center(
+                                                                    child: Text(
+                                                                      'You have not saved any CV yet',
+                                                                      style:
+                                                                          kFont14Black,
+                                                                    ),
+                                                                  )
+                                                                : GridView
+                                                                    .builder(
+                                                                        scrollDirection:
+                                                                            Axis
+                                                                                .horizontal,
+                                                                        shrinkWrap:
+                                                                            true,
+                                                                        gridDelegate:
+                                                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                          childAspectRatio:
+                                                                              1.8,
+                                                                          crossAxisCount:
+                                                                              1,
+                                                                          crossAxisSpacing:
+                                                                              8.0,
+                                                                          mainAxisSpacing:
+                                                                              8.0,
                                                                         ),
-                                                                      ),
-                                                                    );
-                                                                  }
-                                                                },
-                                                              ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5.0,
-                                                    ),
+                                                                        itemCount:
+                                                                            cvList
+                                                                                .length,
+                                                                        itemBuilder:
+                                                                            (BuildContext context,
+                                                                                int index) {
+                                                                          final title =
+                                                                              cvList[index]['username'];
+                                                                          final templateName =
+                                                                              cvList[index]['template']['name'];
+                                                                          int cvId =
+                                                                              cvList[index]['cv']['id'];
+                                                                          final lastDigit =
+                                                                              int.tryParse(templateName.substring(templateName.length - 1)) ?? 1;
+                                                                          final templateIndex =
+                                                                              lastDigit - 1;
+
+                                                                          if (templateIndex >= 0 &&
+                                                                              templateIndex < pdfImages.length) {
+                                                                            return Column(children: [
+                                                                              GestureDetector(
+                                                                                  onTap: () {
+                                                                                    state(() {
+                                                                                      _selectButton = 'Select';
+                                                                                      _tappedIndex = index;
+                                                                                    });
+                                                                                  },
+                                                                                  child: Stack(children: [
+                                                                                    Container(
+                                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
+                                                                                      child: Image.asset(pdfImages[templateIndex]),
+                                                                                    ),
+                                                                                    if (_tappedIndex == index)
+                                                                                      Center(
+                                                                                          child: Column(children: [
+                                                                                        SizedBox(
+                                                                                          height: screenHeight * 0.1,
+                                                                                        ),
+                                                                                        ElevatedButton(
+                                                                                            onPressed: () async {
+                                                                                              state(() {
+                                                                                                _selectButton = 'Selected';
+                                                                                                _isCVSelected = true;
+                                                                                                _cvNotSelected = false;
+                                                                                              });
+                                                                                              chatCvObj = (await tempController.fetchCvObjectFromBackend(cvId, templateName))!;
+                                                                                            },
+                                                                                            style: kElevatedButtonPrimaryBG,
+                                                                                            child: Text(_selectButton, style: const TextStyle(color: Colors.white)))
+                                                                                      ]))
+                                                                                  ])),
+                                                                              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                                                                const Text(
+                                                                                  'Title: ',
+                                                                                ),
+                                                                                Expanded(child: Text(title, maxLines: 2, style: const TextStyle(overflow: TextOverflow.ellipsis, fontWeight: FontWeight.w500)))
+                                                                              ])
+                                                                            ]);
+                                                                          } else {
+                                                                            return Container(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                color: kHighlightedColor,
+                                                                                child: const Center(child: Text('Invalid template version', style: TextStyle(color: Colors.white))));
+                                                                          }
+                                                                        }))),
                                                     Row(children: [
                                                       const SizedBox(
                                                         width: 25.0,
@@ -1309,11 +1084,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       ),
                                                     ]),
                                                     Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              16.0),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 16,
+                                                          vertical: 5),
                                                       child: Text(
-                                                        'Copy and paste job description',
+                                                        'Job description',
                                                         style: kFont14Black
                                                             .copyWith(
                                                                 fontWeight:
@@ -1326,52 +1102,52 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           .symmetric(
                                                           horizontal: 16.0),
                                                       child: TextFormField(
-                                                        controller:
-                                                            _jobDescriptionControllerForSavedCV,
-                                                        minLines: 2,
-                                                        enabled: true,
-                                                        keyboardType:
-                                                            TextInputType
-                                                                .multiline,
-                                                        maxLines: null,
-                                                        decoration:
-                                                            InputDecoration(
-                                                          enabledBorder:
-                                                              _customBorder,
-                                                          focusedBorder:
-                                                              _customBorder,
-                                                          errorBorder:
-                                                              _customBorder,
-                                                          focusedErrorBorder:
-                                                              _customBorder,
-                                                          contentPadding:
-                                                              const EdgeInsets
-                                                                  .symmetric(
-                                                            vertical: 10.0,
-                                                            horizontal: 10.0,
+                                                          controller:
+                                                              _jobDescriptionControllerForSavedCV,
+                                                          minLines: 2,
+                                                          enabled: true,
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .multiline,
+                                                          maxLines: null,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            enabledBorder:
+                                                                customBorderHome,
+                                                            focusedBorder:
+                                                                customBorderHome,
+                                                            errorBorder:
+                                                                customBorderHome,
+                                                            focusedErrorBorder:
+                                                                customBorderHome,
+                                                            contentPadding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                              vertical: 10.0,
+                                                              horizontal: 10.0,
+                                                            ),
+                                                            hintText:
+                                                                'Enter job description',
+                                                            hintStyle: kFadedText
+                                                                .copyWith(
+                                                                    fontSize:
+                                                                        14),
+                                                            errorStyle:
+                                                                const TextStyle(
+                                                              fontSize: 10,
+                                                              color: Colors.red,
+                                                            ),
+                                                            errorText:
+                                                                _isJobDescriptionForSavedCVEmpty
+                                                                    ? 'Job description can\'t be empty'
+                                                                    : null,
                                                           ),
-                                                          hintText:
-                                                              'Enter job description',
-                                                          hintStyle: kFadedText
-                                                              .copyWith(
-                                                                  fontSize: 14),
-                                                          errorStyle:
-                                                              const TextStyle(
-                                                            fontSize: 10,
-                                                            color: Colors.red,
-                                                          ),
-                                                          errorText:
-                                                              _isJobDescriptionForSavedCVEmpty
-                                                                  ? 'Job description can\'t be empty'
-                                                                  : null,
-                                                        ),
-                                                        onChanged: (value) {
-                                                          state(() {
-                                                            _isJobDescriptionForSavedCVEmpty =
-                                                                false;
-                                                          });
-                                                        },
-                                                      ),
+                                                          onChanged: (value) {
+                                                            state(() {
+                                                              _isJobDescriptionForSavedCVEmpty =
+                                                                  false;
+                                                            });
+                                                          }),
                                                     ),
                                                     const SizedBox(
                                                         height: 10.0),
@@ -1622,18 +1398,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.only(left: 15.0),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        setState(() {
-                                          _messages.clear();
-                                          _messagesFromAPI.clear();
-                                          _allMessages.clear();
-                                          cvObj.clear();
-                                          chatCvObj.clear();
-
-                                          _jobDescriptionControllerForUploadCV
-                                              .clear();
-                                          result = null;
-                                          _fileUploaded = false;
-                                        });
+                                        refreshResponse();
+                                        tempController.refreshController();
                                       },
                                       style: kInitialChatButton,
                                       child: Text(
@@ -1648,12 +1414,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.only(left: 15.0),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        print(
-                                            "Controller filled with CV Object");
-                                        tempController
-                                            .fillControllerFromCvObject(
-                                                chatCvObj);
-                                        Get.toNamed(AppRoutes.savedCV);
+                                        final BottomBarController controller =
+                                            Get.find();
+                                        controller.changePage(
+                                            controller.currentIndex.value + 1);
+                                        // refreshResponse();
                                       },
                                       style: kInitialChatButton,
                                       child: Text(
@@ -1696,7 +1461,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       const SizedBox(
                                         width: 5.0,
                                       ),
-                                      const Text('Generating responseeee...'),
+                                      const Text('Generating response...'),
                                     ],
                                   ),
                                 ],
@@ -1727,17 +1492,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(5.0),
                             onTap: () {
-                              setState(() {
-                                _messages.clear();
-                                _messagesFromAPI.clear();
-                                _allMessages.clear();
-                                cvObj.clear();
-                                chatCvObj.clear();
-                                _messageController.clear();
-                                _jobDescriptionControllerForUploadCV.clear();
-                                result = null;
-                                _fileUploaded = false;
-                              });
+                              refreshResponse();
+                              tempController.refreshController();
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -1767,6 +1523,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 35,
                             child: TextField(
                               controller: _messageController,
+                              focusNode: _focusNode,
                               style: kTextFieldTextStyle,
                               readOnly: false,
                               decoration: InputDecoration(
@@ -1801,16 +1558,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     if (cvObj.isNotEmpty ||
                                         chatCvObj.isNotEmpty) {
                                       String message = _messageController.text;
-
                                       _secondApiCalled = true;
-
-                                      ///todo:chatAPI
                                       _messageController.text.isNotEmpty
                                           ? _chatApi(chatCvObj, jobDescription,
                                               message, token)
                                           : '';
                                       if (message.isNotEmpty) {
-                                        // _chatApi(cvObj, jobDescription, message, token);
                                         setState(() {
                                           _messages.add(message);
                                           _messageController.clear();
@@ -1822,6 +1575,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               const Duration(milliseconds: 300),
                                           curve: Curves.easeOut,
                                         );
+                                        _focusNode.unfocus();
                                       }
                                     }
                                   },
@@ -1851,8 +1605,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Colors
-                                      .white, // Change color when recording
+                                  color: Colors.white,
                                   boxShadow: speechToText.isListening
                                       ? [
                                           const BoxShadow(
@@ -1896,178 +1649,335 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _chatApi(Map<String, dynamic> cvObj, String jobDescription,
       String userQuery, String token) async {
     final chatApiUrl = Uri.parse('https://api-cvlab.crewdog.ai/api/chat/');
-    final client = http.Client();
 
-    try {
-      // _firstApiCalled = true;
-      _secondApiCalled = true;
+    void refreshResponse() {
+      _messages.clear();
+      _messagesFromAPI.clear();
+      _allMessages.clear();
+      cvObj.clear();
+      chatCvObj.clear();
+      _messageController.clear();
+      _focusNode.unfocus();
+      _jobDescriptionControllerForUploadCV.clear();
+      result = null;
+      _fileUploaded = false;
+      print("Response Refreshed");
+      setState(() {});
+      // tempController.refreshController();
+    }
 
-      final chatResponse = await client.post(
-        chatApiUrl,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'cv': cvObj,
-          'job_description': jobDescription,
-          'user_query': userQuery,
-        }),
-      );
+    void onSpeechResult(SpeechRecognitionResult result) {
+      setState(() {
+        _messageController.text = result.recognizedWords;
+      });
+    }
 
-      if (chatResponse.statusCode == 200) {
-        setState(() {
-          _firstApiCalled = false;
-          _secondApiCalled = false;
-        });
-        print('Chat API call successful');
+    void stopListening() async {
+      await speechToText.stop();
+      setState(() {});
+    }
 
-        String responseBody = chatResponse.body;
-        // print(responseBody);
+    void startListening() async {
+      if (cvObj.isNotEmpty || chatCvObj.isNotEmpty) {
+        await speechToText.listen(
+          onResult: (result) {
+            return onSpeechResult(result);
+          },
+        );
+        setState(() {});
+      }
+    }
 
-        Map<String, dynamic>? jsonResponse = json.decode(responseBody);
+    String _formatMessageDetails(
+        String summary,
+        Map<String, dynamic> cvObj,
+        List<Map<String, dynamic>> skillsList,
+        List<Map<String, dynamic>> educationList,
+        List<Map<String, dynamic>> employmentHistoryList,
+        List<Map<String, dynamic>> projectsList) {
+      final StringBuffer formattedMessage = StringBuffer();
 
-        if (jsonResponse != null) {
-          //print('JSON RESPONSE:::::::: $jsonResponse');
-          setState(() {
-            chatCvObj = jsonResponse;
-            print('I am CV objeeeeect:::: $chatCvObj');
+      formattedMessage.writeln('𝗦𝘂𝗺𝗺𝗮𝗿𝘆:');
+      formattedMessage.writeln(summary);
+      formattedMessage.writeln();
+
+      formattedMessage.writeln('𝗣𝗲𝗿𝘀𝗼𝗻𝗮𝗹 𝗜𝗻𝗳𝗼:');
+      formattedMessage
+          .writeln('Name: ${cvObj['personal_information']['name']}');
+      formattedMessage
+          .writeln('Email: ${cvObj['personal_information']['email']}');
+      formattedMessage
+          .writeln('Phone: ${cvObj['personal_information']['number']}');
+      formattedMessage
+          .writeln('Address: ${cvObj['personal_information']['address']}');
+      formattedMessage.writeln();
+
+      formattedMessage.writeln('𝗦𝗸𝗶𝗹𝗹𝘀:');
+      for (Map<String, dynamic> skill in skillsList) {
+        formattedMessage.writeln('• ${skill['name']}');
+      }
+      formattedMessage.writeln();
+
+      formattedMessage.writeln('𝗘𝗱𝘂𝗰𝗮𝘁𝗶𝗼𝗻:');
+      for (Map<String, dynamic> education in educationList) {
+        formattedMessage.writeln('Degree: ${education['field_of_study']}');
+        formattedMessage.writeln('Institute: ${education['institute_name']}');
+        formattedMessage.writeln('City: ${education['city']}');
+        formattedMessage.writeln('Country: ${education['country']}');
+        formattedMessage.writeln('Start date: ${education['start_date']}');
+        formattedMessage.writeln('End date: ${education['end_date']}');
+        formattedMessage.writeln('Description: ${education['description']}');
+        formattedMessage.writeln();
+      }
+
+      formattedMessage.writeln('𝗘𝗺𝗽𝗹𝗼𝘆𝗺𝗲𝗻𝘁 𝗛𝗶𝘀𝘁𝗼𝗿𝘆:');
+      for (Map<String, dynamic> employment in employmentHistoryList) {
+        formattedMessage.writeln('Position: ${employment['job_title']}');
+        formattedMessage.writeln('Company: ${employment['company_name']}');
+        formattedMessage.writeln('City: ${employment['city']}');
+        formattedMessage.writeln('Country: ${employment['country']}');
+        formattedMessage.writeln('Start date: ${employment['start_date']}');
+        formattedMessage.writeln('End date: ${employment['end_date']}');
+        formattedMessage.writeln('Description: ${employment['description']}');
+        formattedMessage.writeln();
+      }
+
+      formattedMessage.writeln('𝗣𝗿𝗼𝗷𝗲𝗰𝘁𝘀:');
+      for (Map<String, dynamic> project in projectsList) {
+        formattedMessage.writeln('Project Name: ${project['project_name']}');
+        formattedMessage.writeln('Description: ${project['description']}');
+        formattedMessage.writeln();
+      }
+
+      formattedMessage.writeln();
+
+      return formattedMessage.toString();
+    }
+
+    String _formatFileSize(int bytes) {
+      const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+      int i = 0;
+      double fileSize = bytes.toDouble();
+
+      while (fileSize > 1024) {
+        fileSize /= 1024;
+        i++;
+      }
+
+      return '${fileSize.toStringAsFixed(2)} ${sizes[i]}';
+    }
+
+    void updateMessages() {
+      _allMessages.clear();
+
+      int apiIndex = 0;
+      int userIndex = 0;
+
+      while (
+          apiIndex < _messagesFromAPI.length || userIndex < _messages.length) {
+        if (apiIndex < _messagesFromAPI.length) {
+          _allMessages.add({
+            'message': _messagesFromAPI[apiIndex],
+            'isUser': false,
           });
-          String summary = jsonResponse['personal_information']?['summary'] ??
-              'Summary not found';
-
-          List<Map<String, dynamic>> skillsList = [];
-          if (jsonResponse['skills'] != null) {
-            skillsList = (jsonResponse['skills'] as List)
-                .map((skill) => Map<String, dynamic>.from(skill))
-                .toList();
-          }
-
-          List<Map<String, dynamic>> educationList = [];
-          if (jsonResponse['education'] != null) {
-            educationList = (jsonResponse['education'] as List)
-                .map((education) => Map<String, dynamic>.from(education))
-                .toList();
-          }
-
-          List<Map<String, dynamic>> employmentHistoryList = [];
-          if (jsonResponse['employment_history'] != null) {
-            employmentHistoryList = (jsonResponse['employment_history'] as List)
-                .map((employment) => Map<String, dynamic>.from(employment))
-                .toList();
-          }
-
-          List<Map<String, dynamic>> projectsList = [];
-          if (jsonResponse['projects'] != null) {
-            projectsList = (jsonResponse['projects'] as List)
-                .map((project) => Map<String, dynamic>.from(project))
-                .toList();
-          }
-
-          setState(() {
-            jobDescription = jsonResponse['job_description'] ?? '';
-            String formattedMessage = _formatMessageDetails(
-                summary,
-                jsonResponse,
-                skillsList,
-                educationList,
-                employmentHistoryList,
-                projectsList);
-            _messagesFromAPI.add(formattedMessage);
-            updateMessages();
-            _newMessage = false;
-            _errorInChatApi = false;
-          });
-        } else {
-          print('No valid response received');
+          apiIndex++;
         }
-      } else {
+
+        if (userIndex < _messages.length) {
+          _allMessages.add({
+            'message': _messages[userIndex],
+            'isUser': true,
+          });
+          userIndex++;
+        }
+      }
+    }
+
+    Future<void> _chatApi(Map<String, dynamic> cvObj, String jobDescription,
+        String userQuery, String token) async {
+      final chatApiUrl = Uri.parse('$baseUrl/api/chat/');
+      final client = http.Client();
+      try {
+        _secondApiCalled = true;
+
+        final chatResponse = await client.post(
+          chatApiUrl,
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({
+            'cv': cvObj,
+            'job_description': jobDescription,
+            'user_query': userQuery,
+          }),
+        );
+
+        if (chatResponse.statusCode == 200) {
+          setState(() {
+            _firstApiCalled = false;
+            _secondApiCalled = false;
+          });
+          print('Chat API call successful');
+
+          String responseBody = chatResponse.body;
+
+          Map<String, dynamic>? jsonResponse = json.decode(responseBody);
+
+          if (jsonResponse != null) {
+            setState(() {
+              chatCvObj = jsonResponse;
+            });
+            await tempController.fillControllerFromCvObject(chatCvObj);
+            print("Adnan this is CHAT Obj $chatCvObj");
+
+            print("Filling Controller");
+
+            String summary = jsonResponse['personal_information']?['summary'] ??
+                'Summary not found';
+
+            List<Map<String, dynamic>> skillsList = [];
+            if (jsonResponse['skills'] != null) {
+              skillsList = (jsonResponse['skills'] as List)
+                  .map((skill) => Map<String, dynamic>.from(skill))
+                  .toList();
+            }
+
+            List<Map<String, dynamic>> educationList = [];
+            if (jsonResponse['education'] != null) {
+              educationList = (jsonResponse['education'] as List)
+                  .map((education) => Map<String, dynamic>.from(education))
+                  .toList();
+            }
+
+            List<Map<String, dynamic>> employmentHistoryList = [];
+            if (jsonResponse['employment_history'] != null) {
+              employmentHistoryList = (jsonResponse['employment_history']
+                      as List)
+                  .map((employment) => Map<String, dynamic>.from(employment))
+                  .toList();
+            }
+
+            List<Map<String, dynamic>> projectsList = [];
+            if (jsonResponse['projects'] != null) {
+              projectsList = (jsonResponse['projects'] as List)
+                  .map((project) => Map<String, dynamic>.from(project))
+                  .toList();
+            }
+
+            setState(() {
+              jobDescription = jsonResponse['job_description'] ?? '';
+              String formattedMessage = _formatMessageDetails(
+                  summary,
+                  jsonResponse,
+                  skillsList,
+                  educationList,
+                  employmentHistoryList,
+                  projectsList);
+              _messagesFromAPI.add(formattedMessage);
+              updateMessages();
+              _newMessage = false;
+              _errorInChatApi = false;
+            });
+          } else {
+            print('No valid response received');
+          }
+        } else {
+          setState(() {
+            _secondApiCalled = false;
+            _firstApiCalled = false;
+            _errorInChatApi = true;
+            _messagesFromAPI.add(_errorApiMessage);
+            updateMessages();
+          });
+          print(
+              'Second API call failed with status code ${chatResponse.statusCode}');
+          print(chatResponse.body);
+        }
+      } catch (e) {
         setState(() {
           _secondApiCalled = false;
           _firstApiCalled = false;
-          print('I am in else of status code 200');
-
+          print('I am in catch of chat api');
           _errorInChatApi = true;
           _messagesFromAPI.add(_errorApiMessage);
           updateMessages();
         });
-        print(
-            'Second API call failed with status code ${chatResponse.statusCode}');
-        print(chatResponse.body);
+        print('Error in chat API call: $e');
+      } finally {
+        setState(() {
+          _secondApiCalled = false;
+          _firstApiCalled = false;
+        });
+        client.close();
       }
-    } catch (e) {
-      setState(() {
-        _secondApiCalled = false;
-        _firstApiCalled = false;
-        print('I am in catch of chat api');
-        _errorInChatApi = true;
-        _messagesFromAPI.add(_errorApiMessage);
-        updateMessages();
-      });
-      print('Error in chat API call: $e');
-    } finally {
-      setState(() {
-        _secondApiCalled = false;
-        _firstApiCalled = false;
-      });
-      client.close();
     }
-  }
-}
 
-class MessageBubble extends StatelessWidget {
-  final String message;
-  final bool isUser;
+    Future<bool> _openGallery() async {
+      result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'doc', 'docx'],
+      );
 
-  const MessageBubble({
-    super.key,
-    required this.message,
-    required this.isUser,
-    // required this.timestamp
-  });
+      if (result != null) {
+        setState(() {
+          _fileName = result!.files.single.name;
+          _fileSize = _formatFileSize(result!.files.single.size);
+          _fileUploaded = true;
+        });
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          children: [
-            Align(
-              alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Container(
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
-                  decoration: BoxDecoration(
-                    color: isUser ? kLightOrange : kLightPurple,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
-                    message,
-                    style: kFont10.copyWith(color: Colors.black),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(bottom: 10.0),
-              child: Align(
-                alignment: isUser ? Alignment.topRight : Alignment.topLeft,
-                child: Image.asset(
-                  isUser
-                      ? 'assets/images/avatar.png'
-                      : 'assets/images/avatars/dogDP.png',
-                  height: 30,
-                  width: 30,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
+        // _updateProgress();
+
+        _filePath = result!.files.single.path!;
+        print('File Path: $_filePath');
+
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    Future<Map<String, dynamic>?> _callUploadCVApi() async {
+      try {
+        final url = Uri.parse('$baseUrl/api/process_data/');
+        var request = http.MultipartRequest('POST', url);
+
+        request.headers['Authorization'] = 'Bearer $token';
+
+        var file = File(_filePath);
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'file_upload',
+            file.path,
+          ),
+        );
+        request.fields['job_description'] =
+            _jobDescriptionControllerForUploadCV.text;
+
+        var response = await request.send();
+
+        if (response.statusCode == 200) {
+          setState(() {
+            _firstApiCalled = true;
+          });
+          String apiResponse = await response.stream.bytesToString();
+
+          Map<String, dynamic> jsonResponse = json.decode(apiResponse);
+          cvObj = jsonResponse['cv_obj'];
+          print("Adnan this is CV Obj $cvObj");
+          return cvObj;
+        } else {
+          print(
+              'API call failed with status code ${response.statusCode} and response $response');
+
+          String apiResponse = await response.stream.bytesToString();
+          print(apiResponse);
+          return null;
+        }
+      } catch (e) {
+        print('Error in API call: $e');
+        return null;
+      }
+    }
   }
 }

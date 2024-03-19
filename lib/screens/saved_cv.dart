@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import '../utils/constants.dart';
 import '../routes/app_routes.dart';
@@ -49,7 +50,7 @@ Future<bool> callFavoriteApi(int index, String token) async {
 
 ///TODO: fetch fav cv
 Future<List<String>> fetchFavoriteCVs(String token) async {
-  final String apiEndpoint = '$baseUrl/api/favorite/';
+  const String apiEndpoint = '$baseUrl/api/favorite/';
 
   try {
     final response = await http.get(
@@ -94,7 +95,7 @@ Future<List<String>> fetchFavoriteCVs(String token) async {
 
 ///TODO: del fav cv
 Future<void> removeFromFavorites(int templateId, String token) async {
-  final String apiEndpoint = 'https://api-cvlab.crewdog.ai/api/favorite/';
+  const String apiEndpoint = '$baseUrl/api/favorite/';
   print('template id:::::: $templateId');
   try {
     final response = await http.delete(
@@ -477,6 +478,31 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                   return title.contains(searchQuery);
                 }).toList();
 
+                return MasonryGridView.count(
+                  primary: true,
+                  crossAxisCount: 2,
+                  itemCount: filteredData.length,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  itemBuilder: (context, index) {
+                    final cvData = filteredData[index];
+                    final title = filteredData[index]['username'];
+                    final templateName = cvData['template']['name'];
+                    final lastDigit = int.tryParse(
+                            templateName.substring(templateName.length - 1)) ??
+                        1;
+                    final currentIndex = lastDigit;
+
+                    if (currentIndex >= 1 && currentIndex <= pdfImages.length) {
+                      usedIndices.add(currentIndex);
+                      return buildGridItemForMyCVs(
+                          currentIndex - 1, index, title);
+                    } else {
+                      return const SizedBox(); // Return a placeholder widget
+                    }
+                  },
+                );
+
                 return GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 0.70,
@@ -487,9 +513,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                   itemCount: filteredData.length,
                   itemBuilder: (context, index) {
                     final cvData = filteredData[index];
-                    // final templateId = cvData['template']['name'];
                     final title = filteredData[index]['username'];
-                    // final cvId = cvData['cv']['id'];
                     final templateName = cvData['template']['name'];
                     final lastDigit = int.tryParse(
                             templateName.substring(templateName.length - 1)) ??
@@ -504,8 +528,6 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                   },
                 );
               } else {
-                print('Empty data or no template names found');
-                print('Snapshot data: ${snapshot.data}');
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -534,88 +556,109 @@ class _SavedCvScreenState extends State<SavedCvScreen>
   }
 
   Widget buildGridItemForMyCVs(int indexOfMyCV, int mainIndex, String title) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15, right: 8, left: 8, bottom: 30.0),
-      child: Container(
-        decoration: const BoxDecoration(boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 0.545,
-            offset: Offset(-5, 2),
-            spreadRadius: -3,
-          )
-        ]),
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              tappedMyCVIndex = mainIndex;
-            });
-          },
-          child: Stack(
-            children: [
-              Image.asset(pdfImages[indexOfMyCV]),
-              if (tappedMyCVIndex == mainIndex)
-                Center(
-                  child: ElevatedButton(
-                    style: kElevatedButtonPrimaryBG,
-                    onPressed: () async {
-                      int cvId = cvList[mainIndex]['cv']['id'];
-                      String templateName =
-                          cvList[mainIndex]['template']['name'];
-
-                      await controller.fetchDataFromBackend(cvId, templateName);
-                      Navigator.pushNamed(context, templateName);
-                    },
-                    child: const Text(
-                      'Update',
-                      style: kFont20White,
-                    ),
-                  ),
-                ),
-              Align(
-                alignment: const Alignment(1.2, -1.2),
-                child: IconButton(
-                  onPressed: () {
-                    int cvId = cvList[mainIndex]['cv']['id'];
-                    String templateName = cvList[mainIndex]['template']['name'];
-
-                    print(
-                        'index of previous ::: $indexOfMyCV:::$cvId:::$templateName mainIndex:::$mainIndex');
-                    removeFromMyCVs(cvId, templateName, token);
+    return Column(
+      children: [
+        Stack(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(
+                  top: 15, right: 8, left: 8, bottom: 5.0),
+              decoration: const BoxDecoration(boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 0.545,
+                  offset: Offset(-5, 2),
+                  spreadRadius: -3,
+                )
+              ]),
+              child: GestureDetector(
+                  onTap: () {
                     setState(() {
-                      tappedMyCVIndex = null;
+                      tappedMyCVIndex = mainIndex;
                     });
                   },
-                  icon: Image.asset(
-                    'assets/images/cancelCV.png',
-                    height: 25,
-                    width: 25,
-                  ),
-                ),
-              ),
-              Align(
-                alignment: const Alignment(0.0, 1.23),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Title: ',
-                    ),
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                        ),
+                  child: Stack(
+                    children: [
+                      Column(
+                        children: [
+                          Image.asset(pdfImages[indexOfMyCV]),
+                          SizedBox(
+                            height: 3,
+                          )
+                        ],
                       ),
-                    ),
-                  ],
+                      if (tappedMyCVIndex == mainIndex)
+                        Center(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.125,
+                              ),
+                              SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.275,
+                                child: ElevatedButton(
+                                  style: kElevatedButtonPrimaryBGSmall,
+                                  onPressed: () async {
+                                    int cvId = cvList[mainIndex]['cv']['id'];
+                                    String templateName =
+                                        cvList[mainIndex]['template']['name'];
+
+                                    await controller.fetchDataFromBackend(
+                                        cvId, templateName);
+                                    Get.toNamed(templateName);
+                                  },
+                                  child: const Text(
+                                    'Update',
+                                    style: kFont20White,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  )),
+            ),
+            Align(
+              alignment: const Alignment(1.18, -1.2),
+              child: IconButton(
+                onPressed: () {
+                  int cvId = cvList[mainIndex]['cv']['id'];
+                  String templateName = cvList[mainIndex]['template']['name'];
+                  removeFromMyCVs(cvId, templateName, token);
+                  setState(() {
+                    tappedMyCVIndex = null;
+                  });
+                },
+                icon: Image.asset(
+                  'assets/images/cancelCV.png',
+                  height: 25,
+                  width: 25,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(width: 5),
+            const Text(
+              'Title: ',
+            ),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
