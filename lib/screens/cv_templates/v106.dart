@@ -607,7 +607,8 @@ class _V106State extends State<V106> {
                                     ),
 
                                   const SizedBox(height: 5),
-                                  Row(
+                                  if(controller.projects.isNotEmpty)
+                                    Row(
                                     children: [
                                       Image.asset('assets/images/hat.png', width: 12, height: 12),
                                       const SizedBox(
@@ -640,7 +641,8 @@ class _V106State extends State<V106> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
+                                  if(controller.projects.isNotEmpty)
+                                    const SizedBox(
                                     height: 5.0,
                                   ),
                                   for (int i = 0; i < controller.projects.length; i++)
@@ -680,7 +682,6 @@ class _V106State extends State<V106> {
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         ProjectWidget(
-                                                          isRemovable: controller.projects.length>1,
                                                           title: controller.projects[i].title,
                                                           description: controller.projects[i].description,
                                                           onRemoveTap: () {
@@ -1127,7 +1128,8 @@ class _V106State extends State<V106> {
                     ),
                   ),
                 pw.SizedBox(height: 10),
-                pw.Row(
+                if(controller.projects.isNotEmpty)
+                  pw.Row(
                   children: [
                     pw.Image(pw.MemoryImage(PwAssets.hatImage), height: 15, width: 15),
                     pw.SizedBox(
@@ -1136,7 +1138,8 @@ class _V106State extends State<V106> {
                     pw.Text('Projects', style: TextStylesPdf.headingText15w600),
                   ],
                 ),
-                pw.SizedBox(
+                if(controller.projects.isNotEmpty)
+                  pw.SizedBox(
                   height: 8.0,
                 ),
                 for (int i = 0; i < controller.projects.length; i++)

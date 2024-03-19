@@ -96,6 +96,7 @@ Future<List<String>> fetchFavoriteCVs(String token) async {
 ///TODO: del fav cv
 Future<void> removeFromFavorites(int templateId, String token) async {
   const String apiEndpoint = '$baseUrl/api/favorite/';
+
   print('template id:::::: $templateId');
   try {
     final response = await http.delete(
@@ -122,7 +123,7 @@ Future<void> removeFromFavorites(int templateId, String token) async {
 
 ///TODO: fetch my cvs
 Future<List<Map<String, dynamic>>> fetchMyCVsData(String token) async {
-  final String apiEndpoint = 'https://api-cvlab.crewdog.ai/api/mycvs/?name=' '';
+  final String apiEndpoint = '$baseUrl/api/mycvs/?name=' '';
 
   try {
     final response = await http.get(
@@ -162,7 +163,7 @@ Future<List<Map<String, dynamic>>> fetchMyCVsData(String token) async {
 
 ///Todo: delete cv
 Future<void> removeFromMyCVs(int cvId, String templateId, String token) async {
-  final String apiEndpoint = 'https://api-cvlab.crewdog.ai/api/deleteCV/';
+  final String apiEndpoint = '$baseUrl/api/deleteCV/';
   print('template id :::: $templateId cv ID ::::::::::::::::: $cvId');
   try {
     final response = await http.delete(
@@ -197,7 +198,7 @@ Future<void> removeFromMyCVs(int cvId, String templateId, String token) async {
 ///Todo: update my cv
 Future<void> updateCV(int cvId, String templateId, String token) async {
   final String apiEndpoint =
-      'https://api-cvlab.crewdog.ai/api/getCv/?cv_id=$cvId&template_id=$templateId';
+      '$baseUrl/api/getCv/?cv_id=$cvId&template_id=$templateId';
 
   try {
     final response = await http.get(

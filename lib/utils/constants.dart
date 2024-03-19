@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //API
-const baseUrl = 'https://api-cvlab.crewdog.ai';
+const baseUrl = 'https://cvlab-staging-backend.crewdog.ai';
 
 // Colors
 const Color kPrimaryColor = Color(0xFF161717);

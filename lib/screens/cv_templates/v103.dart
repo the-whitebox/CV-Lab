@@ -502,7 +502,8 @@ class _V103State extends State<V103> {
                                                 ],
                                               ),
                                             const SizedBox(height: 10),
-                                            Row(
+                                            if(controller.projects.isNotEmpty)
+                                              Row(
                                               children: [
                                                 const Text(
                                                   'Projects',
@@ -549,7 +550,7 @@ class _V103State extends State<V103> {
                                                 },
                                               ),
 
-                                            const SizedBox(height: 10),
+                                            if(controller.projects.isNotEmpty) const SizedBox(height: 10),
                                             Row(
                                               children: [
                                                 if (controller
@@ -871,11 +872,12 @@ class _V103State extends State<V103> {
                     ],
                   ),
                 pw.SizedBox(height: 5),
-                pw.Text(
+                if(controller.projects.isNotEmpty)
+                  pw.Text(
                   'Projects',
                   style: TextStylesPdf.headingText20w600,
                 ),
-                pw.SizedBox(height: 5),
+                if(controller.projects.isNotEmpty) pw.SizedBox(height: 5),
                 pw.Column(
                   crossAxisAlignment: pw.CrossAxisAlignment.start,
                   mainAxisAlignment: pw.MainAxisAlignment.start,

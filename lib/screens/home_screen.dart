@@ -82,12 +82,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final tempController = Get.put(TempController());
+
 
   void initSpeech() async {
     speechEnabled = await speechToText.initialize();
     setState(() {});
   }
+
+  final tempController = Get.put(TempController());
+
+
 
   @override
   void initState() {
@@ -420,6 +424,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         Icons.close_rounded,
                                                         size: 16),
                                                   )
+
                                                 ],
                                               ),
                                               content: SingleChildScrollView(
@@ -432,17 +437,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Text(
-                                                          'Please upload CV',
-                                                          style: kFont14Black
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 5.0,
-                                                        ),
                                                         DottedBorder(
                                                           color: kPurple,
                                                           borderType:
@@ -1646,9 +1640,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _chatApi(Map<String, dynamic> cvObj, String jobDescription,
-      String userQuery, String token) async {
-    final chatApiUrl = Uri.parse('https://api-cvlab.crewdog.ai/api/chat/');
 
     void refreshResponse() {
       _messages.clear();
@@ -1980,4 +1971,4 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
   }
-}
+

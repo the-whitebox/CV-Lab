@@ -476,11 +476,13 @@ class _V105State extends State<V105> {
                               ],
                             ),
 
-                            const Divider(
+                            if(controller.projects.isNotEmpty)
+                              const Divider(
                               height: 20,
                               color: Color(0XFF4E4949),
                             ),
-                            Row(
+                            if(controller.projects.isNotEmpty)
+                              Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -520,7 +522,6 @@ class _V105State extends State<V105> {
                                     children: [
                                       for (int i = 0; i < controller.projects.length; i++)
                                         ProjectWidget(
-                                          isRemovable: controller.projects.length>1,
                                           title: controller.projects[i].title,
                                           description: controller.projects[i].description,
                                           onRemoveTap: () {
@@ -774,11 +775,13 @@ class _V105State extends State<V105> {
        ],
      ),
 
-     pw.Divider(
+     if(controller.projects.isNotEmpty)
+       pw.Divider(
        height: 20,
        //color: Color(0XFF4E4949),
      ),
-     pw.Row(
+     if(controller.projects.isNotEmpty)
+       pw.Row(
        crossAxisAlignment: pw.CrossAxisAlignment.start,
        children: [
          pw.Expanded(

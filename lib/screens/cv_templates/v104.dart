@@ -349,7 +349,8 @@ class _V104State extends State<V104> {
                                       ],
                                     ),
                                   const SizedBox(height: 5.0),
-                                  Row(
+                                  if(controller.projects.isNotEmpty)
+                                    Row(
                                     children: [
                                       Image.asset('assets/images/hat.png', width: 10, height: 8),
                                       const SizedBox(
@@ -379,13 +380,13 @@ class _V104State extends State<V104> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 5),
+                                  if(controller.projects.isNotEmpty)
+                                    const SizedBox(height: 5),
                                   for (int i = 0; i < controller.projects.length; i++)
                                     Row(
                                       children: [
                                         Expanded(
                                           child: ProjectWidget(
-                                            isRemovable: controller.projects.length>1,
                                             title: controller.projects[i].title,
                                             description: controller.projects[i].description,
                                             onRemoveTap: () {
@@ -673,7 +674,7 @@ class _V104State extends State<V104> {
                     // const SizedBox(width: 18.0),
                   ],
                 ),
-                pw.SizedBox(height: 5.0),
+                pw.SizedBox(height: 10.0),
                 pw.Row(
                   children: [
                     pw.Image(pw.MemoryImage(PwAssets.bagImage), height: 12, width: 14),
@@ -725,8 +726,10 @@ class _V104State extends State<V104> {
                       )
                     ],
                   ),
-                pw.SizedBox(height: 10.0),
-                pw.Row(
+                if(controller.projects.isNotEmpty)
+                  pw.SizedBox(height: 10.0),
+                if(controller.projects.isNotEmpty)
+                  pw.Row(
                   children: [
                     pw.Image(pw.MemoryImage(PwAssets.hatImage), height: 12, width: 14),
                     pw.SizedBox(

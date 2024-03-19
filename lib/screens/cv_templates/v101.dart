@@ -464,6 +464,7 @@ class _V101State extends State<V101> {
                           ],
                         ),
                         const SizedBox(height: 2),
+                        if(controller.projects.isNotEmpty)
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.alphabetic,
@@ -501,7 +502,6 @@ class _V101State extends State<V101> {
                                 children: [
                                   for (int i = 0; i < controller.projects.length; i++)
                                     ProjectWidget(
-                                      isRemovable: controller.projects.length>1,
                                       title: controller.projects[i].title,
                                       description: controller.projects[i].description,
                                       onRemoveTap: () {
@@ -821,7 +821,8 @@ class _V101State extends State<V101> {
         ],
       ),
       pw.SizedBox(height: 8),
-      pw.Row(
+      if(controller.projects.isNotEmpty)
+        pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Expanded(
@@ -842,7 +843,7 @@ class _V101State extends State<V101> {
                 ],
               )),
         ],
-      ),
+        ),
       pw.SizedBox(height: 8),
       pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
