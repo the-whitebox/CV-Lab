@@ -5,11 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:printing/printing.dart';
 import 'dart:io';
-import '../../custom_widgets/custom_widgets.dart';
-import '../../custom_widgets/pdf_custom_widgets.dart';
+import '../../custom_widgets/custom_button_row.dart';
+import '../../custom_widgets/custom_editable_text.dart';
+import '../../custom_widgets/cv_add_button.dart';
+import '../../custom_widgets/education_history_widget.dart';
+import '../../custom_widgets/employment_history_widget.dart';
+import '../../custom_widgets/project_history_widget.dart';
+import '../../custom_widgets/reference_widget.dart';
+import '../../custom_widgets/skill_custom_widget.dart';
+import '../../pdf_custom_widgets/pdf_education_history.dart';
+import '../../pdf_custom_widgets/pdf_employment_history.dart';
+import '../../pdf_custom_widgets/pdf_project_widget.dart';
+import '../../pdf_custom_widgets/pdf_reference_widget.dart';
+import '../../pdf_custom_widgets/pdf_skill_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pdf/widgets.dart' as pw;
-import '../../custom_widgets/pw_assets.dart';
+import '../../pdf_custom_widgets/pw_assets.dart';
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
 import '../controllers/profile_controller.dart';
@@ -502,6 +513,7 @@ class _V101State extends State<V101> {
                                 children: [
                                   for (int i = 0; i < controller.projects.length; i++)
                                     ProjectWidget(
+                                      isRemovable: controller.projects.length > 1,
                                       title: controller.projects[i].title,
                                       description: controller.projects[i].description,
                                       onRemoveTap: () {
@@ -582,22 +594,13 @@ class _V101State extends State<V101> {
               SaveDownloadButtonsRow(
                 isUpdateCV: controller.saveCvId != 0,
                 onSavePressed: () async {
-                  print("I have CHAT DATA while saving ${controller.isChatData}");
                   if (controller.saveCvId != 0) {
                     await controller.updateCv(('v101'), controller.saveCvId);
-                    // controller.refreshController();
                   } else {
                     await controller.saveCv('v101');
-                    if(controller.isChatData==false) {
-                      controller.refreshController();
-                    }
-
                   }
                 },
                 onDownloadPressed: () async {
-                  await requestPermissions();
-                  await PwAssets.initializeAssets();
-                  await PwFonts.initializeFonts();
                   pw.ImageProvider netImage = await networkImage(
                       'https://cvlab.crewdog.ai/static/media/profilepic.1854a1d1129a7d85e324.png');
                   if (controller.cvImagePath.isNotEmpty) {
@@ -605,11 +608,6 @@ class _V101State extends State<V101> {
                   }
                   await makePdf(
                       buildTemplate4Pdf(controller, netImage), controller.nameController.text);
-                  if(controller.isChatData==false) {
-                    controller.refreshController();
-                  }
-                  Get.back();
-                  appSuccessSnackBar("Success", 'Your CV has been Downloaded');
                 },
               ),
             ],

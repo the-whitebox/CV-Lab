@@ -2,11 +2,11 @@ import 'dart:io';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
-import '../../custom_widgets/custom_widgets.dart';
+import '../../custom_widgets/custom_editable_text.dart';
 import 'package:get/get.dart';
-import '../../custom_widgets/pdf_custom_widgets.dart';
+import '../../pdf_custom_widgets/pdf_skill_widget.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../custom_widgets/pw_assets.dart';
+import '../../pdf_custom_widgets/pw_assets.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../../utils/app_snackbar.dart';
@@ -15,6 +15,17 @@ import '../../utils/app_functions.dart';
 import '../../utils/local_db.dart';
 import '../controllers/profile_controller.dart';
 import 'controllers/temp_controller.dart';
+import '../../custom_widgets/custom_button_row.dart';
+import '../../custom_widgets/cv_add_button.dart';
+import '../../custom_widgets/education_history_widget.dart';
+import '../../custom_widgets/employment_history_widget.dart';
+import '../../custom_widgets/project_history_widget.dart';
+import '../../custom_widgets/reference_widget.dart';
+import '../../custom_widgets/skill_custom_widget.dart';
+import '../../pdf_custom_widgets/pdf_education_history.dart';
+import '../../pdf_custom_widgets/pdf_employment_history.dart';
+import '../../pdf_custom_widgets/pdf_project_widget.dart';
+import '../../pdf_custom_widgets/pdf_reference_widget.dart';
 
 class V106 extends StatefulWidget {
   const V106({Key? key}) : super(key: key);
@@ -682,6 +693,7 @@ class _V106State extends State<V106> {
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         ProjectWidget(
+                                                          isRemovable: controller.projects.length > 1,
                                                           title: controller.projects[i].title,
                                                           description: controller.projects[i].description,
                                                           onRemoveTap: () {
@@ -819,9 +831,6 @@ class _V106State extends State<V106> {
                       await controller.updateCv(('v106'), controller.saveCvId);
                     }else{
                       await controller.saveCv('v106');
-                      if(controller.isChatData==false) {
-                        controller.refreshController();
-                      }
                     }
                   }, onDownloadPressed: () async {
                 WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -857,9 +866,6 @@ class _V106State extends State<V106> {
                     storage.write("project$i", projectsRenderBox.size.height*1.2);
                     print("Projects History Height ${projectsRenderBox.size.height*1.2}");
                   }
-                  await requestPermissions();
-                  await PwAssets.initializeAssets();
-                  await PwFonts.initializeFonts();
                   pw.ImageProvider netImage = await networkImage(
                       'https://cvlab.crewdog.ai/static/media/profilepic.1854a1d1129a7d85e324.png');
                   if (controller.cvImagePath.isNotEmpty) {
@@ -867,11 +873,6 @@ class _V106State extends State<V106> {
                   }
                   await makePdf(
                       buildTemplate1Pdf(controller, netImage), controller.nameController.text);
-                  if(controller.isChatData==false) {
-                    controller.refreshController();
-                  }
-                  Get.back();
-                  appSuccessSnackBar("Success", 'Your CV has been Downloaded');
                 });
               }),
             ],
