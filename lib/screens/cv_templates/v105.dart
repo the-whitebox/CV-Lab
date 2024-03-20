@@ -3,16 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:printing/printing.dart';
-import '../../custom_widgets/custom_widgets.dart';
+import '../../custom_widgets/custom_editable_text.dart';
 import 'package:pdf/widgets.dart' as pw;
-import '../../custom_widgets/pdf_custom_widgets.dart';
-import '../../custom_widgets/pw_assets.dart';
+import '../../pdf_custom_widgets/pdf_skill_widget.dart';
+import '../../pdf_custom_widgets/pw_assets.dart';
 import '../../utils/app_snackbar.dart';
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
 import '../../utils/local_db.dart';
 import '../controllers/profile_controller.dart';
 import 'controllers/temp_controller.dart';
+import '../../custom_widgets/custom_button_row.dart';
+import '../../custom_widgets/cv_add_button.dart';
+import '../../custom_widgets/project_history_widget.dart';
+import '../../custom_widgets/reference_widget.dart';
+import '../../custom_widgets/skill_custom_widget.dart';
+import '../../pdf_custom_widgets/pdf_project_widget.dart';
+import '../../pdf_custom_widgets/pdf_reference_widget.dart';
 
 class V105 extends StatefulWidget {
   const V105({super.key});
@@ -522,6 +529,7 @@ class _V105State extends State<V105> {
                                     children: [
                                       for (int i = 0; i < controller.projects.length; i++)
                                         ProjectWidget(
+                                          isRemovable: controller.projects.length > 1,
                                           title: controller.projects[i].title,
                                           description: controller.projects[i].description,
                                           onRemoveTap: () {
@@ -613,25 +621,14 @@ class _V105State extends State<V105> {
                     await controller.updateCv(('v105'), controller.saveCvId);
                   }else{
                     await controller.saveCv('v105');
-                    if(controller.isChatData==false) {
-                      controller.refreshController();
-                    }
                   }
                 },
                 onDownloadPressed: () async {
-                  await requestPermissions();
-                  await PwAssets.initializeAssets();
-                  await PwFonts.initializeFonts();
                   pw.ImageProvider   netImage= await networkImage('https://cvlab.crewdog.ai/static/media/profilepic.1854a1d1129a7d85e324.png');
                   if(controller.cvImagePath.isNotEmpty){
                     netImage = await networkImage('$baseUrl${controller.cvImagePath}');
                   }
                   await makePdf(buildTemplate6Pdf(controller,netImage), controller.nameController.text);
-                  if(controller.isChatData==false) {
-                    controller.refreshController();
-                  }
-                  Get.back();
-                  appSuccessSnackBar("Success", 'Your CV has been Downloaded');
                 },
               ),
             ],

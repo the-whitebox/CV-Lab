@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 import '../../../utils/constants.dart';
+import '../../home_screen.dart';
 
 String token = getAccessToken();
 String userId = getUserId();
@@ -19,6 +20,8 @@ class TempController extends GetxController {
     refreshController();
     profileImage = getProfilePic();
   }
+
+
 
   int saveCvId = 0;
   File cvImage = File('');
@@ -40,14 +43,7 @@ class TempController extends GetxController {
         'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
   );
 
-  final List<Projects> projects = [
-    // Projects(
-    //     keyController: GlobalKey(),
-    //     title: TextEditingController(text: 'Lorem Ipsum'),
-    //     description: TextEditingController(
-    //         text:
-    //             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
-  ];
+  final List<Projects> projects = [];
 
   final List<Map<TextEditingController, double>> skills = [
     {TextEditingController(text: 'Your Skill'): 1},
@@ -198,9 +194,6 @@ class TempController extends GetxController {
       );
 
       if (response.statusCode == 201) {
-        print('CV saved successfully: ${response.body}');
-        // isChatData=false;
-        Get.back();
         appSuccessSnackBar('Success', 'CV saved successfully');
       } else {
         print('Failed to save CV. Status code: ${response.statusCode}');
@@ -246,9 +239,6 @@ class TempController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        // isChatData=false;
-        print('CV Updated successfully: ${response.body}');
-        Get.back();
         appSuccessSnackBar('Success', 'CV Updated successfully');
       } else {
         print('Failed to Update CV. Status code: ${response.statusCode}');
@@ -289,6 +279,8 @@ class TempController extends GetxController {
   }
 
   Future<void> fillControllerFromCvObject(Map<String, dynamic> cvData) async {
+
+    print("Filling from CV Object");
     final Map<String, dynamic> personalData = cvData['personal_information'];
     nameController.text = personalData['name'] ?? '';
     mailController.text = personalData['email'] ?? '';
@@ -544,90 +536,97 @@ class TempController extends GetxController {
   }
 
   void refreshController() {
-    print("Controller Refreshed");
-    profilePicState = true;
-    isChatData = false;
-    profileImage = getProfilePic();
-    if (profileImage.contains("https://cvlab-staging-backend.crewdog.ai")) {
-      profileImage = profileImage.substring(40);
-    }
-    nameController.text = 'Adnan Ashraf';
-    designationController.text = 'Manager';
-    addressController.text = '2980 Smith Street, Massachusetts, USA';
-    contactController.text = '+1 508-831-1827';
-    mailController.text = 'lorem@gmail.com';
-    cvImagePath = profileImage;
-    saveCvId = 0;
-    personalInformation.text =
-        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.';
 
-    // Refresh skills
-    skills.clear();
-    skills.addAll([
-      {TextEditingController(text: 'Your Skill'): 1},
-      {TextEditingController(text: 'Your Skill'): 0.9},
-      {TextEditingController(text: 'Your Skill'): 0.7},
-      {TextEditingController(text: 'Your Skill'): 0.3},
-    ]);
+    if(chatCvObj.isNotEmpty){
+      fillControllerFromCvObject(chatCvObj);
+    }else{
+      print("Controller Refreshed");
+      profilePicState = true;
+      isChatData = false;
+      profileImage = getProfilePic();
+      if (profileImage.contains("https://cvlab-staging-backend.crewdog.ai")) {
+        profileImage = profileImage.substring(40);
+      }
+      nameController.text = 'Adnan Ashraf';
+      designationController.text = 'Manager';
+      addressController.text = '2980 Smith Street, Massachusetts, USA';
+      contactController.text = '+1 508-831-1827';
+      mailController.text = 'lorem@gmail.com';
+      cvImagePath = profileImage;
+      saveCvId = 0;
+      personalInformation.text =
+      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.';
 
-    projects.clear();
-    projects.addAll([
-      Projects(
-          keyController: GlobalKey(),
-          title: TextEditingController(text: 'Lorem Ipsum'),
+      // Refresh skills
+      skills.clear();
+      skills.addAll([
+        {TextEditingController(text: 'Your Skill'): 1},
+        {TextEditingController(text: 'Your Skill'): 0.9},
+        {TextEditingController(text: 'Your Skill'): 0.7},
+        {TextEditingController(text: 'Your Skill'): 0.3},
+      ]);
+
+      projects.clear();
+      projects.addAll([
+        Projects(
+            keyController: GlobalKey(),
+            title: TextEditingController(text: 'Lorem Ipsum'),
+            description: TextEditingController(
+                text:
+                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
+      ]);
+
+
+      // Refresh education
+      education.clear();
+      education.addAll([
+        EducationHistory(
+          fieldOfStudy: TextEditingController(text: 'Lorem Ipsum'),
           description: TextEditingController(
-              text:
-                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
-    ]);
+            text:
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
+          ),
+          endDate: TextEditingController(text: 'November 2015'),
+          startDate: TextEditingController(text: 'September 2019'),
+          city: TextEditingController(text: 'Lorem Ipsum'),
+          country: TextEditingController(text: 'Lorem Ipsum'),
+          instituteName: TextEditingController(text: 'Lorem Ipsum'),
+          keyController: GlobalKey(),
+        )
+      ]);
+
+      // Refresh employment history
+      employmentHistory.clear();
+      employmentHistory.addAll([
+        EmploymentHistory(
+          jobTitle: TextEditingController(text: 'Lorem Ipsum'),
+          description: TextEditingController(
+            text:
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
+          ),
+          endDate: TextEditingController(text: 'November 2015'),
+          startDate: TextEditingController(text: 'September 2019'),
+          city: TextEditingController(text: 'Lorem Ipsum'),
+          country: TextEditingController(text: 'Lorem Ipsum'),
+          companyName: TextEditingController(text: 'Lorem Ipsum'),
+          keyController: GlobalKey(),
+        )
+      ]);
+
+      reference.clear();
+      reference.addAll([
+        References(
+            personName: TextEditingController(text: 'Lorem Ipsum'),
+            contactNumber: TextEditingController(text: '+92 3123456789'),
+            referenceText: TextEditingController(
+                text:
+                'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text'),
+            keyController: GlobalKey())
+      ]);
+    }
+    }
 
 
-    // Refresh education
-    education.clear();
-    education.addAll([
-      EducationHistory(
-        fieldOfStudy: TextEditingController(text: 'Lorem Ipsum'),
-        description: TextEditingController(
-          text:
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
-        ),
-        endDate: TextEditingController(text: 'November 2015'),
-        startDate: TextEditingController(text: 'September 2019'),
-        city: TextEditingController(text: 'Lorem Ipsum'),
-        country: TextEditingController(text: 'Lorem Ipsum'),
-        instituteName: TextEditingController(text: 'Lorem Ipsum'),
-        keyController: GlobalKey(),
-      )
-    ]);
-
-    // Refresh employment history
-    employmentHistory.clear();
-    employmentHistory.addAll([
-      EmploymentHistory(
-        jobTitle: TextEditingController(text: 'Lorem Ipsum'),
-        description: TextEditingController(
-          text:
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
-        ),
-        endDate: TextEditingController(text: 'November 2015'),
-        startDate: TextEditingController(text: 'September 2019'),
-        city: TextEditingController(text: 'Lorem Ipsum'),
-        country: TextEditingController(text: 'Lorem Ipsum'),
-        companyName: TextEditingController(text: 'Lorem Ipsum'),
-        keyController: GlobalKey(),
-      )
-    ]);
-
-    reference.clear();
-    reference.addAll([
-      References(
-          personName: TextEditingController(text: 'Lorem Ipsum'),
-          contactNumber: TextEditingController(text: '+92 3123456789'),
-          referenceText: TextEditingController(
-              text:
-                  'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text'),
-          keyController: GlobalKey())
-    ]);
-  }
 }
 
 class EmploymentHistory {

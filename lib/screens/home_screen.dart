@@ -386,6 +386,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     _fileUploaded = false;
                                     showDialog<void>(
                                       context: context,
+                                      barrierDismissible: false,
                                       builder: (BuildContext context) {
                                         return StatefulBuilder(
                                           builder: (context, state) {
@@ -416,13 +417,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 FontWeight
                                                                     .w600),
                                                   ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      Get.back();
-                                                    },
-                                                    child: const Icon(
-                                                        Icons.close_rounded,
-                                                        size: 16),
+                                                  IgnorePointer(
+                                                    ignoring:
+                                                    _isSubmitPressed,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        Get.back();
+                                                      },
+                                                      child: const Icon(
+                                                          Icons.close_rounded,
+                                                          size: 16),
+                                                    ),
                                                   )
 
                                                 ],
@@ -637,18 +642,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               Expanded(
                                                                 flex: 13,
                                                                 child:
-                                                                    IconButton(
+                                                                IconButton(
                                                                   highlightColor:
-                                                                      Colors
-                                                                          .transparent,
+                                                                  Colors
+                                                                      .transparent,
                                                                   iconSize: 20,
                                                                   onPressed:
                                                                       () {
                                                                     state(() {
                                                                       result =
-                                                                          null;
+                                                                      null;
                                                                       _fileUploaded =
-                                                                          false;
+                                                                      false;
                                                                     });
                                                                   },
                                                                   icon: const Icon(
@@ -777,11 +782,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           const SizedBox(
                                                             width: 4,
                                                           ),
-                                                          ElevatedButton(
+                                                          IgnorePointer(
+                                                            ignoring:
+                                                            _isSubmitPressed,
+                                                            child: ElevatedButton(
                                                             onPressed:
                                                                 () async {
                                                               _isSubmitPressed =
-                                                                  true;
+                                                              true;
                                                               _isJobDescriptionEmpty =
                                                                   _jobDescriptionControllerForUploadCV
                                                                       .text
@@ -789,38 +797,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               if (!_isJobDescriptionEmpty) {
                                                                 state(() {
                                                                   _isJobDescriptionEmpty =
-                                                                      false;
+                                                                  false;
                                                                   _isLoading =
-                                                                      true;
+                                                                  true;
                                                                 });
                                                               } else {
                                                                 state(() {
                                                                   _isJobDescriptionEmpty =
-                                                                      true;
+                                                                  true;
                                                                   _isSubmitPressed =
-                                                                      false;
+                                                                  false;
                                                                 });
                                                               }
                                                               if (_fileUploaded &&
                                                                   !_isJobDescriptionEmpty) {
                                                                 state(() {
                                                                   _fileUploaded =
-                                                                      true;
+                                                                  true;
                                                                 });
 
                                                                 if (await isInternetConnected()) {
                                                                   await _callUploadCVApi();
                                                                   state(() {
                                                                     _firstApiCalled =
-                                                                        true;
+                                                                    true;
                                                                     _isSubmitPressed =
-                                                                        false;
+                                                                    false;
                                                                   });
                                                                   if (cvObj
                                                                       .isNotEmpty) {
                                                                     state(() {
                                                                       _firstApiCalled =
-                                                                          true;
+                                                                      true;
                                                                     });
                                                                     Get.back();
                                                                     _chatApi(
@@ -837,39 +845,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               } else if (!_fileUploaded) {
                                                                 state(() {
                                                                   _fileUploaded =
-                                                                      false;
+                                                                  false;
                                                                 });
                                                               }
                                                               state(() {
                                                                 _isLoading =
-                                                                    false;
+                                                                false;
                                                               });
                                                             },
                                                             style:
-                                                                kElevatedButtonPrimaryBG,
+                                                            kElevatedButtonPrimaryBG,
                                                             child: Align(
                                                               alignment:
-                                                                  Alignment
-                                                                      .center,
+                                                              Alignment
+                                                                  .center,
                                                               child: _isLoading
                                                                   ? const RotatingImage(
-                                                                      height:
-                                                                          30,
-                                                                      width: 30,
-                                                                    )
+                                                                height:
+                                                                30,
+                                                                width: 30,
+                                                              )
                                                                   : const Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      child:
-                                                                          Text(
-                                                                        'Submit',
-                                                                        style:
-                                                                            kFont12,
-                                                                      ),
-                                                                    ),
+                                                                alignment:
+                                                                Alignment
+                                                                    .center,
+                                                                child:
+                                                                Text(
+                                                                  'Submit',
+                                                                  style:
+                                                                  kFont12,
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
+                                                          ),)
                                                         ],
                                                       ),
                                                     ),
@@ -908,6 +916,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     cvList = await fetchMyCVsData(token);
 
                                     showDialog(
+                                      barrierDismissible: false,
                                       builder: (BuildContext context) {
                                         final screenHeight =
                                             MediaQuery.of(context).size.height;
@@ -925,6 +934,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 )),
                                             contentPadding: EdgeInsets.zero,
                                             backgroundColor: Colors.white,
+
+                                            titlePadding:
+                                            const EdgeInsets.symmetric(
+                                                vertical: 10,
+                                                horizontal: 10),
+                                            title: Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  'Select a CV',
+                                                  style:
+                                                  kFont14Black.copyWith(
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .w600),
+                                                ),
+                                                IgnorePointer(
+                                                  ignoring:
+                                                  _isSubmitPressed,
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      Get.back();
+                                                    },
+                                                    child: const Icon(
+                                                        Icons.close_rounded,
+                                                        size: 16),
+                                                  ),
+                                                )
+
+                                              ],
+                                            ),
                                             content: SingleChildScrollView(
                                               child: ConstrainedBox(
                                                 constraints: BoxConstraints(
@@ -937,22 +979,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: [
-                                                    const SizedBox(
-                                                        height: 10.0),
-                                                    Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal:
-                                                                    16.0),
-                                                        child: Text(
-                                                            'Select a CV',
-                                                            style: kFont14Black
-                                                                .copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                            ))),
+
                                                     SizedBox(
                                                         height:
                                                             screenHeight * 0.3,
@@ -1143,8 +1170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             });
                                                           }),
                                                     ),
-                                                    const SizedBox(
-                                                        height: 10.0),
+
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
@@ -1187,89 +1213,94 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             const SizedBox(
                                                               width: 4,
                                                             ),
-                                                            ElevatedButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                _isJobDescriptionForSavedCVEmpty =
-                                                                    _jobDescriptionControllerForSavedCV
-                                                                        .text
-                                                                        .isEmpty;
-                                                                if (!_isCVSelected) {
-                                                                  state(() {
-                                                                    _cvNotSelected =
-                                                                        true;
-                                                                  });
-                                                                } else {
-                                                                  state(() {
-                                                                    _cvNotSelected =
-                                                                        false;
-                                                                  });
-                                                                }
-                                                                if (!_jobDescriptionControllerForSavedCV
-                                                                        .text
-                                                                        .isEmpty &&
-                                                                    _isCVSelected) {
-                                                                  _isSubmitPressed =
+                                                            IgnorePointer(
+                                                              ignoring:
+                                                              _isSubmitPressed,
+                                                              child: ElevatedButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  _isJobDescriptionForSavedCVEmpty =
+                                                                      _jobDescriptionControllerForSavedCV
+                                                                          .text
+                                                                          .isEmpty;
+                                                                  if (!_isCVSelected) {
+                                                                    state(() {
+                                                                      _cvNotSelected =
                                                                       true;
-                                                                  _isLoading =
-                                                                      true;
-                                                                  if (await isInternetConnected()) {
-                                                                    await _chatApi(
-                                                                        chatCvObj,
-                                                                        _jobDescriptionControllerForSavedCV
-                                                                            .text,
-                                                                        '',
-                                                                        token);
-                                                                    _isSubmitPressed =
-                                                                        false;
-                                                                    Navigator.pop(
-                                                                        context);
+                                                                    });
                                                                   } else {
-                                                                    appSnackBar(
-                                                                        "Error",
-                                                                        "No internet connectivity");
-                                                                  }
-                                                                } else {
-                                                                  state(() {
-                                                                    if (_jobDescriptionControllerForSavedCV
-                                                                        .text
-                                                                        .isEmpty) {
-                                                                      _isJobDescriptionForSavedCVEmpty =
-                                                                          true;
-                                                                    }
-                                                                  });
-                                                                }
-
-                                                                state(() {
-                                                                  _isLoading =
+                                                                    state(() {
+                                                                      _cvNotSelected =
                                                                       false;
-                                                                });
-                                                              },
-                                                              style:
-                                                                  kElevatedButtonPrimaryBG,
-                                                              child: Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: _isLoading
-                                                                    ? const RotatingImage(
-                                                                        height:
-                                                                            30,
-                                                                        width:
-                                                                            30,
-                                                                      )
-                                                                    : const Align(
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        child:
-                                                                            Text(
-                                                                          'Submit',
-                                                                          style:
-                                                                              kFont12,
-                                                                        ),
-                                                                      ),
+                                                                    });
+                                                                  }
+                                                                  if (!_jobDescriptionControllerForSavedCV
+                                                                      .text
+                                                                      .isEmpty &&
+                                                                      _isCVSelected) {
+                                                                    _isSubmitPressed =
+                                                                    true;
+                                                                    _isLoading =
+                                                                    true;
+                                                                    if (await isInternetConnected()) {
+                                                                      await _chatApi(
+                                                                          chatCvObj,
+                                                                          _jobDescriptionControllerForSavedCV
+                                                                              .text,
+                                                                          '',
+                                                                          token);
+                                                                      _isSubmitPressed =
+                                                                      false;
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    } else {
+                                                                      appSnackBar(
+                                                                          "Error",
+                                                                          "No internet connectivity");
+                                                                    }
+                                                                  } else {
+                                                                    state(() {
+                                                                      if (_jobDescriptionControllerForSavedCV
+                                                                          .text
+                                                                          .isEmpty) {
+                                                                        _isJobDescriptionForSavedCVEmpty =
+                                                                        true;
+                                                                      }
+                                                                    });
+                                                                  }
+
+                                                                  state(() {
+                                                                    _isLoading =
+                                                                    false;
+                                                                  });
+                                                                },
+                                                                style:
+                                                                kElevatedButtonPrimaryBG,
+                                                                child: Align(
+                                                                  alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                                  child: _isLoading
+                                                                      ? const RotatingImage(
+                                                                    height:
+                                                                    30,
+                                                                    width:
+                                                                    30,
+                                                                  )
+                                                                      : const Align(
+                                                                    alignment:
+                                                                    Alignment.center,
+                                                                    child:
+                                                                    Text(
+                                                                      'Submit',
+                                                                      style:
+                                                                      kFont12,
+                                                                    ),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
+
+                                                            )
                                                           ],
                                                         ),
                                                       ),
@@ -1412,7 +1443,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                             Get.find();
                                         controller.changePage(
                                             controller.currentIndex.value + 1);
-                                        // refreshResponse();
                                       },
                                       style: kInitialChatButton,
                                       child: Text(
@@ -1819,10 +1849,6 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               chatCvObj = jsonResponse;
             });
-            await tempController.fillControllerFromCvObject(chatCvObj);
-            print("Adnan this is CHAT Obj $chatCvObj");
-
-            print("Filling Controller");
 
             String summary = jsonResponse['personal_information']?['summary'] ??
                 'Summary not found';

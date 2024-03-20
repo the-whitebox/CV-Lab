@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:crewdog_cv_lab/screens/home_screen.dart';
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -12,7 +13,6 @@ List<int> tappedIndexes = [];
 List<dynamic> responseDataInFavouriteCV = [];
 List<Map<String, dynamic>> cvList = [];
 
-///TODO: add to fav cv
 Future<bool> callFavoriteApi(int index, String token) async {
   const String apiEndpoint = '$baseUrl/api/favorite/';
 
@@ -37,8 +37,7 @@ Future<bool> callFavoriteApi(int index, String token) async {
       print('CV is already in favourites');
       return false; // CV is already in favourites
     } else {
-      print(
-          'Failed API call. Status code: ${response.statusCode} data: $payload');
+      print('Failed API call. Status code: ${response.statusCode} data: $payload');
       print('Response: ${response.body}');
       return false; // Failed to add CV
     }
@@ -48,7 +47,6 @@ Future<bool> callFavoriteApi(int index, String token) async {
   }
 }
 
-///TODO: fetch fav cv
 Future<List<String>> fetchFavoriteCVs(String token) async {
   const String apiEndpoint = '$baseUrl/api/favorite/';
 
@@ -64,14 +62,12 @@ Future<List<String>> fetchFavoriteCVs(String token) async {
     if (response.statusCode == 200) {
       responseDataInFavouriteCV = jsonDecode(response.body);
 
-      // Use a Set to store unique CV IDs
       final Set<int> uniqueCVIds = Set();
 
       final List<String> favoriteCVs = responseDataInFavouriteCV
           .map((template) {
             final int cvId = template['id'];
 
-            // Check if the CV ID is unique
             if (!uniqueCVIds.contains(cvId)) {
               uniqueCVIds.add(cvId);
               return template['template']['name'].toString();
@@ -83,8 +79,7 @@ Future<List<String>> fetchFavoriteCVs(String token) async {
           .toList();
       return favoriteCVs;
     } else {
-      print(
-          'Failed to fetch favorite CVs. Status code: ${response.statusCode}');
+      print('Failed to fetch favorite CVs. Status code: ${response.statusCode}');
       return []; // Return an empty list or handle the error as needed
     }
   } catch (e) {
@@ -93,7 +88,6 @@ Future<List<String>> fetchFavoriteCVs(String token) async {
   }
 }
 
-///TODO: del fav cv
 Future<void> removeFromFavorites(int templateId, String token) async {
   const String apiEndpoint = '$baseUrl/api/favorite/';
 
@@ -109,19 +103,15 @@ Future<void> removeFromFavorites(int templateId, String token) async {
     );
 
     if (response.statusCode == 200) {
-      // Success: Handle the successful removal
       print('CV removed from favorites successfully');
     } else {
-      // Error: Handle the error case
-      print(
-          'Failed to remove CV from favorites. Status code: ${response.statusCode}');
+      print('Failed to remove CV from favorites. Status code: ${response.statusCode}');
     }
   } catch (e) {
     print('Error removing CV from favorites: $e');
   }
 }
 
-///TODO: fetch my cvs
 Future<List<Map<String, dynamic>>> fetchMyCVsData(String token) async {
   final String apiEndpoint = '$baseUrl/api/mycvs/?name=' '';
 
@@ -135,12 +125,10 @@ Future<List<Map<String, dynamic>>> fetchMyCVsData(String token) async {
     );
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic>? responseData =
-          jsonDecode(response.body) as Map<String, dynamic>?;
+      final Map<String, dynamic>? responseData = jsonDecode(response.body) as Map<String, dynamic>?;
 
       if (responseData != null) {
-        cvList = List<Map<String, dynamic>>.from(responseData['results'] ?? [])
-            .map((cv) {
+        cvList = List<Map<String, dynamic>>.from(responseData['results'] ?? []).map((cv) {
           final Map<String, dynamic> templateData = cv['template'];
           cv['templateName'] = templateData['name'];
           return cv;
@@ -161,10 +149,8 @@ Future<List<Map<String, dynamic>>> fetchMyCVsData(String token) async {
   }
 }
 
-///Todo: delete cv
 Future<void> removeFromMyCVs(int cvId, String templateId, String token) async {
   final String apiEndpoint = '$baseUrl/api/deleteCV/';
-  print('template id :::: $templateId cv ID ::::::::::::::::: $cvId');
   try {
     final response = await http.delete(
       Uri.parse(apiEndpoint),
@@ -172,33 +158,21 @@ Future<void> removeFromMyCVs(int cvId, String templateId, String token) async {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
-      body:
-          // {
-          //   'template_id': templateId,
-          //   'cv_id':cvId,
-          // }
-          jsonEncode({'cv_id': cvId, 'template_id': templateId}),
+      body: jsonEncode({'cv_id': cvId, 'template_id': templateId}),
     );
 
     if (response.statusCode == 200) {
-      // Success: Handle the successful removal
       print('CV removed from My CVs successfully');
     } else {
-      // Error: Handle the error case
-      print(
-          'Failed to remove CV from My CVs. Status code: ${response.statusCode}');
-      //print('Response: ${response.body}');
+      print('Failed to remove CV from My CVs. Status code: ${response.statusCode}');
     }
   } catch (e) {
-    // Exception: Handle any exceptions that occur during the request
     print('Error removing CV from My CVs: $e');
   }
 }
 
-///Todo: update my cv
 Future<void> updateCV(int cvId, String templateId, String token) async {
-  final String apiEndpoint =
-      '$baseUrl/api/getCv/?cv_id=$cvId&template_id=$templateId';
+  final String apiEndpoint = '$baseUrl/api/getCv/?cv_id=$cvId&template_id=$templateId';
 
   try {
     final response = await http.get(
@@ -228,8 +202,7 @@ class SavedCvScreen extends StatefulWidget {
   State<SavedCvScreen> createState() => _SavedCvScreenState();
 }
 
-class _SavedCvScreenState extends State<SavedCvScreen>
-    with SingleTickerProviderStateMixin {
+class _SavedCvScreenState extends State<SavedCvScreen> with SingleTickerProviderStateMixin {
   TextEditingController searchController = TextEditingController();
 
   late TabController _tabController;
@@ -260,9 +233,9 @@ class _SavedCvScreenState extends State<SavedCvScreen>
   @override
   void initState() {
     super.initState();
+    Get.put(TempController()).refreshController();
     _tabController = TabController(length: 3, vsync: this);
     _tabController.addListener(_handleTabSelection);
-    // controller.refreshController();
   }
 
   @override
@@ -276,8 +249,10 @@ class _SavedCvScreenState extends State<SavedCvScreen>
       tappedIndex = null;
       tappedMyCVIndex = null;
       tappedFavCVIndex = null;
+
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -311,9 +286,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                           'Templates',
                           style: TextStyle(
                             fontSize: 20,
-                            color: _tabController.index == 0
-                                ? kHighlightedColor
-                                : Colors.black,
+                            color: _tabController.index == 0 ? kHighlightedColor : Colors.black,
                           ),
                         ),
                       ),
@@ -322,9 +295,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                           'My CV\'s',
                           style: TextStyle(
                             fontSize: 20,
-                            color: _tabController.index == 1
-                                ? kHighlightedColor
-                                : Colors.black,
+                            color: _tabController.index == 1 ? kHighlightedColor : Colors.black,
                           ),
                         ),
                       ),
@@ -333,9 +304,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                           'Favourites',
                           style: TextStyle(
                             fontSize: 20,
-                            color: _tabController.index == 2
-                                ? kHighlightedColor
-                                : Colors.black,
+                            color: _tabController.index == 2 ? kHighlightedColor : Colors.black,
                           ),
                         ),
                       ),
@@ -451,6 +420,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                     ? GestureDetector(
                         onTap: () {
                           searchController.clear();
+                          setState(() {});
                         },
                         child: const Icon(Icons.clear, size: 20.0),
                       )
@@ -466,14 +436,10 @@ class _SavedCvScreenState extends State<SavedCvScreen>
           child: FutureBuilder<List<Map<String, dynamic>>>(
             future: fetchMyCVsData(token),
             builder: (context, snapshot) {
-              // if (snapshot.connectionState == ConnectionState.waiting) {
-              //   return const RotatingImage();
-              // } else
               if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                List<Map<String, dynamic>> filteredData =
-                    snapshot.data!.where((cvData) {
+                List<Map<String, dynamic>> filteredData = snapshot.data!.where((cvData) {
                   String title = cvData['username'].toLowerCase();
                   String searchQuery = searchController.text.toLowerCase();
                   return title.contains(searchQuery);
@@ -489,42 +455,15 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                     final cvData = filteredData[index];
                     final title = filteredData[index]['username'];
                     final templateName = cvData['template']['name'];
-                    final lastDigit = int.tryParse(
-                            templateName.substring(templateName.length - 1)) ??
-                        1;
+                    final lastDigit =
+                        int.tryParse(templateName.substring(templateName.length - 1)) ?? 1;
                     final currentIndex = lastDigit;
 
                     if (currentIndex >= 1 && currentIndex <= pdfImages.length) {
                       usedIndices.add(currentIndex);
-                      return buildGridItemForMyCVs(
-                          currentIndex - 1, index, title);
+                      return buildGridItemForMyCVs(currentIndex - 1, index, title);
                     } else {
                       return const SizedBox(); // Return a placeholder widget
-                    }
-                  },
-                );
-
-                return GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 0.70,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemCount: filteredData.length,
-                  itemBuilder: (context, index) {
-                    final cvData = filteredData[index];
-                    final title = filteredData[index]['username'];
-                    final templateName = cvData['template']['name'];
-                    final lastDigit = int.tryParse(
-                            templateName.substring(templateName.length - 1)) ??
-                        1;
-                    final currentIndex = lastDigit;
-
-                    if (currentIndex >= 1 && currentIndex <= pdfImages.length) {
-                      usedIndices.add(currentIndex);
-                      return buildGridItemForMyCVs(
-                          currentIndex - 1, index, title);
                     }
                   },
                 );
@@ -562,8 +501,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
         Stack(
           children: [
             Container(
-              margin: const EdgeInsets.only(
-                  top: 15, right: 8, left: 8, bottom: 5.0),
+              margin: const EdgeInsets.only(top: 15, right: 8, left: 8, bottom: 5.0),
               decoration: const BoxDecoration(boxShadow: [
                 BoxShadow(
                   color: Colors.black12,
@@ -581,33 +519,24 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                   child: Stack(
                     children: [
                       Column(
-                        children: [
-                          Image.asset(pdfImages[indexOfMyCV]),
-                          SizedBox(
-                            height: 3,
-                          )
-                        ],
+                        children: [Image.asset(pdfImages[indexOfMyCV]), const SizedBox(height: 3)],
                       ),
                       if (tappedMyCVIndex == mainIndex)
                         Center(
                           child: Column(
                             children: [
                               SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.125,
+                                height: MediaQuery.of(context).size.height * 0.125,
                               ),
                               SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.275,
+                                width: MediaQuery.of(context).size.width * 0.275,
                                 child: ElevatedButton(
                                   style: kElevatedButtonPrimaryBGSmall,
                                   onPressed: () async {
                                     int cvId = cvList[mainIndex]['cv']['id'];
-                                    String templateName =
-                                        cvList[mainIndex]['template']['name'];
+                                    String templateName = cvList[mainIndex]['template']['name'];
 
-                                    await controller.fetchDataFromBackend(
-                                        cvId, templateName);
+                                    await controller.fetchDataFromBackend(cvId, templateName);
                                     Get.toNamed(templateName);
                                   },
                                   child: const Text(
@@ -667,9 +596,6 @@ class _SavedCvScreenState extends State<SavedCvScreen>
     return FutureBuilder<List<String>>(
       future: fetchFavoriteCVs(token),
       builder: (context, snapshot) {
-        // if (snapshot.connectionState == ConnectionState.waiting) {
-        //   return const RotatingImage();
-        // } else
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
@@ -692,7 +618,6 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                 final lastChar = cvFileName.substring(cvFileName.length - 1);
                 currentIndex = (int.tryParse(lastChar) ?? 0) - 1;
               }
-
               if (currentIndex >= 0 && currentIndex < pdfFiles.length) {
                 return buildGridItemForFavourites(currentIndex, index);
               } else {
@@ -710,8 +635,7 @@ class _SavedCvScreenState extends State<SavedCvScreen>
               const SizedBox(
                 height: 10.0,
               ),
-              Text('No Collection',
-                  style: kFont24.copyWith(color: kHighlightedColor)),
+              Text('No Collection', style: kFont24.copyWith(color: kHighlightedColor)),
               Text(
                 'Go to templates to add favorite CV',
                 style: kFont12.copyWith(color: const Color(0xFF4E4949)),
@@ -739,7 +663,6 @@ class _SavedCvScreenState extends State<SavedCvScreen>
           onTap: () {
             setState(() {
               tappedFavCVIndex = index;
-              print("I have CHAT DATA ${controller.isChatData}");
             });
           },
           child: Stack(
@@ -751,7 +674,6 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                     style: kElevatedButtonPrimaryBG,
                     onPressed: () async {
                       await fetchMyCVsData(token);
-                      // controller.refreshController();
                       Get.toNamed(pdfFiles[index]);
                     },
                     child: const Text(
@@ -805,7 +727,6 @@ class _SavedCvScreenState extends State<SavedCvScreen>
               onTap: () {
                 setState(() {
                   tappedIndex = index;
-                  print("I have CHAT DATA ${controller.isChatData}");
                 });
               },
               child: Image.asset(pdfImages[index]),
@@ -842,8 +763,8 @@ class _SavedCvScreenState extends State<SavedCvScreen>
                         tappedIndexes.add(index);
                         appSuccessSnackBar("Success", 'CV added to favourites');
                       } else {
-                        appSuccessSnackBar(
-                            "Success", 'CV is already in favourites');
+                        appSuccessSnackBar("Success", 'CV is already in favourites');
+
                       }
                     });
                   }

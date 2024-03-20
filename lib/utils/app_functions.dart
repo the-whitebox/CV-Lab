@@ -4,6 +4,9 @@ import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+import '../pdf_custom_widgets/pw_assets.dart';
+import 'app_snackbar.dart';
+
 Future<void> requestPermissions() async {
   var status = await Permission.storage.status;
   print('###Status$status');
@@ -12,6 +15,9 @@ Future<void> requestPermissions() async {
 }
 
 Future<void> makePdf(List<pw.Widget> widget, String templateName) async {
+  await requestPermissions();
+  await PwAssets.initializeAssets();
+  await PwFonts.initializeFonts();
   const double marginTop = 2.0 * 72.0 / 2.54;
   const double marginBottom = 2.0 *30.0 / 2.54;
   const double marginLeft = 2.0 * 72.0 / 2.54;
@@ -37,7 +43,9 @@ Future<void> makePdf(List<pw.Widget> widget, String templateName) async {
 
   final downloadsDirectory = Directory(directoryPath!.path);
   final file = File('${downloadsDirectory.path}/$templateName.pdf');
-  await file.writeAsBytes(await pdf.save());
+  await file.writeAsBytes(await pdf.save()).then((value)  {
+    appSuccessSnackBar("Success", 'Your CV has been Downloaded');
+  });
 }
 
 final emailRegex = RegExp(

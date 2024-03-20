@@ -3,16 +3,27 @@ import 'package:get/get.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
-import '../../custom_widgets/custom_widgets.dart';
-import '../../custom_widgets/pdf_custom_widgets.dart';
+import '../../custom_widgets/custom_editable_text.dart';
+import '../../pdf_custom_widgets/pdf_skill_widget.dart';
 import 'package:pdf/widgets.dart' as pw;
-import '../../custom_widgets/pw_assets.dart';
+import '../../pdf_custom_widgets/pw_assets.dart';
 import '../../utils/app_snackbar.dart';
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
 import '../../utils/local_db.dart';
 import '../controllers/profile_controller.dart';
 import 'controllers/temp_controller.dart';
+import '../../custom_widgets/custom_button_row.dart';
+import '../../custom_widgets/cv_add_button.dart';
+import '../../custom_widgets/education_history_widget.dart';
+import '../../custom_widgets/employment_history_widget.dart';
+import '../../custom_widgets/project_history_widget.dart';
+import '../../custom_widgets/reference_widget.dart';
+import '../../custom_widgets/skill_custom_widget.dart';
+import '../../pdf_custom_widgets/pdf_education_history.dart';
+import '../../pdf_custom_widgets/pdf_employment_history.dart';
+import '../../pdf_custom_widgets/pdf_project_widget.dart';
+import '../../pdf_custom_widgets/pdf_reference_widget.dart';
 
 class V103 extends StatefulWidget {
   const V103({super.key});
@@ -535,9 +546,7 @@ class _V103State extends State<V103> {
                                                 i < controller.projects.length;
                                                 i++)
                                               ProjectWidget(
-                                                isRemovable:
-                                                    controller.projects.length >
-                                                        1,
+                                                isRemovable: controller.projects.length > 1,
                                                 title: controller
                                                     .projects[i].title,
                                                 description: controller
@@ -711,15 +720,9 @@ class _V103State extends State<V103> {
                             ('v103'), controller.saveCvId);
                       } else {
                         await controller.saveCv('v103');
-                        if (controller.isChatData == false) {
-                          controller.refreshController();
-                        }
                       }
                     },
                     onDownloadPressed: () async {
-                      await requestPermissions();
-                      await PwAssets.initializeAssets();
-                      await PwFonts.initializeFonts();
                       pw.ImageProvider netImage = await networkImage(
                           'https://cvlab.crewdog.ai/static/media/profilepic.1854a1d1129a7d85e324.png');
                       if (controller.cvImagePath.isNotEmpty) {
@@ -732,12 +735,6 @@ class _V103State extends State<V103> {
                             netImage,
                           ),
                           controller.nameController.text);
-                      if (controller.isChatData == false) {
-                        controller.refreshController();
-                      }
-                      Get.back();
-                      appSuccessSnackBar(
-                          "Success", 'Your CV has been Downloaded');
                     },
                   ),
                 ],
