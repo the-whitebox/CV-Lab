@@ -16,8 +16,6 @@ Future<void> requestPermissions() async {
 
 Future<void> makePdf(List<pw.Widget> widget, String templateName) async {
   await requestPermissions();
-  await PwAssets.initializeAssets();
-  await PwFonts.initializeFonts();
   const double marginTop = 2.0 * 72.0 / 2.54;
   const double marginBottom = 2.0 *30.0 / 2.54;
   const double marginLeft = 2.0 * 72.0 / 2.54;
@@ -42,10 +40,31 @@ Future<void> makePdf(List<pw.Widget> widget, String templateName) async {
   }
 
   final downloadsDirectory = Directory(directoryPath!.path);
-  final file = File('${downloadsDirectory.path}/$templateName.pdf');
-  await file.writeAsBytes(await pdf.save()).then((value)  {
+  String filePath = '${downloadsDirectory.path}/$templateName.pdf';
+
+// Check if the file already exists
+  if (await File(filePath).exists()) {
+    int count = 1;
+    String newName = templateName;
+
+    // Find the next available file name
+    while (await File(filePath).exists()) {
+      newName = '$templateName ($count)';
+      filePath = '${downloadsDirectory.path}/$newName.pdf';
+      count++;
+    }
+  }
+
+  final file = File(filePath);
+  await file.writeAsBytes(await pdf.save()).then((value) {
     appSuccessSnackBar("Success", 'Your CV has been Downloaded');
   });
+
+  // final downloadsDirectory = Directory(directoryPath!.path);
+  // final file = File('${downloadsDirectory.path}/$templateName.pdf');
+  // await file.writeAsBytes(await pdf.save()).then((value)  {
+  //   appSuccessSnackBar("Success", 'Your CV has been Downloaded');
+  // });
 }
 
 final emailRegex = RegExp(

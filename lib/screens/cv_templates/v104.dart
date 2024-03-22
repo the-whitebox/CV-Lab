@@ -577,6 +577,8 @@ class _V104State extends State<V104> {
                   }
                 },
                 onDownloadPressed: () async {
+                  await PwAssets.initializeAssets();
+                  await PwFonts.initializeFonts();
                   pw.ImageProvider   netImage= await networkImage('https://cvlab.crewdog.ai/static/media/profilepic.1854a1d1129a7d85e324.png');
                   if(controller.cvImagePath.isNotEmpty){
                     netImage = await networkImage('$baseUrl${controller.cvImagePath}');

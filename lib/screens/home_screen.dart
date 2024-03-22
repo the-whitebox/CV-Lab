@@ -1732,14 +1732,16 @@ class _HomeScreenState extends State<HomeScreen> {
       formattedMessage
           .writeln('Address: ${cvObj['personal_information']['address']}');
       formattedMessage.writeln();
-
-      formattedMessage.writeln('𝗦𝗸𝗶𝗹𝗹𝘀:');
+if(skillsList.isNotEmpty) {
+  formattedMessage.writeln('𝗦𝗸𝗶𝗹𝗹𝘀:');
+}
       for (Map<String, dynamic> skill in skillsList) {
         formattedMessage.writeln('• ${skill['name']}');
       }
       formattedMessage.writeln();
-
-      formattedMessage.writeln('𝗘𝗱𝘂𝗰𝗮𝘁𝗶𝗼𝗻:');
+if(educationList.isNotEmpty) {
+  formattedMessage.writeln('𝗘𝗱𝘂𝗰𝗮𝘁𝗶𝗼𝗻:');
+}
       for (Map<String, dynamic> education in educationList) {
         formattedMessage.writeln('Degree: ${education['field_of_study']}');
         formattedMessage.writeln('Institute: ${education['institute_name']}');
@@ -1750,8 +1752,9 @@ class _HomeScreenState extends State<HomeScreen> {
         formattedMessage.writeln('Description: ${education['description']}');
         formattedMessage.writeln();
       }
-
-      formattedMessage.writeln('𝗘𝗺𝗽𝗹𝗼𝘆𝗺𝗲𝗻𝘁 𝗛𝗶𝘀𝘁𝗼𝗿𝘆:');
+if(employmentHistoryList.isNotEmpty) {
+  formattedMessage.writeln('𝗘𝗺𝗽𝗹𝗼𝘆𝗺𝗲𝗻𝘁 𝗛𝗶𝘀𝘁𝗼𝗿𝘆:');
+}
       for (Map<String, dynamic> employment in employmentHistoryList) {
         formattedMessage.writeln('Position: ${employment['job_title']}');
         formattedMessage.writeln('Company: ${employment['company_name']}');
@@ -1762,15 +1765,14 @@ class _HomeScreenState extends State<HomeScreen> {
         formattedMessage.writeln('Description: ${employment['description']}');
         formattedMessage.writeln();
       }
-
-      formattedMessage.writeln('𝗣𝗿𝗼𝗷𝗲𝗰𝘁𝘀:');
+if(projectsList.isNotEmpty) {
+  formattedMessage.writeln('𝗣𝗿𝗼𝗷𝗲𝗰𝘁𝘀:');
+}
       for (Map<String, dynamic> project in projectsList) {
         formattedMessage.writeln('Project Name: ${project['project_name']}');
         formattedMessage.writeln('Description: ${project['description']}');
         formattedMessage.writeln();
       }
-
-      formattedMessage.writeln();
 
       return formattedMessage.toString();
     }

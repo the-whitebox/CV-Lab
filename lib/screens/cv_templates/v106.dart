@@ -833,6 +833,8 @@ class _V106State extends State<V106> {
                       await controller.saveCv('v106');
                     }
                   }, onDownloadPressed: () async {
+                await PwAssets.initializeAssets();
+                await PwFonts.initializeFonts();
                 WidgetsBinding.instance.addPostFrameCallback((_) async {
                   final RenderBox profileRenderBox =
                   profileContainerKey.currentContext!.findRenderObject() as RenderBox;
