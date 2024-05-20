@@ -1,5 +1,4 @@
 import 'package:crewdog_cv_lab/screens/cv_templates/controllers/temp_controller.dart';
-import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
 import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -130,7 +129,7 @@ class _V101State extends State<V101> {
                                               child: Image(
                                                 image: controller.cvImagePath.isNotEmpty
                                                     ? NetworkImage(
-                                                    '$baseUrl${controller.cvImagePath}')
+                                                    '$ssoUrl${controller.cvImagePath}')
                                                     : const AssetImage(
                                                     'assets/images/icon-profile.png')
                                                 as ImageProvider,
@@ -604,7 +603,7 @@ class _V101State extends State<V101> {
                   pw.ImageProvider netImage = await networkImage(
                       'https://cvlab.crewdog.ai/static/media/profilepic.1854a1d1129a7d85e324.png');
                   if (controller.cvImagePath.isNotEmpty) {
-                    netImage = await networkImage('$baseUrl${controller.cvImagePath}');
+                    netImage = await networkImage('$ssoUrl${controller.cvImagePath}');
                   }
                   await makePdf(
                       buildTemplate4Pdf(controller, netImage), controller.nameController.text);

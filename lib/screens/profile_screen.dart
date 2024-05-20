@@ -81,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required String newPassword,
   }) async {
     if (await isInternetConnected()) {
-      final apiUrl = Uri.parse('$baseUrl/accounts/api/password/change/');
+      final apiUrl = Uri.parse('$ssoUrl/api/accounts/password/change/');
       print('old $oldPassword and new $newPassword');
       print('token $token');
       final response = await http.put(
@@ -177,7 +177,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 );
               } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text('Error: ${snapshot.error}'),
+                    Padding(
+                      padding:
+                      EdgeInsets.symmetric(horizontal: screenWidth * 0.07, vertical: screenHeight * 0.04),
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          clearUserId();
+                          clearProfilePic();
+                          clearAccessToken();
+                          Get.offAllNamed(AppRoutes.welcome);
+                        },
+                        style: kElevatedButtonWithWhiteColor.copyWith(
+                          padding: MaterialStateProperty.all(
+                            EdgeInsets.symmetric(
+                                vertical: isLargerScreen ? screenHeight * 0.009 : screenHeight * 0.005,
+                                horizontal: isLargerScreen ? screenWidth * 0.05 : screenWidth * 0.05),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.logout_outlined,
+                              color: kHighlightedColor,
+                              size: isLargerScreen ? 24 : 18,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              'Log out',
+                              style: kButtonTextStyle.copyWith(
+                                  color: kHighlightedColor, fontSize: isLargerScreen ? 20 : 18),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
               } else {
                 return SafeArea(
                   child: SingleChildScrollView(
@@ -280,12 +322,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Map<String, dynamic> userData,
   ) {
     if (userData['profile_pic'] != null) {
-      imageNetwork = baseUrl + userData['profile_pic'];
-      print("Profile Pic Stored:$imageNetwork");
+      imageNetwork = ssoUrl + userData['profile_pic'];
       storeProfilePic(imageNetwork!);
     } else if (userData['avatar_url'] != null) {
       avatarIndexNetwork = int.parse(userData['avatar_url']);
-      print("Profile Pic is empty");
       storeProfilePic("");
     }
     return Container(
@@ -458,13 +498,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(height: isLargerScreen ? screenHeight * 0.18 : screenHeight * 0.05),
           Padding(
             padding:
-                EdgeInsets.symmetric(horizontal: screenWidth * 0.07, vertical: screenHeight * 0.04),
+            EdgeInsets.symmetric(horizontal: screenWidth * 0.07, vertical: screenHeight * 0.04),
             child: ElevatedButton(
               onPressed: () async {
                 clearUserId();
                 clearProfilePic();
                 clearAccessToken();
-                print("Access Token Clear");
                 Get.offAllNamed(AppRoutes.welcome);
               },
               style: kElevatedButtonWithWhiteColor.copyWith(

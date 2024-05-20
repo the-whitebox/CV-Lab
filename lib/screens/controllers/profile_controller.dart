@@ -13,16 +13,13 @@ Future<void> updateProfile(
   int? avatarIndex,
 ) async {
   try {
-    final uri = Uri.parse('$baseUrl/accounts/api/profile/update/');
+    final uri = Uri.parse('$ssoUrl/api/accounts/profile/update/');
     var request = http.MultipartRequest('PATCH', uri)
       ..headers['Authorization'] = 'Bearer $token';
-    // ..fields['first_name'] = firstName
-    // ..fields['last_name'] = lastName;
 
     if (profilePic != null) {
       var stream = http.ByteStream(Stream.castFrom(profilePic.openRead()));
       var length = await profilePic.length();
-      print("Profile Pic");
       var multipartFile = http.MultipartFile(
         'profile_pic',
         stream,
@@ -58,9 +55,10 @@ Future<void> updateProfile(
 }
 
 Future<Map<String, dynamic>> retrieveProfile(String token) async {
+  print("Token in profile $token");
   try {
     final response = await http.get(
-      Uri.parse('$baseUrl/accounts/api/profile/'),
+      Uri.parse('$ssoUrl/api/accounts/profile/'),
       headers: {'Authorization': 'Bearer $token'},
     );
 
@@ -99,7 +97,7 @@ Future<String> uploadDataAndImage(
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('$baseUrl/api/save/picture/'),
+      Uri.parse('$ssoUrl/api/save/picture/'),
     );
 
     // Add form data

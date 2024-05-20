@@ -152,7 +152,7 @@ class _V103State extends State<V103> {
                                                               .cvImagePath
                                                               .isNotEmpty
                                                           ? NetworkImage(
-                                                              '$baseUrl${controller.cvImagePath}')
+                                                              '$ssoUrl${controller.cvImagePath}')
                                                           : const AssetImage(
                                                                   'assets/images/icon-profile.png')
                                                               as ImageProvider,
@@ -727,7 +727,7 @@ class _V103State extends State<V103> {
                           'https://cvlab.crewdog.ai/static/media/profilepic.1854a1d1129a7d85e324.png');
                       if (controller.cvImagePath.isNotEmpty) {
                         netImage = await networkImage(
-                            '$baseUrl${controller.cvImagePath}');
+                            '$ssoUrl${controller.cvImagePath}');
                       }
                       await makePdf(
                           buildTemplate5Pdf(

@@ -544,8 +544,8 @@ class TempController extends GetxController {
       profilePicState = true;
       isChatData = false;
       profileImage = getProfilePic();
-      if (profileImage.contains("https://cvlab-staging-backend.crewdog.ai")) {
-        profileImage = profileImage.substring(40);
+      if (profileImage.contains("https://sso-oci.crewdog.ai")) {
+        profileImage = profileImage.substring(26);
       }
       nameController.text = 'Adnan Ashraf';
       designationController.text = 'Manager';
