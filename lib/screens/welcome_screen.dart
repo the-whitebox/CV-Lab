@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../custom_widgets/rotating_image.dart';
 import '../utils/constants.dart';
+import 'controllers/profile_controller.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -89,6 +90,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   await signInWithSso();
                               if (ssoToken.isNotEmpty) {
                                 storeAccessToken(ssoToken);
+                                var responseData = await retrieveProfile(ssoToken);
+                                var profilePic = responseData['profile_pic'];
+                                if (profilePic != null) {
+                                  storeProfilePic(profilePic);
+                                }
+                                var userId = responseData['id'];
+                                if(userId!=null){
+                                  storeUserId(userId.toString());
+                                }
                                 Get.offAllNamed(AppRoutes.bottomBar);
                                 isBusy = false;
                               } else {
@@ -113,32 +123,32 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   : kButtonTextStyleSmallScreen,
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: isLargerScreen ? screenHeight * 0.01 : 0),
-                            child: ElevatedButton(
-                              onPressed: (){},
-                              style: kElevatedButtonWithWhiteColor.copyWith(
-                                padding: MaterialStateProperty.all(
-                                  EdgeInsets.symmetric(
-                                      vertical: screenHeight * 0.007,
-                                      horizontal: screenWidth * 0.008),
-                                ),
-                              ),
-                              child: Text(
-                                'Sign up',
-                                style: isLargerScreen
-                                    ? kButtonTextStyle.copyWith(
-                                        color: const Color(0xFFFF5E59))
-                                    : kButtonTextStyleSmallScreen.copyWith(
-                                        color: const Color(0xFFFF5E59)),
-                              ),
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: EdgeInsets.only(
+                          //       top: isLargerScreen ? screenHeight * 0.01 : 0),
+                          //   child: ElevatedButton(
+                          //     onPressed: (){},
+                          //     style: kElevatedButtonWithWhiteColor.copyWith(
+                          //       padding: MaterialStateProperty.all(
+                          //         EdgeInsets.symmetric(
+                          //             vertical: screenHeight * 0.007,
+                          //             horizontal: screenWidth * 0.008),
+                          //       ),
+                          //     ),
+                          //     child: Text(
+                          //       'Sign up',
+                          //       style: isLargerScreen
+                          //           ? kButtonTextStyle.copyWith(
+                          //               color: const Color(0xFFFF5E59))
+                          //           : kButtonTextStyleSmallScreen.copyWith(
+                          //               color: const Color(0xFFFF5E59)),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                       SizedBox(
-                        height: screenHeight * 0.07,
+                        height: screenHeight * 0.05,
                       )
                     ],
                   ),

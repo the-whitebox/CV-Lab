@@ -16,8 +16,6 @@ Future<void> requestPermissions() async {
 
 Future<void> makePdf(List<pw.Widget> widget, String templateName) async {
   await requestPermissions();
-  await PwAssets.initializeAssets();
-  await PwFonts.initializeFonts();
   const double marginTop = 2.0 * 72.0 / 2.54;
   const double marginBottom = 2.0 *30.0 / 2.54;
   const double marginLeft = 2.0 * 72.0 / 2.54;
@@ -42,10 +40,25 @@ Future<void> makePdf(List<pw.Widget> widget, String templateName) async {
   }
 
   final downloadsDirectory = Directory(directoryPath!.path);
-  final file = File('${downloadsDirectory.path}/$templateName.pdf');
-  await file.writeAsBytes(await pdf.save()).then((value)  {
+  String baseFileName = '${downloadsDirectory.path}/$templateName.pdf';
+
+  String fileName = await _getUniqueFileName(baseFileName);
+
+  final file = File(fileName);
+  await file.writeAsBytes(await pdf.save()).then((value) {
     appSuccessSnackBar("Success", 'Your CV has been Downloaded');
   });
+}
+
+
+Future<String> _getUniqueFileName(String baseFileName) async {
+  String fileName = baseFileName;
+  int count = 1;
+  while (await File(fileName).exists()) {
+    fileName = baseFileName.replaceAll('.pdf', ' ($count).pdf');
+    count++;
+  }
+  return fileName;
 }
 
 final emailRegex = RegExp(

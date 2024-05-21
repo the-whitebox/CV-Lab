@@ -55,7 +55,6 @@ Future<void> updateProfile(
 }
 
 Future<Map<String, dynamic>> retrieveProfile(String token) async {
-  print("Token in profile $token");
   try {
     final response = await http.get(
       Uri.parse('$ssoUrl/api/accounts/profile/'),
@@ -64,7 +63,7 @@ Future<Map<String, dynamic>> retrieveProfile(String token) async {
 
     if (response.statusCode == 200) {
       final decodedData = jsonDecode(response.body);
-      print("$decodedData");
+      print("Profile Get in controller :$decodedData");
       return decodedData;
     } else {
       print('Error retrieving profile: ${response.reasonPhrase}');
@@ -76,15 +75,6 @@ Future<Map<String, dynamic>> retrieveProfile(String token) async {
   }
 }
 
-Future<Map<String, dynamic>> fetchProfile(String token) async {
-  try {
-    final Map<String, dynamic> response = await retrieveProfile(token);
-    return response;
-  } catch (e) {
-    print('Error retrieving profile: $e');
-    return {};
-  }
-}
 
 Future<String> uploadDataAndImage(
   XFile imageToUpload,
@@ -97,15 +87,13 @@ Future<String> uploadDataAndImage(
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('$ssoUrl/api/save/picture/'),
+      Uri.parse('$baseUrl/api/save/picture/'),
     );
 
-    // Add form data
     request.headers['Authorization'] = 'Bearer $token';
     request.fields['user'] = userId;
     request.fields['template'] = template;
 
-    // Add image file
     request.files.add(http.MultipartFile(
       'picture',
       http.ByteStream.fromBytes(imageBytes),
@@ -119,7 +107,6 @@ Future<String> uploadDataAndImage(
       String responseBody = await response.stream.bytesToString();
       Map<String, dynamic> responseData = jsonDecode(responseBody);
 
-      // Check if "picture_path" exists in the response
       if (responseData.containsKey('picture_path')) {
         String picturePath = responseData['picture_path'];
         print('Picture path: $picturePath');

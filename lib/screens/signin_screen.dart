@@ -60,7 +60,7 @@ class _SigninScreenState extends State<SigninScreen> {
             print('Login successful. Access Token: $access');
             storeAccessToken(access);
 
-            var response = await fetchProfile(access);
+            var response = await retrieveProfile(access);
             print(response);
             var id = response['id'];
             // var email = responseData['email'];
@@ -70,7 +70,7 @@ class _SigninScreenState extends State<SigninScreen> {
             // var avatarUrl = response['avatar_url'];
             storeUserId(id.toString());
             if (profilePic != null) {
-              print("Profile Pic Stored");
+              print("Profile Pic Stored $profilePic");
               storeProfilePic(profilePic);
             }
             return true;

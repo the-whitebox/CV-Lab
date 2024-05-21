@@ -51,7 +51,6 @@ Future<String> getTokenFromCode(String code) async {
       final decodedData = jsonDecode(response.body);
       final accessToken = decodedData['access_token'] as String?;
       if (accessToken != null) {
-        print("Access Token: $accessToken");
         return accessToken;
       } else {
         return '';
