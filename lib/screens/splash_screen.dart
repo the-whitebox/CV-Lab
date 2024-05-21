@@ -19,20 +19,21 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkLoginStatus() async {
-    await Future.delayed(const Duration(seconds: 3));
-
     String? token = getAccessToken();
-
+    await Future.delayed(const Duration(seconds: 3));
     if (token.isEmpty) {
       Get.offAllNamed(AppRoutes.welcome);
     } else if (token.isNotEmpty) {
-      var responseData = await fetchProfile(token);
+      Get.offAllNamed(AppRoutes.bottomBar);
+      var responseData = await retrieveProfile(token);
       var profilePic = responseData['profile_pic'];
       if (profilePic != null) {
         storeProfilePic(profilePic);
       }
-      Get.offAllNamed(AppRoutes.bottomBar);
-      print(token);
+      var userId = responseData['id'];
+      if(userId!=null){
+        storeUserId(userId.toString());
+      }
     }
   }
 

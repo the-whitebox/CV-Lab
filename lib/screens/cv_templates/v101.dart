@@ -39,14 +39,11 @@ class _V101State extends State<V101> {
   File? selectedImage;
   bool isCanPop=true;
 
-  @override
-  void initState() {
-    super.initState();
-    controller.cvImagePath = getProfilePic();
-    if (controller.cvImagePath.contains("https://cvlab-staging-backend.crewdog.ai")) {
-      controller.cvImagePath = controller.cvImagePath.substring(40);
-    }
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   controller.cvImagePath = getProfilePic();
+  // }
 
 
 
@@ -128,8 +125,9 @@ class _V101State extends State<V101> {
                                               width: 60,
                                               child: Image(
                                                 image: controller.cvImagePath.isNotEmpty
-                                                    ? NetworkImage(
-                                                    '$ssoUrl${controller.cvImagePath}')
+                                                    ? controller.isSsoUrl? NetworkImage(
+                                                    '$ssoUrl${controller.cvImagePath}'): NetworkImage(
+                                                    '$baseUrl${controller.cvImagePath}')
                                                     : const AssetImage(
                                                     'assets/images/icon-profile.png')
                                                 as ImageProvider,
@@ -145,6 +143,7 @@ class _V101State extends State<V101> {
                                           onTap: () {
                                             controller.profilePicState = false;
                                             controller.cvImagePath = '';
+                                            controller.isSsoUrl=false;
                                             controller.cvImage = File('');
                                             selectedImage == null;
                                             setState(() {});
@@ -600,10 +599,12 @@ class _V101State extends State<V101> {
                   }
                 },
                 onDownloadPressed: () async {
+                  await PwAssets.initializeAssets();
+                  await PwFonts.initializeFonts();
                   pw.ImageProvider netImage = await networkImage(
                       'https://cvlab.crewdog.ai/static/media/profilepic.1854a1d1129a7d85e324.png');
                   if (controller.cvImagePath.isNotEmpty) {
-                    netImage = await networkImage('$ssoUrl${controller.cvImagePath}');
+                    netImage =controller.isSsoUrl? await networkImage('$ssoUrl${controller.cvImagePath}'): await networkImage('$baseUrl${controller.cvImagePath}');
                   }
                   await makePdf(
                       buildTemplate4Pdf(controller, netImage), controller.nameController.text);
@@ -631,11 +632,10 @@ class _V101State extends State<V101> {
         selectedImage = File(pickedFile.path);
         controller.cvImage = File(pickedFile.path);
         controller.cvImagePath = '/media/$cvImagePath';
+        controller.isSsoUrl=false;
       });
     }
   }
-
-
 
 
   List<pw.Widget> buildTemplate4Pdf(TempController controller, pw.ImageProvider netImage) {

@@ -45,7 +45,7 @@ Future<void> _sendAccessTokenToServer(String accessToken) async {
           storeAccessToken(access!);
 
 
-          var profileResponse = await fetchProfile(access);
+          var profileResponse = await retrieveProfile(access);
           print(profileResponse);
           var id = profileResponse['id'];
           // var email = responseData['email'];

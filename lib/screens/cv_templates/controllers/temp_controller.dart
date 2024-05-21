@@ -28,8 +28,9 @@ class TempController extends GetxController {
   String cvImagePath = profileImage;
   bool isChatData = false;
   bool profilePicState = true;
+  bool isSsoUrl = true;
   TextEditingController nameController =
-      TextEditingController(text: 'Adnan Ashraf');
+      TextEditingController(text: 'Lorem Ipsum');
   TextEditingController designationController =
       TextEditingController(text: 'Manager');
   TextEditingController addressController =
@@ -290,6 +291,7 @@ class TempController extends GetxController {
     personalInformation.text = personalData['summary'] ?? '';
     cvImagePath = personalData['profile_pic'] ?? '';
     isChatData = true;
+    isSsoUrl = false;
     // profilePicState = responseData['cv']['profile_pic_state'] ?? true;
     // saveCvId = cvId;
 
@@ -408,6 +410,8 @@ class TempController extends GetxController {
 
       if (response.statusCode == 200) {
         isChatData = false;
+        isSsoUrl = false;
+
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final Map<String, dynamic> cvData = responseData['cv']['cv'];
 
@@ -541,13 +545,11 @@ class TempController extends GetxController {
       fillControllerFromCvObject(chatCvObj);
     }else{
       print("Controller Refreshed");
+      isSsoUrl = true;
       profilePicState = true;
       isChatData = false;
       profileImage = getProfilePic();
-      if (profileImage.contains("https://sso-oci.crewdog.ai")) {
-        profileImage = profileImage.substring(26);
-      }
-      nameController.text = 'Adnan Ashraf';
+      nameController.text = 'Lorem Ipsum';
       designationController.text = 'Manager';
       addressController.text = '2980 Smith Street, Massachusetts, USA';
       contactController.text = '+1 508-831-1827';
