@@ -1,8 +1,9 @@
-import 'package:crewdog_cv_lab/routes/app_routes.dart';
-import 'package:crewdog_cv_lab/screens/controllers/profile_controller.dart';
+import 'package:crewdog_cv_lab/utils/app_routes.dart';
 import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../controllers/profile_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

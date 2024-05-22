@@ -1,9 +1,9 @@
-import 'package:crewdog_cv_lab/screens/cv_templates/controllers/temp_controller.dart';
-import 'package:crewdog_cv_lab/utils/local_db.dart';
+import '../cv_templates/controllers/templates_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:printing/printing.dart';
 import 'dart:io';
+import '../../controllers/profile_controller.dart';
 import '../../custom_widgets/custom_button_row.dart';
 import '../../custom_widgets/custom_editable_text.dart';
 import '../../custom_widgets/cv_add_button.dart';
@@ -22,7 +22,6 @@ import 'package:pdf/widgets.dart' as pw;
 import '../../pdf_custom_widgets/pw_assets.dart';
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
-import '../controllers/profile_controller.dart';
 
 class V101 extends StatefulWidget {
   const V101({super.key});

@@ -7,12 +7,10 @@ import '../../custom_widgets/custom_editable_text.dart';
 import '../../pdf_custom_widgets/pdf_skill_widget.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../../pdf_custom_widgets/pw_assets.dart';
-import '../../utils/app_snackbar.dart';
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
-import '../../utils/local_db.dart';
-import '../controllers/profile_controller.dart';
-import 'controllers/temp_controller.dart';
+import '../../controllers/profile_controller.dart';
+import 'controllers/templates_controller.dart';
 import '../../custom_widgets/custom_button_row.dart';
 import '../../custom_widgets/cv_add_button.dart';
 import '../../custom_widgets/education_history_widget.dart';
@@ -37,15 +35,6 @@ class _V103State extends State<V103> {
   bool isCanPop = true;
   File? selectedImage;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   controller.cvImagePath = getProfilePic();
-  //   if (controller.cvImagePath
-  //       .contains("https://cvlab-staging-backend.crewdog.ai")) {
-  //     controller.cvImagePath = controller.cvImagePath.substring(40);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

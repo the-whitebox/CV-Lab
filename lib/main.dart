@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:crewdog_cv_lab/routes/app_routes.dart';
+import 'package:crewdog_cv_lab/utils/app_routes.dart';
 import 'package:crewdog_cv_lab/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
