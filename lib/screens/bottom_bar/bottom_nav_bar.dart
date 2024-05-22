@@ -1,4 +1,3 @@
-import 'package:crewdog_cv_lab/screens/cv_templates/controllers/temp_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../home_screen.dart';

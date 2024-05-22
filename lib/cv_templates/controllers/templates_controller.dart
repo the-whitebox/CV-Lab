@@ -5,9 +5,8 @@ import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-
 import '../../../utils/constants.dart';
-import '../../home_screen.dart';
+import '../../screens/home_screen.dart';
 
 String token = getAccessToken();
 String userId = getUserId();
@@ -289,9 +288,9 @@ class TempController extends GetxController {
     addressController.text = personalData['address'] ?? '';
     designationController.text = personalData['job_title'] ?? '';
     personalInformation.text = personalData['summary'] ?? '';
-    cvImagePath = personalData['profile_pic'] ?? '';
+    cvImagePath = personalData['profile_pic'] ?? getProfilePic();
     isChatData = true;
-    isSsoUrl = false;
+    isSsoUrl =personalData['profile_pic']? false:true;
     // profilePicState = responseData['cv']['profile_pic_state'] ?? true;
     // saveCvId = cvId;
 

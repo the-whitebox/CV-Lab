@@ -9,12 +9,9 @@ import 'package:image_picker/image_picker.dart';
 import '../../pdf_custom_widgets/pw_assets.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import '../../utils/app_snackbar.dart';
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
-import '../../utils/local_db.dart';
-import '../controllers/profile_controller.dart';
-import 'controllers/temp_controller.dart';
+import '../../controllers/profile_controller.dart';
 import '../../custom_widgets/custom_button_row.dart';
 import '../../custom_widgets/cv_add_button.dart';
 import '../../custom_widgets/education_history_widget.dart';
@@ -26,6 +23,7 @@ import '../../pdf_custom_widgets/pdf_education_history.dart';
 import '../../pdf_custom_widgets/pdf_employment_history.dart';
 import '../../pdf_custom_widgets/pdf_project_widget.dart';
 import '../../pdf_custom_widgets/pdf_reference_widget.dart';
+import 'controllers/templates_controller.dart';
 
 class V106 extends StatefulWidget {
   const V106({Key? key}) : super(key: key);
@@ -46,15 +44,6 @@ class _V106State extends State<V106> {
   final storage = GetStorage();
   final controller = Get.put(TempController());
   bool isCanPop=true;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   controller.cvImagePath = getProfilePic();
-  //   if (controller.cvImagePath.contains("https://cvlab-staging-backend.crewdog.ai")) {
-  //     controller.cvImagePath = controller.cvImagePath.substring(40);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

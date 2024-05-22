@@ -1,13 +1,13 @@
 import 'dart:ui';
-import 'package:crewdog_cv_lab/routes/app_routes.dart';
-import 'package:crewdog_cv_lab/screens/controllers/sso_authentication.dart';
+import 'package:crewdog_cv_lab/utils/app_routes.dart';
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
 import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/profile_controller.dart';
+import '../controllers/sso_authentication.dart';
 import '../custom_widgets/rotating_image.dart';
 import '../utils/constants.dart';
-import 'controllers/profile_controller.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);

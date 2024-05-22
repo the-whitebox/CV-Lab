@@ -1,13 +1,12 @@
 import 'dart:convert';
-import 'package:crewdog_cv_lab/screens/home_screen.dart';
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
+import '../cv_templates/controllers/templates_controller.dart';
 import '../utils/constants.dart';
-import '../routes/app_routes.dart';
+import '../utils/app_routes.dart';
 import 'package:http/http.dart' as http;
-import 'cv_templates/controllers/temp_controller.dart';
 
 List<int> tappedIndexes = [];
 List<dynamic> responseDataInFavouriteCV = [];

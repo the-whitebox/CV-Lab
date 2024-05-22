@@ -1,17 +1,15 @@
-import 'package:crewdog_cv_lab/screens/forgot_password_screen.dart';
 import 'package:crewdog_cv_lab/screens/saved_cv.dart';
-import 'package:crewdog_cv_lab/screens/signin_screen.dart';
-import 'package:crewdog_cv_lab/screens/signup_screen.dart';
 import 'package:crewdog_cv_lab/screens/splash_screen.dart';
 import 'package:crewdog_cv_lab/screens/welcome_screen.dart';
 import 'package:get/get.dart';
+import '../cv_templates/v101.dart';
+import '../cv_templates/v102.dart';
+import '../cv_templates/v103.dart';
+import '../cv_templates/v104.dart';
+import '../cv_templates/v105.dart';
+import '../cv_templates/v106.dart';
 import '../screens/bottom_bar/bottom_nav_bar.dart';
-import '../screens/cv_templates/v101.dart';
-import '../screens/cv_templates/v102.dart';
-import '../screens/cv_templates/v103.dart';
-import '../screens/cv_templates/v104.dart';
-import '../screens/cv_templates/v105.dart';
-import '../screens/cv_templates/v106.dart';
+
 
 class AppRoutes {
   static const String splash = '/splash';
@@ -38,18 +36,18 @@ class AppRoutes {
         name: welcome,
         page: () => const WelcomeScreen(),
       ),
-      GetPage(
-        name: signin,
-        page: () => const SigninScreen(),
-      ),
-      GetPage(
-        name: signup,
-        page: () => const SignupScreen(),
-      ),
-      GetPage(
-        name: forgetPassword,
-        page: () => const ForgotPasswordScreen(),
-      ),
+      // GetPage(
+      //   name: signin,
+      //   page: () => const SigninScreen(),
+      // ),
+      // GetPage(
+      //   name: signup,
+      //   page: () => const SignupScreen(),
+      // ),
+      // GetPage(
+      //   name: forgetPassword,
+      //   page: () => const ForgotPasswordScreen(),
+      // ),
       GetPage(
         name: savedCV,
         page: () => const SavedCvScreen(),

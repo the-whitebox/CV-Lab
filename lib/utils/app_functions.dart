@@ -9,9 +9,7 @@ import 'app_snackbar.dart';
 
 Future<void> requestPermissions() async {
   var status = await Permission.storage.status;
-  print('###Status$status');
   final permissionStatus = await Permission.storage.request();
-  print('###PermissionStatus$permissionStatus');
 }
 
 Future<void> makePdf(List<pw.Widget> widget, String templateName) async {

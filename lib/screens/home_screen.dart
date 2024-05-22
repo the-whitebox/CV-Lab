@@ -11,11 +11,11 @@ import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import '../custom_widgets/bubble_message.dart';
 import '../custom_widgets/rotating_image.dart';
-import '../routes/app_routes.dart';
+import '../utils/app_routes.dart';
 import '../utils/app_snackbar.dart';
 import '../utils/constants.dart';
 import 'bottom_bar/bottom_nav_bar.dart';
-import 'cv_templates/controllers/temp_controller.dart';
+import '../cv_templates/controllers/templates_controller.dart';
 
 List<String> pdfImages = [
   'assets/images/template/v101.png',
@@ -73,6 +73,7 @@ String words = '';
 final TextEditingController _messageController = TextEditingController();
 final FocusNode _focusNode = FocusNode();
 final ScrollController _scrollController = ScrollController();
+ String imageFromApi="";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -82,16 +83,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-
   void initSpeech() async {
     speechEnabled = await speechToText.initialize();
     setState(() {});
   }
 
   final tempController = Get.put(TempController());
-
-
 
   @override
   void initState() {
@@ -418,8 +415,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     .w600),
                                                   ),
                                                   IgnorePointer(
-                                                    ignoring:
-                                                    _isSubmitPressed,
+                                                    ignoring: _isSubmitPressed,
                                                     child: InkWell(
                                                       onTap: () {
                                                         Get.back();
@@ -429,7 +425,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           size: 16),
                                                     ),
                                                   )
-
                                                 ],
                                               ),
                                               content: SingleChildScrollView(
@@ -642,18 +637,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               Expanded(
                                                                 flex: 13,
                                                                 child:
-                                                                IconButton(
+                                                                    IconButton(
                                                                   highlightColor:
-                                                                  Colors
-                                                                      .transparent,
+                                                                      Colors
+                                                                          .transparent,
                                                                   iconSize: 20,
                                                                   onPressed:
                                                                       () {
                                                                     state(() {
                                                                       result =
-                                                                      null;
+                                                                          null;
                                                                       _fileUploaded =
-                                                                      false;
+                                                                          false;
                                                                     });
                                                                   },
                                                                   icon: const Icon(
@@ -784,100 +779,102 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           ),
                                                           IgnorePointer(
                                                             ignoring:
-                                                            _isSubmitPressed,
-                                                            child: ElevatedButton(
-                                                            onPressed:
-                                                                () async {
-                                                              _isSubmitPressed =
-                                                              true;
-                                                              _isJobDescriptionEmpty =
-                                                                  _jobDescriptionControllerForUploadCV
-                                                                      .text
-                                                                      .isEmpty;
-                                                              if (!_isJobDescriptionEmpty) {
-                                                                state(() {
-                                                                  _isJobDescriptionEmpty =
-                                                                  false;
-                                                                  _isLoading =
-                                                                  true;
-                                                                });
-                                                              } else {
-                                                                state(() {
-                                                                  _isJobDescriptionEmpty =
-                                                                  true;
-                                                                  _isSubmitPressed =
-                                                                  false;
-                                                                });
-                                                              }
-                                                              if (_fileUploaded &&
-                                                                  !_isJobDescriptionEmpty) {
-                                                                state(() {
-                                                                  _fileUploaded =
-                                                                  true;
-                                                                });
-
-                                                                if (await isInternetConnected()) {
-                                                                  await _callUploadCVApi();
-                                                                  state(() {
-                                                                    _firstApiCalled =
+                                                                _isSubmitPressed,
+                                                            child:
+                                                                ElevatedButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                _isSubmitPressed =
                                                                     true;
-                                                                    _isSubmitPressed =
-                                                                    false;
+                                                                _isJobDescriptionEmpty =
+                                                                    _jobDescriptionControllerForUploadCV
+                                                                        .text
+                                                                        .isEmpty;
+                                                                if (!_isJobDescriptionEmpty) {
+                                                                  state(() {
+                                                                    _isJobDescriptionEmpty =
+                                                                        false;
+                                                                    _isLoading =
+                                                                        true;
                                                                   });
-                                                                  if (cvObj
-                                                                      .isNotEmpty) {
+                                                                } else {
+                                                                  state(() {
+                                                                    _isJobDescriptionEmpty =
+                                                                        true;
+                                                                    _isSubmitPressed =
+                                                                        false;
+                                                                  });
+                                                                }
+                                                                if (_fileUploaded &&
+                                                                    !_isJobDescriptionEmpty) {
+                                                                  state(() {
+                                                                    _fileUploaded =
+                                                                        true;
+                                                                  });
+
+                                                                  if (await isInternetConnected()) {
+                                                                    await _callUploadCVApi();
                                                                     state(() {
                                                                       _firstApiCalled =
-                                                                      true;
+                                                                          true;
+                                                                      _isSubmitPressed =
+                                                                          false;
                                                                     });
-                                                                    Get.back();
-                                                                    _chatApi(
-                                                                        cvObj,
-                                                                        jobDescription,
-                                                                        '',
-                                                                        token);
+                                                                    if (cvObj
+                                                                        .isNotEmpty) {
+                                                                      state(() {
+                                                                        _firstApiCalled =
+                                                                            true;
+                                                                      });
+                                                                      Get.back();
+                                                                      _chatApi(
+                                                                          cvObj,
+                                                                          jobDescription,
+                                                                          '',
+                                                                          token);
+                                                                    }
+                                                                  } else {
+                                                                    appSnackBar(
+                                                                        "Error",
+                                                                        "No internet connectivity");
                                                                   }
-                                                                } else {
-                                                                  appSnackBar(
-                                                                      "Error",
-                                                                      "No internet connectivity");
+                                                                } else if (!_fileUploaded) {
+                                                                  state(() {
+                                                                    _fileUploaded =
+                                                                        false;
+                                                                  });
                                                                 }
-                                                              } else if (!_fileUploaded) {
                                                                 state(() {
-                                                                  _fileUploaded =
-                                                                  false;
+                                                                  _isLoading =
+                                                                      false;
                                                                 });
-                                                              }
-                                                              state(() {
-                                                                _isLoading =
-                                                                false;
-                                                              });
-                                                            },
-                                                            style:
-                                                            kElevatedButtonPrimaryBG,
-                                                            child: Align(
-                                                              alignment:
-                                                              Alignment
-                                                                  .center,
-                                                              child: _isLoading
-                                                                  ? const RotatingImage(
-                                                                height:
-                                                                30,
-                                                                width: 30,
-                                                              )
-                                                                  : const Align(
+                                                              },
+                                                              style:
+                                                                  kElevatedButtonPrimaryBG,
+                                                              child: Align(
                                                                 alignment:
-                                                                Alignment
-                                                                    .center,
-                                                                child:
-                                                                Text(
-                                                                  'Submit',
-                                                                  style:
-                                                                  kFont12,
-                                                                ),
+                                                                    Alignment
+                                                                        .center,
+                                                                child: _isLoading
+                                                                    ? const RotatingImage(
+                                                                        height:
+                                                                            30,
+                                                                        width:
+                                                                            30,
+                                                                      )
+                                                                    : const Align(
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        child:
+                                                                            Text(
+                                                                          'Submit',
+                                                                          style:
+                                                                              kFont12,
+                                                                        ),
+                                                                      ),
                                                               ),
                                                             ),
-                                                          ),)
+                                                          )
                                                         ],
                                                       ),
                                                     ),
@@ -934,27 +931,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 )),
                                             contentPadding: EdgeInsets.zero,
                                             backgroundColor: Colors.white,
-
                                             titlePadding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: 10,
-                                                horizontal: 10),
+                                                const EdgeInsets.symmetric(
+                                                    vertical: 10,
+                                                    horizontal: 10),
                                             title: Row(
                                               mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Text(
                                                   'Select a CV',
-                                                  style:
-                                                  kFont14Black.copyWith(
+                                                  style: kFont14Black.copyWith(
                                                       fontWeight:
-                                                      FontWeight
-                                                          .w600),
+                                                          FontWeight.w600),
                                                 ),
                                                 IgnorePointer(
-                                                  ignoring:
-                                                  _isSubmitPressed,
+                                                  ignoring: _isSubmitPressed,
                                                   child: InkWell(
                                                     onTap: () {
                                                       Get.back();
@@ -964,7 +957,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         size: 16),
                                                   ),
                                                 )
-
                                               ],
                                             ),
                                             content: SingleChildScrollView(
@@ -979,7 +971,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: [
-
                                                     SizedBox(
                                                         height:
                                                             screenHeight * 0.3,
@@ -1170,7 +1161,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             });
                                                           }),
                                                     ),
-
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
@@ -1215,8 +1205,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             ),
                                                             IgnorePointer(
                                                               ignoring:
-                                                              _isSubmitPressed,
-                                                              child: ElevatedButton(
+                                                                  _isSubmitPressed,
+                                                              child:
+                                                                  ElevatedButton(
                                                                 onPressed:
                                                                     () async {
                                                                   _isJobDescriptionForSavedCVEmpty =
@@ -1226,22 +1217,22 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   if (!_isCVSelected) {
                                                                     state(() {
                                                                       _cvNotSelected =
-                                                                      true;
+                                                                          true;
                                                                     });
                                                                   } else {
                                                                     state(() {
                                                                       _cvNotSelected =
-                                                                      false;
+                                                                          false;
                                                                     });
                                                                   }
                                                                   if (!_jobDescriptionControllerForSavedCV
-                                                                      .text
-                                                                      .isEmpty &&
+                                                                          .text
+                                                                          .isEmpty &&
                                                                       _isCVSelected) {
                                                                     _isSubmitPressed =
-                                                                    true;
+                                                                        true;
                                                                     _isLoading =
-                                                                    true;
+                                                                        true;
                                                                     if (await isInternetConnected()) {
                                                                       await _chatApi(
                                                                           chatCvObj,
@@ -1250,7 +1241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           '',
                                                                           token);
                                                                       _isSubmitPressed =
-                                                                      false;
+                                                                          false;
                                                                       Navigator.pop(
                                                                           context);
                                                                     } else {
@@ -1264,42 +1255,41 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           .text
                                                                           .isEmpty) {
                                                                         _isJobDescriptionForSavedCVEmpty =
-                                                                        true;
+                                                                            true;
                                                                       }
                                                                     });
                                                                   }
 
                                                                   state(() {
                                                                     _isLoading =
-                                                                    false;
+                                                                        false;
                                                                   });
                                                                 },
                                                                 style:
-                                                                kElevatedButtonPrimaryBG,
+                                                                    kElevatedButtonPrimaryBG,
                                                                 child: Align(
                                                                   alignment:
-                                                                  Alignment
-                                                                      .center,
+                                                                      Alignment
+                                                                          .center,
                                                                   child: _isLoading
                                                                       ? const RotatingImage(
-                                                                    height:
-                                                                    30,
-                                                                    width:
-                                                                    30,
-                                                                  )
+                                                                          height:
+                                                                              30,
+                                                                          width:
+                                                                              30,
+                                                                        )
                                                                       : const Align(
-                                                                    alignment:
-                                                                    Alignment.center,
-                                                                    child:
-                                                                    Text(
-                                                                      'Submit',
-                                                                      style:
-                                                                      kFont12,
-                                                                    ),
-                                                                  ),
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          child:
+                                                                              Text(
+                                                                            'Submit',
+                                                                            style:
+                                                                                kFont12,
+                                                                          ),
+                                                                        ),
                                                                 ),
                                                               ),
-
                                                             )
                                                           ],
                                                         ),
@@ -1494,6 +1484,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           }
                         } else {
                           return MessageBubble(
+                            userImage: imageFromApi,
                             message: _allMessages[index]['message'],
                             isUser: _allMessages[index]['isUser'],
                           );
@@ -1670,331 +1661,331 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void refreshResponse() {
+    _messages.clear();
+    _messagesFromAPI.clear();
+    _allMessages.clear();
+    cvObj.clear();
+    chatCvObj.clear();
+    _messageController.clear();
+    _focusNode.unfocus();
+    _jobDescriptionControllerForUploadCV.clear();
+    result = null;
+    _fileUploaded = false;
+    imageFromApi="";
+    print("Response Refreshed");
+    setState(() {});
+    // tempController.refreshController();
+  }
 
-    void refreshResponse() {
-      _messages.clear();
-      _messagesFromAPI.clear();
-      _allMessages.clear();
-      cvObj.clear();
-      chatCvObj.clear();
-      _messageController.clear();
-      _focusNode.unfocus();
-      _jobDescriptionControllerForUploadCV.clear();
-      result = null;
-      _fileUploaded = false;
-      print("Response Refreshed");
-      setState(() {});
-      // tempController.refreshController();
-    }
+  void onSpeechResult(SpeechRecognitionResult result) {
+    setState(() {
+      _messageController.text = result.recognizedWords;
+    });
+  }
 
-    void onSpeechResult(SpeechRecognitionResult result) {
-      setState(() {
-        _messageController.text = result.recognizedWords;
-      });
-    }
+  void stopListening() async {
+    await speechToText.stop();
+    setState(() {});
+  }
 
-    void stopListening() async {
-      await speechToText.stop();
-      setState(() {});
-    }
-
-    void startListening() async {
-      if (cvObj.isNotEmpty || chatCvObj.isNotEmpty) {
-        await speechToText.listen(
-          onResult: (result) {
-            return onSpeechResult(result);
-          },
-        );
-        setState(() {});
-      }
-    }
-
-    String _formatMessageDetails(
-        String summary,
-        Map<String, dynamic> cvObj,
-        List<Map<String, dynamic>> skillsList,
-        List<Map<String, dynamic>> educationList,
-        List<Map<String, dynamic>> employmentHistoryList,
-        List<Map<String, dynamic>> projectsList) {
-      final StringBuffer formattedMessage = StringBuffer();
-
-      formattedMessage.writeln('𝗦𝘂𝗺𝗺𝗮𝗿𝘆:');
-      formattedMessage.writeln(summary);
-      formattedMessage.writeln();
-
-      formattedMessage.writeln('𝗣𝗲𝗿𝘀𝗼𝗻𝗮𝗹 𝗜𝗻𝗳𝗼:');
-      formattedMessage
-          .writeln('Name: ${cvObj['personal_information']['name']}');
-      formattedMessage
-          .writeln('Email: ${cvObj['personal_information']['email']}');
-      formattedMessage
-          .writeln('Phone: ${cvObj['personal_information']['number']}');
-      formattedMessage
-          .writeln('Address: ${cvObj['personal_information']['address']}');
-      formattedMessage.writeln();
-
-      formattedMessage.writeln('𝗦𝗸𝗶𝗹𝗹𝘀:');
-      for (Map<String, dynamic> skill in skillsList) {
-        formattedMessage.writeln('• ${skill['name']}');
-      }
-      formattedMessage.writeln();
-
-      formattedMessage.writeln('𝗘𝗱𝘂𝗰𝗮𝘁𝗶𝗼𝗻:');
-      for (Map<String, dynamic> education in educationList) {
-        formattedMessage.writeln('Degree: ${education['field_of_study']}');
-        formattedMessage.writeln('Institute: ${education['institute_name']}');
-        formattedMessage.writeln('City: ${education['city']}');
-        formattedMessage.writeln('Country: ${education['country']}');
-        formattedMessage.writeln('Start date: ${education['start_date']}');
-        formattedMessage.writeln('End date: ${education['end_date']}');
-        formattedMessage.writeln('Description: ${education['description']}');
-        formattedMessage.writeln();
-      }
-
-      formattedMessage.writeln('𝗘𝗺𝗽𝗹𝗼𝘆𝗺𝗲𝗻𝘁 𝗛𝗶𝘀𝘁𝗼𝗿𝘆:');
-      for (Map<String, dynamic> employment in employmentHistoryList) {
-        formattedMessage.writeln('Position: ${employment['job_title']}');
-        formattedMessage.writeln('Company: ${employment['company_name']}');
-        formattedMessage.writeln('City: ${employment['city']}');
-        formattedMessage.writeln('Country: ${employment['country']}');
-        formattedMessage.writeln('Start date: ${employment['start_date']}');
-        formattedMessage.writeln('End date: ${employment['end_date']}');
-        formattedMessage.writeln('Description: ${employment['description']}');
-        formattedMessage.writeln();
-      }
-
-      formattedMessage.writeln('𝗣𝗿𝗼𝗷𝗲𝗰𝘁𝘀:');
-      for (Map<String, dynamic> project in projectsList) {
-        formattedMessage.writeln('Project Name: ${project['project_name']}');
-        formattedMessage.writeln('Description: ${project['description']}');
-        formattedMessage.writeln();
-      }
-
-      formattedMessage.writeln();
-
-      return formattedMessage.toString();
-    }
-
-    String _formatFileSize(int bytes) {
-      const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-      int i = 0;
-      double fileSize = bytes.toDouble();
-
-      while (fileSize > 1024) {
-        fileSize /= 1024;
-        i++;
-      }
-
-      return '${fileSize.toStringAsFixed(2)} ${sizes[i]}';
-    }
-
-    void updateMessages() {
-      _allMessages.clear();
-
-      int apiIndex = 0;
-      int userIndex = 0;
-
-      while (
-          apiIndex < _messagesFromAPI.length || userIndex < _messages.length) {
-        if (apiIndex < _messagesFromAPI.length) {
-          _allMessages.add({
-            'message': _messagesFromAPI[apiIndex],
-            'isUser': false,
-          });
-          apiIndex++;
-        }
-
-        if (userIndex < _messages.length) {
-          _allMessages.add({
-            'message': _messages[userIndex],
-            'isUser': true,
-          });
-          userIndex++;
-        }
-      }
-    }
-
-    Future<void> _chatApi(Map<String, dynamic> cvObj, String jobDescription,
-        String userQuery, String token) async {
-      final chatApiUrl = Uri.parse('$baseUrl/api/chat/');
-      final client = http.Client();
-      try {
-        _secondApiCalled = true;
-
-        final chatResponse = await client.post(
-          chatApiUrl,
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Content-Type': 'application/json',
-          },
-          body: jsonEncode({
-            'cv': cvObj,
-            'job_description': jobDescription,
-            'user_query': userQuery,
-          }),
-        );
-
-        if (chatResponse.statusCode == 200) {
-          setState(() {
-            _firstApiCalled = false;
-            _secondApiCalled = false;
-          });
-          print('Chat API call successful');
-
-          String responseBody = chatResponse.body;
-
-          Map<String, dynamic>? jsonResponse = json.decode(responseBody);
-
-          if (jsonResponse != null) {
-            setState(() {
-              chatCvObj = jsonResponse;
-            });
-
-            String summary = jsonResponse['personal_information']?['summary'] ??
-                'Summary not found';
-
-            List<Map<String, dynamic>> skillsList = [];
-            if (jsonResponse['skills'] != null) {
-              skillsList = (jsonResponse['skills'] as List)
-                  .map((skill) => Map<String, dynamic>.from(skill))
-                  .toList();
-            }
-
-            List<Map<String, dynamic>> educationList = [];
-            if (jsonResponse['education'] != null) {
-              educationList = (jsonResponse['education'] as List)
-                  .map((education) => Map<String, dynamic>.from(education))
-                  .toList();
-            }
-
-            List<Map<String, dynamic>> employmentHistoryList = [];
-            if (jsonResponse['employment_history'] != null) {
-              employmentHistoryList = (jsonResponse['employment_history']
-                      as List)
-                  .map((employment) => Map<String, dynamic>.from(employment))
-                  .toList();
-            }
-
-            List<Map<String, dynamic>> projectsList = [];
-            if (jsonResponse['projects'] != null) {
-              projectsList = (jsonResponse['projects'] as List)
-                  .map((project) => Map<String, dynamic>.from(project))
-                  .toList();
-            }
-
-            setState(() {
-              jobDescription = jsonResponse['job_description'] ?? '';
-              String formattedMessage = _formatMessageDetails(
-                  summary,
-                  jsonResponse,
-                  skillsList,
-                  educationList,
-                  employmentHistoryList,
-                  projectsList);
-              _messagesFromAPI.add(formattedMessage);
-              updateMessages();
-              _newMessage = false;
-              _errorInChatApi = false;
-            });
-          } else {
-            print('No valid response received');
-          }
-        } else {
-          setState(() {
-            _secondApiCalled = false;
-            _firstApiCalled = false;
-            _errorInChatApi = true;
-            _messagesFromAPI.add(_errorApiMessage);
-            updateMessages();
-          });
-          print(
-              'Second API call failed with status code ${chatResponse.statusCode}');
-          print(chatResponse.body);
-        }
-      } catch (e) {
-        setState(() {
-          _secondApiCalled = false;
-          _firstApiCalled = false;
-          print('I am in catch of chat api');
-          _errorInChatApi = true;
-          _messagesFromAPI.add(_errorApiMessage);
-          updateMessages();
-        });
-        print('Error in chat API call: $e');
-      } finally {
-        setState(() {
-          _secondApiCalled = false;
-          _firstApiCalled = false;
-        });
-        client.close();
-      }
-    }
-
-    Future<bool> _openGallery() async {
-      result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'doc', 'docx'],
+  void startListening() async {
+    if (cvObj.isNotEmpty || chatCvObj.isNotEmpty) {
+      await speechToText.listen(
+        onResult: (result) {
+          return onSpeechResult(result);
+        },
       );
+      setState(() {});
+    }
+  }
 
-      if (result != null) {
-        setState(() {
-          _fileName = result!.files.single.name;
-          _fileSize = _formatFileSize(result!.files.single.size);
-          _fileUploaded = true;
-        });
+  String _formatMessageDetails(
+      String summary,
+      Map<String, dynamic> cvObj,
+      List<Map<String, dynamic>> skillsList,
+      List<Map<String, dynamic>> educationList,
+      List<Map<String, dynamic>> employmentHistoryList,
+      List<Map<String, dynamic>> projectsList) {
+    final StringBuffer formattedMessage = StringBuffer();
 
-        // _updateProgress();
+    formattedMessage.writeln('𝗦𝘂𝗺𝗺𝗮𝗿𝘆:');
+    formattedMessage.writeln(summary);
+    formattedMessage.writeln();
 
-        _filePath = result!.files.single.path!;
-        print('File Path: $_filePath');
+    formattedMessage.writeln('𝗣𝗲𝗿𝘀𝗼𝗻𝗮𝗹 𝗜𝗻𝗳𝗼:');
+    formattedMessage.writeln('Name: ${cvObj['personal_information']['name']}');
+    formattedMessage
+        .writeln('Email: ${cvObj['personal_information']['email']}');
+    formattedMessage
+        .writeln('Phone: ${cvObj['personal_information']['number']}');
+    formattedMessage
+        .writeln('Address: ${cvObj['personal_information']['address']}');
+    formattedMessage
+        .writeln('Linkedin: ${cvObj['personal_information']['linkedin']}');
+    formattedMessage.writeln();
 
-        return true;
-      } else {
-        return false;
-      }
+    formattedMessage.writeln('𝗦𝗸𝗶𝗹𝗹𝘀:');
+    for (Map<String, dynamic> skill in skillsList) {
+      formattedMessage.writeln('• ${skill['name']}');
+    }
+    formattedMessage.writeln();
+
+    formattedMessage.writeln('𝗘𝗱𝘂𝗰𝗮𝘁𝗶𝗼𝗻:');
+    for (Map<String, dynamic> education in educationList) {
+      formattedMessage.writeln('Degree: ${education['field_of_study']}');
+      formattedMessage.writeln('Institute: ${education['institute_name']}');
+      formattedMessage.writeln('City: ${education['city']}');
+      formattedMessage.writeln('Country: ${education['country']}');
+      formattedMessage.writeln('Start date: ${education['start_date']}');
+      formattedMessage.writeln('End date: ${education['end_date']}');
+      formattedMessage.writeln('Description: ${education['description']}');
+      formattedMessage.writeln();
     }
 
-    Future<Map<String, dynamic>?> _callUploadCVApi() async {
-      try {
-        final url = Uri.parse('$baseUrl/api/process_data/');
-        var request = http.MultipartRequest('POST', url);
+    formattedMessage.writeln('𝗘𝗺𝗽𝗹𝗼𝘆𝗺𝗲𝗻𝘁 𝗛𝗶𝘀𝘁𝗼𝗿𝘆:');
+    for (Map<String, dynamic> employment in employmentHistoryList) {
+      formattedMessage.writeln('Position: ${employment['job_title']}');
+      formattedMessage.writeln('Company: ${employment['company_name']}');
+      formattedMessage.writeln('City: ${employment['city']}');
+      formattedMessage.writeln('Country: ${employment['country']}');
+      formattedMessage.writeln('Start date: ${employment['start_date']}');
+      formattedMessage.writeln('End date: ${employment['end_date']}');
+      formattedMessage.writeln('Description: ${employment['description']}');
+      formattedMessage.writeln();
+    }
 
-        request.headers['Authorization'] = 'Bearer $token';
+    formattedMessage.writeln('𝗣𝗿𝗼𝗷𝗲𝗰𝘁𝘀:');
+    for (Map<String, dynamic> project in projectsList) {
+      formattedMessage.writeln('Project Name: ${project['project_name']}');
+      formattedMessage.writeln('Description: ${project['description']}');
+      formattedMessage.writeln();
+    }
 
-        var file = File(_filePath);
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'file_upload',
-            file.path,
-          ),
-        );
-        request.fields['job_description'] =
-            _jobDescriptionControllerForUploadCV.text;
+    formattedMessage.writeln();
 
-        var response = await request.send();
+    return formattedMessage.toString();
+  }
 
-        if (response.statusCode == 200) {
-          setState(() {
-            _firstApiCalled = true;
-          });
-          String apiResponse = await response.stream.bytesToString();
+  String _formatFileSize(int bytes) {
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    int i = 0;
+    double fileSize = bytes.toDouble();
 
-          Map<String, dynamic> jsonResponse = json.decode(apiResponse);
-          cvObj = jsonResponse['cv_obj'];
-          print("Adnan this is CV Obj $cvObj");
-          return cvObj;
-        } else {
-          print(
-              'API call failed with status code ${response.statusCode} and response $response');
+    while (fileSize > 1024) {
+      fileSize /= 1024;
+      i++;
+    }
 
-          String apiResponse = await response.stream.bytesToString();
-          print(apiResponse);
-          return null;
-        }
-      } catch (e) {
-        print('Error in API call: $e');
-        return null;
+    return '${fileSize.toStringAsFixed(2)} ${sizes[i]}';
+  }
+
+  void updateMessages() {
+    _allMessages.clear();
+
+    int apiIndex = 0;
+    int userIndex = 0;
+
+    while (apiIndex < _messagesFromAPI.length || userIndex < _messages.length) {
+      if (apiIndex < _messagesFromAPI.length) {
+        _allMessages.add({
+          'message': _messagesFromAPI[apiIndex],
+          'isUser': false,
+        });
+        apiIndex++;
+      }
+
+      if (userIndex < _messages.length) {
+        _allMessages.add({
+          'message': _messages[userIndex],
+          'isUser': true,
+        });
+        userIndex++;
       }
     }
   }
 
+  Future<void> _chatApi(Map<String, dynamic> cvObj, String jobDescription,
+      String userQuery, String token) async {
+    final chatApiUrl = Uri.parse('$baseUrl/api/chat/');
+    final client = http.Client();
+    try {
+      _secondApiCalled = true;
+
+      final chatResponse = await client.post(
+        chatApiUrl,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'cv': cvObj,
+          'job_description': jobDescription,
+          'user_query': userQuery,
+        }),
+      );
+
+      if (chatResponse.statusCode == 200) {
+        setState(() {
+          _firstApiCalled = false;
+          _secondApiCalled = false;
+        });
+        print('Chat API call successful');
+
+        String responseBody = chatResponse.body;
+
+        Map<String, dynamic>? jsonResponse = json.decode(responseBody);
+
+        if (jsonResponse != null) {
+          setState(() {
+            chatCvObj = jsonResponse;
+          });
+          String summary = jsonResponse['personal_information']?['summary'] ??
+              'Summary not found';
+          imageFromApi=  jsonResponse['personal_information']?['profile_pic']??"";
+          print("Adnan Ashraf $imageFromApi");
+          print("Adnan Ashraf ${ jsonResponse['personal_information']?['profile_pic']}");
+
+          List<Map<String, dynamic>> skillsList = [];
+          if (jsonResponse['skills'] != null) {
+            skillsList = (jsonResponse['skills'] as List)
+                .map((skill) => Map<String, dynamic>.from(skill))
+                .toList();
+          }
+
+          List<Map<String, dynamic>> educationList = [];
+          if (jsonResponse['education'] != null) {
+            educationList = (jsonResponse['education'] as List)
+                .map((education) => Map<String, dynamic>.from(education))
+                .toList();
+          }
+
+          List<Map<String, dynamic>> employmentHistoryList = [];
+          if (jsonResponse['employment_history'] != null) {
+            employmentHistoryList = (jsonResponse['employment_history'] as List)
+                .map((employment) => Map<String, dynamic>.from(employment))
+                .toList();
+          }
+
+          List<Map<String, dynamic>> projectsList = [];
+          if (jsonResponse['projects'] != null) {
+            projectsList = (jsonResponse['projects'] as List)
+                .map((project) => Map<String, dynamic>.from(project))
+                .toList();
+          }
+
+          setState(() {
+            jobDescription = jsonResponse['job_description'] ?? '';
+            String formattedMessage = _formatMessageDetails(
+                summary,
+                jsonResponse,
+                skillsList,
+                educationList,
+                employmentHistoryList,
+                projectsList);
+            _messagesFromAPI.add(formattedMessage);
+            updateMessages();
+            _newMessage = false;
+            _errorInChatApi = false;
+          });
+        } else {
+          print('No valid response received');
+        }
+      } else {
+        setState(() {
+          _secondApiCalled = false;
+          _firstApiCalled = false;
+          _errorInChatApi = true;
+          _messagesFromAPI.add(_errorApiMessage);
+          updateMessages();
+        });
+        print(
+            'Second API call failed with status code ${chatResponse.statusCode}');
+        print(chatResponse.body);
+      }
+    } catch (e) {
+      setState(() {
+        _secondApiCalled = false;
+        _firstApiCalled = false;
+        print('I am in catch of chat api');
+        _errorInChatApi = true;
+        _messagesFromAPI.add(_errorApiMessage);
+        updateMessages();
+      });
+      print('Error in chat API call: $e');
+    } finally {
+      setState(() {
+        _secondApiCalled = false;
+        _firstApiCalled = false;
+      });
+      client.close();
+    }
+  }
+
+  Future<bool> _openGallery() async {
+    result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc', 'docx'],
+    );
+
+    if (result != null) {
+      setState(() {
+        _fileName = result!.files.single.name;
+        _fileSize = _formatFileSize(result!.files.single.size);
+        _fileUploaded = true;
+      });
+
+      // _updateProgress();
+
+      _filePath = result!.files.single.path!;
+      print('File Path: $_filePath');
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<Map<String, dynamic>?> _callUploadCVApi() async {
+    try {
+      final url = Uri.parse('$baseUrl/api/process_data/');
+      var request = http.MultipartRequest('POST', url);
+
+      request.headers['Authorization'] = 'Bearer $token';
+
+      var file = File(_filePath);
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'file_upload',
+          file.path,
+        ),
+      );
+      request.fields['job_description'] =
+          _jobDescriptionControllerForUploadCV.text;
+
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _firstApiCalled = true;
+        });
+        String apiResponse = await response.stream.bytesToString();
+
+        Map<String, dynamic> jsonResponse = json.decode(apiResponse);
+        cvObj = jsonResponse['cv_obj'];
+        print("Adnan this is CV Obj $cvObj");
+        return cvObj;
+      } else {
+        print(
+            'API call failed with status code ${response.statusCode} and response $response');
+
+        String apiResponse = await response.stream.bytesToString();
+        print(apiResponse);
+        return null;
+      }
+    } catch (e) {
+      print('Error in API call: $e');
+      return null;
+    }
+  }
+}
