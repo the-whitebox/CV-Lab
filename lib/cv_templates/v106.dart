@@ -11,7 +11,6 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
-import '../../controllers/profile_controller.dart';
 import '../../custom_widgets/custom_button_row.dart';
 import '../../custom_widgets/cv_add_button.dart';
 import '../../custom_widgets/education_history_widget.dart';
@@ -24,6 +23,7 @@ import '../../pdf_custom_widgets/pdf_employment_history.dart';
 import '../../pdf_custom_widgets/pdf_project_widget.dart';
 import '../../pdf_custom_widgets/pdf_reference_widget.dart';
 import 'controllers/templates_controller.dart';
+import 'controllers/upload_data_and_image.dart';
 
 class V106 extends StatefulWidget {
   const V106({Key? key}) : super(key: key);
@@ -63,6 +63,7 @@ class _V106State extends State<V106> {
           controller.cvImage = File(pickedFile.path);
           controller.cvImagePath = '/media/$cvImagePath';
           controller.isSsoUrl=false;
+          controller.isAuthImage=false;
         });
       }
     }

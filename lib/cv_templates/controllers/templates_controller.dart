@@ -1,12 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crewdog_cv_lab/cv_templates/controllers/fetch_and_upload_image.dart';
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
 import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../utils/constants.dart';
 import '../../screens/home_screen.dart';
+import 'package:http_parser/http_parser.dart';
 
 String token = getAccessToken();
 String userId = getUserId();
@@ -20,14 +24,13 @@ class TempController extends GetxController {
     profileImage = getProfilePic();
   }
 
-
-
   int saveCvId = 0;
   File cvImage = File('');
   String cvImagePath = profileImage;
   bool isChatData = false;
   bool profilePicState = true;
   bool isSsoUrl = true;
+  bool isAuthImage=true;
   TextEditingController nameController =
       TextEditingController(text: 'Lorem Ipsum');
   TextEditingController designationController =
@@ -162,6 +165,16 @@ class TempController extends GetxController {
 
   Future<void> saveCv(String templateId) async {
     try {
+      if(isAuthImage){
+        String imageFetchedByUrl = await fetchAndUploadImage(
+            token: token,
+            templateId: templateId,
+            userId: userId,
+            cvImagePath: cvImagePath);
+        cvImagePath=imageFetchedByUrl;
+        print("CV IMage Updated $cvImagePath");
+      }
+
       final Map<String, dynamic> payload = {
         'cv_data': {
           'personal_information': {
@@ -202,10 +215,20 @@ class TempController extends GetxController {
     } catch (e) {
       print('Error saving CV: $e');
     }
+    print("Lasat path $cvImagePath");
   }
 
   Future<void> updateCv(String templateId, int savedCvId) async {
     try {
+      if(isAuthImage){
+        String imageFetchedByUrl = await fetchAndUploadImage(
+            token: token,
+            templateId: templateId,
+            userId: userId,
+            cvImagePath: cvImagePath);
+        cvImagePath=imageFetchedByUrl;
+        print("CV IMage Updated in Upadte CV $cvImagePath");
+      }
       final Map<String, dynamic> payload = {
         'cv_data': {
           'personal_information': {
@@ -279,8 +302,7 @@ class TempController extends GetxController {
   }
 
   Future<void> fillControllerFromCvObject(Map<String, dynamic> cvData) async {
-
-    print("Filling from CV Object");
+    print("Filling from CV Object $cvData");
     final Map<String, dynamic> personalData = cvData['personal_information'];
     nameController.text = personalData['name'] ?? '';
     mailController.text = personalData['email'] ?? '';
@@ -290,8 +312,15 @@ class TempController extends GetxController {
     personalInformation.text = personalData['summary'] ?? '';
     cvImagePath = personalData['profile_pic'] ?? getProfilePic();
     isChatData = true;
-    isSsoUrl =personalData['profile_pic']? false:true;
-    // profilePicState = responseData['cv']['profile_pic_state'] ?? true;
+    // isSsoUrl=false;
+    isAuthImage= personalData['profile_pic'] != null
+        ? false
+        : true;
+    isSsoUrl =
+            personalData['profile_pic'] != null
+        ? false
+        : true;
+    print("This is SSO URL $isSsoUrl");
     // saveCvId = cvId;
 
     final List<dynamic> skillsDataList = cvData['skills'] ?? [];
@@ -394,12 +423,12 @@ class TempController extends GetxController {
     }
 
     update();
+    print("CV IMAGE $cvImagePath");
   }
 
   Future<void> fetchDataFromBackend(int cvId, String templateId) async {
     try {
       final response = await http.get(
-
         Uri.parse('$baseUrl/api/getCv/?cv_id=$cvId&template_id=$templateId'),
         headers: {
           'Authorization': 'Bearer $token',
@@ -410,9 +439,11 @@ class TempController extends GetxController {
       if (response.statusCode == 200) {
         isChatData = false;
         isSsoUrl = false;
+        isAuthImage=false;
 
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final Map<String, dynamic> cvData = responseData['cv']['cv'];
+        print("hERE $cvData");
 
         final Map<String, dynamic> personalData =
             cvData['personal_information'];
@@ -539,11 +570,11 @@ class TempController extends GetxController {
   }
 
   void refreshController() {
-
-    if(chatCvObj.isNotEmpty){
+    if (chatCvObj.isNotEmpty) {
       fillControllerFromCvObject(chatCvObj);
-    }else{
+    } else {
       print("Controller Refreshed");
+      isAuthImage=true;
       isSsoUrl = true;
       profilePicState = true;
       isChatData = false;
@@ -556,7 +587,7 @@ class TempController extends GetxController {
       cvImagePath = profileImage;
       saveCvId = 0;
       personalInformation.text =
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.';
+          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.';
 
       // Refresh skills
       skills.clear();
@@ -574,9 +605,8 @@ class TempController extends GetxController {
             title: TextEditingController(text: 'Lorem Ipsum'),
             description: TextEditingController(
                 text:
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
+                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
       ]);
-
 
       // Refresh education
       education.clear();
@@ -585,7 +615,7 @@ class TempController extends GetxController {
           fieldOfStudy: TextEditingController(text: 'Lorem Ipsum'),
           description: TextEditingController(
             text:
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
+                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
           ),
           endDate: TextEditingController(text: 'November 2015'),
           startDate: TextEditingController(text: 'September 2019'),
@@ -603,7 +633,7 @@ class TempController extends GetxController {
           jobTitle: TextEditingController(text: 'Lorem Ipsum'),
           description: TextEditingController(
             text:
-            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
+                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
           ),
           endDate: TextEditingController(text: 'November 2015'),
           startDate: TextEditingController(text: 'September 2019'),
@@ -621,13 +651,11 @@ class TempController extends GetxController {
             contactNumber: TextEditingController(text: '+92 3123456789'),
             referenceText: TextEditingController(
                 text:
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text'),
+                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text'),
             keyController: GlobalKey())
       ]);
     }
-    }
-
-
+  }
 }
 
 class EmploymentHistory {
@@ -698,4 +726,53 @@ class Projects {
     required this.title,
     required this.description,
   });
+}
+
+Future<String> uploadImage(
+  XFile imageToUpload,
+  String token,
+  String userId,
+) async {
+  try {
+    List<int> imageBytes = await imageToUpload.readAsBytes();
+
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$baseUrl/api/save/picture/'),
+    );
+
+    request.headers['Authorization'] = 'Bearer $token';
+    request.fields['user'] = userId;
+    // request.fields['template'] = template;
+
+    request.files.add(http.MultipartFile(
+      'picture',
+      http.ByteStream.fromBytes(imageBytes),
+      imageBytes.length,
+      filename: 'cv_image.jpg',
+      contentType: MediaType('image', 'jpeg'),
+    ));
+    var response = await request.send();
+
+    if (response.statusCode == 201) {
+      String responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> responseData = jsonDecode(responseBody);
+
+      if (responseData.containsKey('picture_path')) {
+        String picturePath = responseData['picture_path'];
+        print('Picture path: $picturePath');
+        return picturePath;
+      } else {
+        print('Failed to get "picture_path" from the response.');
+        return "null";
+      }
+    } else {
+      print('Failed to upload image. Status code: ${response.statusCode}');
+      print('Response: ${await response.stream.bytesToString()}');
+      return "null";
+    }
+  } catch (e) {
+    print('Error uploading data and image: $e');
+    return "null";
+  }
 }
