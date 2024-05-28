@@ -4,8 +4,8 @@ import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
 import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/profile_controller.dart';
-import '../controllers/sso_authentication.dart';
+import '../services/profile/retrieve_profile.dart';
+import '../services/sso_auth/get_code_sso.dart';
 import '../custom_widgets/rotating_image.dart';
 import '../utils/constants.dart';
 

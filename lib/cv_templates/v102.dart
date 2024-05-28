@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:printing/printing.dart';
-import '../../controllers/profile_controller.dart';
 import '../../pdf_custom_widgets/pdf_education_history.dart';
 import '../../pdf_custom_widgets/pdf_employment_history.dart';
 import '../../pdf_custom_widgets/pdf_project_widget.dart';
@@ -22,6 +21,7 @@ import '../../custom_widgets/skill_custom_widget.dart';
 import 'package:crewdog_cv_lab/custom_widgets/custom_editable_text.dart';
 import 'package:crewdog_cv_lab/pdf_custom_widgets/pdf_skill_widget.dart';
 import 'controllers/templates_controller.dart';
+import 'controllers/upload_data_and_image.dart';
 
 class V102 extends StatefulWidget {
   const V102({Key? key}) : super(key: key);
@@ -752,6 +752,7 @@ class _V102State extends State<V102> {
         controller.cvImage = File(pickedFile.path);
         controller.cvImagePath = '/media/$cvImagePath';
         controller.isSsoUrl=false;
+        controller.isAuthImage=false;
       });
     }
   }

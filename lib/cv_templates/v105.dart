@@ -9,7 +9,6 @@ import '../../pdf_custom_widgets/pdf_skill_widget.dart';
 import '../../pdf_custom_widgets/pw_assets.dart';
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
-import '../../controllers/profile_controller.dart';
 import 'controllers/templates_controller.dart';
 import '../../custom_widgets/custom_button_row.dart';
 import '../../custom_widgets/cv_add_button.dart';
@@ -18,6 +17,7 @@ import '../../custom_widgets/reference_widget.dart';
 import '../../custom_widgets/skill_custom_widget.dart';
 import '../../pdf_custom_widgets/pdf_project_widget.dart';
 import '../../pdf_custom_widgets/pdf_reference_widget.dart';
+import 'controllers/upload_data_and_image.dart';
 
 class V105 extends StatefulWidget {
   const V105({super.key});
@@ -48,6 +48,8 @@ class _V105State extends State<V105> {
         controller.cvImage = File(pickedFile.path);
         controller.cvImagePath = '/media/$cvImagePath';
         controller.isSsoUrl=false;
+        controller.isAuthImage=false;
+
       });
     }
   }

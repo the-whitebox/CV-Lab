@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:printing/printing.dart';
 import 'dart:io';
-import '../../controllers/profile_controller.dart';
 import '../../custom_widgets/custom_button_row.dart';
 import '../../custom_widgets/custom_editable_text.dart';
 import '../../custom_widgets/cv_add_button.dart';
@@ -22,6 +21,7 @@ import 'package:pdf/widgets.dart' as pw;
 import '../../pdf_custom_widgets/pw_assets.dart';
 import '../../utils/constants.dart';
 import '../../utils/app_functions.dart';
+import 'controllers/upload_data_and_image.dart';
 
 class V101 extends StatefulWidget {
   const V101({super.key});
@@ -632,6 +632,7 @@ class _V101State extends State<V101> {
         controller.cvImage = File(pickedFile.path);
         controller.cvImagePath = '/media/$cvImagePath';
         controller.isSsoUrl=false;
+        controller.isAuthImage=false;
       });
     }
   }
