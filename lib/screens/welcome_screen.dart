@@ -1,10 +1,8 @@
 import 'dart:ui';
 import 'package:crewdog_cv_lab/utils/app_routes.dart';
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
-import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../services/profile/retrieve_profile.dart';
 import '../services/sso_auth/get_code_sso.dart';
 import '../custom_widgets/rotating_image.dart';
 import '../utils/constants.dart';
@@ -82,33 +80,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                            onPressed: () async {
-                              setState(() {
-                                isBusy = true;
-                              });
-                              final  ssoToken =
-                                  await signInWithSso();
-                              if (ssoToken.isNotEmpty) {
-                                storeAccessToken(ssoToken);
-                                var responseData = await retrieveProfile(ssoToken);
-                                var profilePic = responseData['profile_pic'];
-                                if (profilePic != null) {
-                                  storeProfilePic(profilePic);
-                                }
-                                var userId = responseData['id'];
-                                if(userId!=null){
-                                  storeUserId(userId.toString());
-                                }
-                                Get.offAllNamed(AppRoutes.bottomBar);
-                                isBusy = false;
-                              } else {
-                                setState(() {
-                                  isBusy = false;
-                                });
-                                appSnackBar(
-                                    "Login Failed", "Something went wrong.");
-                              }
-                            },
+                            onPressed: loginTapped,
                             style: kElevatedButtonStyle.copyWith(
                               padding: MaterialStateProperty.all(
                                 EdgeInsets.symmetric(
@@ -123,28 +95,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   : kButtonTextStyleSmallScreen,
                             ),
                           ),
-                          // Padding(
-                          //   padding: EdgeInsets.only(
-                          //       top: isLargerScreen ? screenHeight * 0.01 : 0),
-                          //   child: ElevatedButton(
-                          //     onPressed: (){},
-                          //     style: kElevatedButtonWithWhiteColor.copyWith(
-                          //       padding: MaterialStateProperty.all(
-                          //         EdgeInsets.symmetric(
-                          //             vertical: screenHeight * 0.007,
-                          //             horizontal: screenWidth * 0.008),
-                          //       ),
-                          //     ),
-                          //     child: Text(
-                          //       'Sign up',
-                          //       style: isLargerScreen
-                          //           ? kButtonTextStyle.copyWith(
-                          //               color: const Color(0xFFFF5E59))
-                          //           : kButtonTextStyleSmallScreen.copyWith(
-                          //               color: const Color(0xFFFF5E59)),
-                          //     ),
-                          //   ),
-                          // ),
                         ],
                       ),
                       SizedBox(
@@ -168,5 +118,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       )),
     );
   }
-}
 
+  Future loginTapped() async {
+    setState(() {
+      isBusy = true;
+    });
+    final isValidToken = await signInWithSso();
+    if (isValidToken) {
+      Get.offAllNamed(AppRoutes.bottomBar);
+      isBusy = false;
+    } else {
+      setState(() {
+        isBusy = false;
+      });
+      appSnackBar("Login Failed", "Something went wrong.");
+    }
+  }
+}

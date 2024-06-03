@@ -6,10 +6,20 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'utils/local_db.dart';
 
+
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
+
 Future<void> main() async {
   await GetStorage.init();
   bool isIOS = Platform.isIOS;
   storePlatformInfo(isIOS);
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
