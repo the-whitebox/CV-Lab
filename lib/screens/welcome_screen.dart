@@ -68,7 +68,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       Image.asset(
                         'assets/images/crewDog_beta.png',
                         height: isLargerScreen
-                            ? screenHeight * 0.06
+                            ? screenHeight * 0.075
                             : screenHeight * 0.078,
                         width: double.infinity,
                       ),
