@@ -27,10 +27,8 @@ class MessageBubble extends StatelessWidget {
               child: Padding(
                   padding: const EdgeInsets.only(top: 10.0),
                   child: Container(
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 13),
+                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
                     decoration: BoxDecoration(
                       color: isUser ? kLightOrange : kLightPurple,
                       borderRadius: BorderRadius.circular(12),
@@ -43,8 +41,7 @@ class MessageBubble extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   CircleAvatar(
-                                    backgroundImage:
-                                        NetworkImage(baseUrl + userImage),
+                                    backgroundImage: NetworkImage(baseUrl + userImage),
                                     minRadius: 30,
                                   )
                                 ],
@@ -64,14 +61,17 @@ class MessageBubble extends StatelessWidget {
                 alignment: isUser ? Alignment.topRight : Alignment.topLeft,
                 child: isUser
                     ? profileImage.isNotEmpty
-                        ? CircleAvatar(maxRadius: 13,backgroundImage: NetworkImage(ssoUrl+profileImage),)
+                        ? CircleAvatar(
+                            maxRadius: 13,
+                            backgroundImage: NetworkImage(ssoUrl + profileImage),
+                          )
                         : Image.asset(
                             'assets/images/avatar.png',
                             height: 30,
                             width: 30,
                           )
                     : Image.asset(
-                        'assets/images/avatars/dogDP.png',
+                        'assets/images/avatars/robot.png',
                         height: 30,
                         width: 30,
                       ),

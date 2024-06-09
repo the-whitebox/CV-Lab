@@ -4,15 +4,13 @@ class RotatingImage extends StatefulWidget {
   final double width;
   final double height;
 
-  const RotatingImage({Key? key, this.width = 70.0, this.height = 70.0})
-      : super(key: key);
+  const RotatingImage({Key? key, this.width = 70.0, this.height = 70.0}) : super(key: key);
 
   @override
   RotatingImageState createState() => RotatingImageState();
 }
 
-class RotatingImageState extends State<RotatingImage>
-    with SingleTickerProviderStateMixin {
+class RotatingImageState extends State<RotatingImage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -30,7 +28,7 @@ class RotatingImageState extends State<RotatingImage>
       child: RotationTransition(
         turns: _controller,
         child: Image.asset(
-          'assets/images/bone.png',
+          'assets/images/logo/logo.png',
           width: widget.width,
           height: widget.height,
         ),
