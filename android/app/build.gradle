@@ -49,9 +49,8 @@ android {
         targetSdkVersion 32
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        manifestPlaceholders = [
-                'appAuthRedirectScheme': 'com.crewdogcvlab'
-        ]
+        manifestPlaceholders += ['appAuthRedirectScheme': 'com.crewdogcvlab']
+
         multiDexEnabled true
     }
 

@@ -13,6 +13,18 @@ void clearAccessToken(){
   storage.remove('accessToken');
 }
 
+
+void storeRefreshToken(String refreshToken) {
+  storage.write('refreshToken', refreshToken);
+}
+
+String getRefreshToken() {
+  return storage.read('refreshToken') ?? '';
+}
+void clearRefreshToken(){
+  storage.remove('refreshToken');
+}
+
 void storeUserId(String accessToken) {
   storage.write('userId', accessToken);
 }
