@@ -2,7 +2,6 @@ import 'package:crewdog_cv_lab/services/sso_auth/get_token_sso.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import '../../../utils/constants.dart';
 
-
 const appAuth = FlutterAppAuth();
 
 Future<bool> signInWithSso() async {
@@ -18,10 +17,10 @@ Future<bool> signInWithSso() async {
     );
 
     if (result != null) {
-      final token =await  getTokenFromCode(result.authorizationCode!);
-      if(token){
+      final token = await getTokenFromCode(result.authorizationCode!);
+      if (token) {
         return true;
-      }else{
+      } else {
         print("Token Is Invalid");
         return false;
       }

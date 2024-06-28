@@ -4,17 +4,15 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import '../../../utils/constants.dart';
 
-
-Future<String> fetchAndUploadImage(
-    {
-      required String token,
-      required String templateId,
-      required String userId,
-      required String cvImagePath,
-    }
-    ) async {
-  http.Response res = await http.get(Uri.parse(ssoUrl+cvImagePath));
+Future<String> fetchAndUploadImage({
+  required String token,
+  required String templateId,
+  required String userId,
+  required String cvImagePath,
+}) async {
+  http.Response res = await http.get(Uri.parse(ssoUrl + cvImagePath));
   if (res.statusCode == 200) {
+    print('token at fetchAndUploadImage : $token');
     Uint8List bytes = res.bodyBytes;
     XFile imageFile = XFile.fromData(bytes);
     String cvImagePathAfterUpload = await uploadDataAndImage(
@@ -23,10 +21,10 @@ Future<String> fetchAndUploadImage(
       templateId,
       userId,
     );
-    cvImagePathAfterUpload='/media/$cvImagePathAfterUpload';
+    cvImagePathAfterUpload = '/media/$cvImagePathAfterUpload';
     return cvImagePathAfterUpload;
   } else {
-    print('Failed to fetch image');
+    print('Failed to fetch image :: $token');
     return '';
   }
 }

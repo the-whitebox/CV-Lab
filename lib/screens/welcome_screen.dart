@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:crewdog_cv_lab/utils/app_routes.dart';
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
+import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../services/sso_auth/get_code_sso.dart';
@@ -42,16 +43,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: Stack(
               children: [
                 Container(
-                  decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                        Colors.white70,
-                        Colors.transparent,
-                        Colors.white38,
-                        Colors.white
-                      ])),
+                  decoration: const BoxDecoration(gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Colors.white70, Colors.transparent, Colors.white38, Colors.white])),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -67,9 +59,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                       Image.asset(
                         'assets/images/crewDog_beta.png',
-                        height: isLargerScreen
-                            ? screenHeight * 0.075
-                            : screenHeight * 0.078,
+                        height: isLargerScreen ? screenHeight * 0.075 : screenHeight * 0.078,
                         width: double.infinity,
                       ),
 
@@ -83,16 +73,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             onPressed: loginTapped,
                             style: kElevatedButtonStyle.copyWith(
                               padding: MaterialStateProperty.all(
-                                EdgeInsets.symmetric(
-                                    vertical: screenHeight * 0.007,
-                                    horizontal: screenWidth * 0.008),
+                                EdgeInsets.symmetric(vertical: screenHeight * 0.007, horizontal: screenWidth * 0.008),
                               ),
                             ),
                             child: Text(
                               'Sign in',
-                              style: isLargerScreen
-                                  ? kButtonTextStyle
-                                  : kButtonTextStyleSmallScreen,
+                              style: isLargerScreen ? kButtonTextStyle : kButtonTextStyleSmallScreen,
                             ),
                           ),
                         ],
@@ -125,6 +111,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     });
     final isValidToken = await signInWithSso();
     if (isValidToken) {
+      String token = getAccessToken();
+      print('token before log in : $token');
       Get.offAllNamed(AppRoutes.bottomBar);
       isBusy = false;
     } else {

@@ -76,9 +76,10 @@ Future<List<String>> fetchFavoriteCVs(String token) async {
           })
           .whereType<String>() // Filter out null values and keep only strings
           .toList();
+      print('succesfull token fav cv: $token');
       return favoriteCVs;
     } else {
-      print('Failed to fetch favorite CVs. Status code: ${response.statusCode}');
+      print('Failed to fetch favorite CVs. Status code: ${response.statusCode} token: $token');
       return []; // Return an empty list or handle the error as needed
     }
   } catch (e) {
@@ -248,10 +249,8 @@ class _SavedCvScreenState extends State<SavedCvScreen> with SingleTickerProvider
       tappedIndex = null;
       tappedMyCVIndex = null;
       tappedFavCVIndex = null;
-
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -454,8 +453,7 @@ class _SavedCvScreenState extends State<SavedCvScreen> with SingleTickerProvider
                     final cvData = filteredData[index];
                     final title = filteredData[index]['username'];
                     final templateName = cvData['template']['name'];
-                    final lastDigit =
-                        int.tryParse(templateName.substring(templateName.length - 1)) ?? 1;
+                    final lastDigit = int.tryParse(templateName.substring(templateName.length - 1)) ?? 1;
                     final currentIndex = lastDigit;
 
                     if (currentIndex >= 1 && currentIndex <= pdfImages.length) {
@@ -747,9 +745,7 @@ class _SavedCvScreenState extends State<SavedCvScreen> with SingleTickerProvider
               alignment: const Alignment(1.25, -1.2),
               child: IconButton(
                 icon: Image.asset(
-                  isFavouriteItem
-                      ? 'assets/images/favourite-red.png'
-                      : 'assets/images/favouriteCV.png',
+                  isFavouriteItem ? 'assets/images/favourite-red.png' : 'assets/images/favouriteCV.png',
                   height: 25,
                   width: 25,
                 ),
@@ -763,7 +759,6 @@ class _SavedCvScreenState extends State<SavedCvScreen> with SingleTickerProvider
                         appSuccessSnackBar("Success", 'CV added to favourites');
                       } else {
                         appSuccessSnackBar("Success", 'CV is already in favourites');
-
                       }
                     });
                   }

@@ -22,6 +22,8 @@ class TempController extends GetxController {
     super.onInit();
     refreshController();
     profileImage = getProfilePic();
+    token = getAccessToken();
+    print('token at init : $token');
   }
 
   int saveCvId = 0;
@@ -30,17 +32,12 @@ class TempController extends GetxController {
   bool isChatData = false;
   bool profilePicState = true;
   bool isSsoUrl = true;
-  bool isAuthImage=true;
-  TextEditingController nameController =
-      TextEditingController(text: 'Lorem Ipsum');
-  TextEditingController designationController =
-      TextEditingController(text: 'Manager');
-  TextEditingController addressController =
-      TextEditingController(text: '2980 Smith Street, Massachusetts, USA');
-  TextEditingController contactController =
-      TextEditingController(text: '+1 508-831-1827');
-  TextEditingController mailController =
-      TextEditingController(text: 'lorem@gmail.com');
+  bool isAuthImage = true;
+  TextEditingController nameController = TextEditingController(text: 'Lorem Ipsum');
+  TextEditingController designationController = TextEditingController(text: 'Manager');
+  TextEditingController addressController = TextEditingController(text: '2980 Smith Street, Massachusetts, USA');
+  TextEditingController contactController = TextEditingController(text: '+1 508-831-1827');
+  TextEditingController mailController = TextEditingController(text: 'lorem@gmail.com');
   TextEditingController personalInformation = TextEditingController(
     text:
         'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
@@ -58,9 +55,7 @@ class TempController extends GetxController {
     References(
       personName: TextEditingController(text: "Lorem Ipsum"),
       contactNumber: TextEditingController(text: "+92 3123456789"),
-      referenceText: TextEditingController(
-          text:
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text'),
+      referenceText: TextEditingController(text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text'),
       keyController: GlobalKey(),
     ),
   ];
@@ -68,9 +63,7 @@ class TempController extends GetxController {
   final List<EmploymentHistory> employmentHistory = [
     EmploymentHistory(
       jobTitle: TextEditingController(text: 'Lorem Ipsum'),
-      description: TextEditingController(
-          text:
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+      description: TextEditingController(text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
       endDate: TextEditingController(text: 'November 2015'),
       startDate: TextEditingController(text: 'September 2019'),
       city: TextEditingController(text: 'Lorem Ipsum'),
@@ -82,9 +75,7 @@ class TempController extends GetxController {
   final List<EducationHistory> education = [
     EducationHistory(
       fieldOfStudy: TextEditingController(text: 'Lorem Ipsum'),
-      description: TextEditingController(
-          text:
-              'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
+      description: TextEditingController(text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'),
       endDate: TextEditingController(text: 'November 2015'),
       startDate: TextEditingController(text: 'September 2019'),
       city: TextEditingController(text: 'Lorem Ipsum'),
@@ -105,8 +96,7 @@ class TempController extends GetxController {
     }).toList();
   }
 
-  List<Map<String, dynamic>> _prepareHistoryData(
-      List<EmploymentHistory> historyList) {
+  List<Map<String, dynamic>> _prepareHistoryData(List<EmploymentHistory> historyList) {
     return historyList.map((history) {
       final Map<String, dynamic> historyData = {
         'company_name': history.companyName.text,
@@ -122,8 +112,7 @@ class TempController extends GetxController {
     }).toList();
   }
 
-  List<Map<String, dynamic>> _prepareEducationHistoryData(
-      List<EducationHistory> historyList) {
+  List<Map<String, dynamic>> _prepareEducationHistoryData(List<EducationHistory> historyList) {
     return historyList.map((history) {
       final Map<String, dynamic> historyData = {
         'field_of_study': history.fieldOfStudy.text,
@@ -140,8 +129,7 @@ class TempController extends GetxController {
     }).toList();
   }
 
-  List<Map<String, dynamic>> _prepareReferenceData(
-      List<References> referenceList) {
+  List<Map<String, dynamic>> _prepareReferenceData(List<References> referenceList) {
     return referenceList.map((history) {
       final Map<String, dynamic> referenceList = {
         'person_name': history.personName.text,
@@ -165,13 +153,9 @@ class TempController extends GetxController {
 
   Future<void> saveCv(String templateId) async {
     try {
-      if(isAuthImage){
-        String imageFetchedByUrl = await fetchAndUploadImage(
-            token: token,
-            templateId: templateId,
-            userId: userId,
-            cvImagePath: cvImagePath);
-        cvImagePath=imageFetchedByUrl;
+      if (isAuthImage) {
+        String imageFetchedByUrl = await fetchAndUploadImage(token: token, templateId: templateId, userId: userId, cvImagePath: cvImagePath);
+        cvImagePath = imageFetchedByUrl;
         print("CV IMage Updated $cvImagePath");
       }
 
@@ -196,7 +180,7 @@ class TempController extends GetxController {
         'template_id': templateId,
         'profile_pic_state': profilePicState,
       };
-
+      print('I am tokennn: $token');
       final response = await http.post(
         Uri.parse('$baseUrl/api/save/cv/'),
         headers: {
@@ -209,7 +193,7 @@ class TempController extends GetxController {
       if (response.statusCode == 201) {
         appSuccessSnackBar('Success', 'CV saved successfully');
       } else {
-        print('Failed to save CV. Status code: ${response.statusCode}');
+        print('Failed to save CV. Status code: ${response.statusCode} $token');
         print('Response: ${response.body}');
       }
     } catch (e) {
@@ -220,13 +204,9 @@ class TempController extends GetxController {
 
   Future<void> updateCv(String templateId, int savedCvId) async {
     try {
-      if(isAuthImage){
-        String imageFetchedByUrl = await fetchAndUploadImage(
-            token: token,
-            templateId: templateId,
-            userId: userId,
-            cvImagePath: cvImagePath);
-        cvImagePath=imageFetchedByUrl;
+      if (isAuthImage) {
+        String imageFetchedByUrl = await fetchAndUploadImage(token: token, templateId: templateId, userId: userId, cvImagePath: cvImagePath);
+        cvImagePath = imageFetchedByUrl;
         print("CV IMage Updated in Upadte CV $cvImagePath");
       }
       final Map<String, dynamic> payload = {
@@ -251,6 +231,7 @@ class TempController extends GetxController {
         'cv_id': savedCvId,
         'profile_pic_state': profilePicState,
       };
+      print('I am tokennn update: $token');
 
       final response = await http.put(
         Uri.parse('$baseUrl/api/updateCV/'),
@@ -272,8 +253,7 @@ class TempController extends GetxController {
     }
   }
 
-  Future<Map<String, dynamic>?> fetchCvObjectFromBackend(
-      int cvId, String templateId) async {
+  Future<Map<String, dynamic>?> fetchCvObjectFromBackend(int cvId, String templateId) async {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/api/getCv/?cv_id=$cvId&template_id=$templateId'),
@@ -313,21 +293,15 @@ class TempController extends GetxController {
     cvImagePath = personalData['profile_pic'] ?? getProfilePic();
     isChatData = true;
     // isSsoUrl=false;
-    isAuthImage= personalData['profile_pic'] != null
-        ? false
-        : true;
-    isSsoUrl =
-            personalData['profile_pic'] != null
-        ? false
-        : true;
+    isAuthImage = personalData['profile_pic'] != null ? false : true;
+    isSsoUrl = personalData['profile_pic'] != null ? false : true;
     print("This is SSO URL $isSsoUrl");
     // saveCvId = cvId;
 
     final List<dynamic> skillsDataList = cvData['skills'] ?? [];
     skills.clear();
     for (var skill in skillsDataList) {
-      final TextEditingController controller =
-          TextEditingController(text: skill['name'] ?? '');
+      final TextEditingController controller = TextEditingController(text: skill['name'] ?? '');
       final double level = skill['level'] ?? 0;
       skills.add({controller: level});
     }
@@ -335,12 +309,9 @@ class TempController extends GetxController {
     final List<dynamic> referenceDataList = cvData['reference'] ?? [];
     reference.clear();
     for (var ref in referenceDataList) {
-      final TextEditingController personNameController =
-          TextEditingController(text: ref['person_name'] ?? '');
-      final TextEditingController contactNumberController =
-          TextEditingController(text: ref['contact_number'] ?? '');
-      final TextEditingController referenceTextController =
-          TextEditingController(text: ref['reference_text'] ?? '');
+      final TextEditingController personNameController = TextEditingController(text: ref['person_name'] ?? '');
+      final TextEditingController contactNumberController = TextEditingController(text: ref['contact_number'] ?? '');
+      final TextEditingController referenceTextController = TextEditingController(text: ref['reference_text'] ?? '');
       final GlobalKey key = GlobalKey();
       reference.add(References(
         personName: personNameController,
@@ -353,32 +324,22 @@ class TempController extends GetxController {
     final List<dynamic> projectsDataList = cvData['projects'] ?? [];
     projects.clear();
     for (var pro in projectsDataList) {
-      final TextEditingController title =
-          TextEditingController(text: pro['project_name'] ?? '');
-      final TextEditingController description =
-          TextEditingController(text: pro['description'] ?? '');
+      final TextEditingController title = TextEditingController(text: pro['project_name'] ?? '');
+      final TextEditingController description = TextEditingController(text: pro['description'] ?? '');
       final GlobalKey key = GlobalKey();
-      projects.add(
-          Projects(title: title, description: description, keyController: key));
+      projects.add(Projects(title: title, description: description, keyController: key));
     }
 
     final List<dynamic> educationDataList = cvData['education'] ?? [];
     education.clear();
     for (var edu in educationDataList) {
-      final TextEditingController fieldOfStudyController =
-          TextEditingController(text: edu['field_of_study'] ?? '');
-      final TextEditingController descriptionController =
-          TextEditingController(text: edu['description'] ?? '');
-      final TextEditingController endDateController =
-          TextEditingController(text: edu['end_date'] ?? '');
-      final TextEditingController startDateController =
-          TextEditingController(text: edu['start_date'] ?? '');
-      final TextEditingController cityController =
-          TextEditingController(text: edu['city'] ?? '');
-      final TextEditingController countryController =
-          TextEditingController(text: edu['country'] ?? '');
-      final TextEditingController instituteNameController =
-          TextEditingController(text: edu['institute_name'] ?? '');
+      final TextEditingController fieldOfStudyController = TextEditingController(text: edu['field_of_study'] ?? '');
+      final TextEditingController descriptionController = TextEditingController(text: edu['description'] ?? '');
+      final TextEditingController endDateController = TextEditingController(text: edu['end_date'] ?? '');
+      final TextEditingController startDateController = TextEditingController(text: edu['start_date'] ?? '');
+      final TextEditingController cityController = TextEditingController(text: edu['city'] ?? '');
+      final TextEditingController countryController = TextEditingController(text: edu['country'] ?? '');
+      final TextEditingController instituteNameController = TextEditingController(text: edu['institute_name'] ?? '');
       final GlobalKey key = GlobalKey();
       education.add(EducationHistory(
         fieldOfStudy: fieldOfStudyController,
@@ -395,20 +356,13 @@ class TempController extends GetxController {
     final List<dynamic> employmentDataList = cvData['employment_history'] ?? [];
     employmentHistory.clear();
     for (var employment in employmentDataList) {
-      final TextEditingController jobTitleController =
-          TextEditingController(text: employment['job_title'] ?? '');
-      final TextEditingController descriptionController =
-          TextEditingController(text: employment['description'] ?? '');
-      final TextEditingController endDateController =
-          TextEditingController(text: employment['end_date'] ?? '');
-      final TextEditingController startDateController =
-          TextEditingController(text: employment['start_date'] ?? '');
-      final TextEditingController cityController =
-          TextEditingController(text: employment['city'] ?? '');
-      final TextEditingController countryController =
-          TextEditingController(text: employment['country'] ?? '');
-      final TextEditingController companyNameController =
-          TextEditingController(text: employment['company_name'] ?? '');
+      final TextEditingController jobTitleController = TextEditingController(text: employment['job_title'] ?? '');
+      final TextEditingController descriptionController = TextEditingController(text: employment['description'] ?? '');
+      final TextEditingController endDateController = TextEditingController(text: employment['end_date'] ?? '');
+      final TextEditingController startDateController = TextEditingController(text: employment['start_date'] ?? '');
+      final TextEditingController cityController = TextEditingController(text: employment['city'] ?? '');
+      final TextEditingController countryController = TextEditingController(text: employment['country'] ?? '');
+      final TextEditingController companyNameController = TextEditingController(text: employment['company_name'] ?? '');
       final GlobalKey key = GlobalKey();
       employmentHistory.add(EmploymentHistory(
         jobTitle: jobTitleController,
@@ -439,14 +393,13 @@ class TempController extends GetxController {
       if (response.statusCode == 200) {
         isChatData = false;
         isSsoUrl = false;
-        isAuthImage=false;
+        isAuthImage = false;
 
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final Map<String, dynamic> cvData = responseData['cv']['cv'];
         print("hERE $cvData");
 
-        final Map<String, dynamic> personalData =
-            cvData['personal_information'];
+        final Map<String, dynamic> personalData = cvData['personal_information'];
         nameController.text = personalData['name'] ?? '';
         mailController.text = personalData['email'] ?? '';
         contactController.text = personalData['number'] ?? '';
@@ -460,8 +413,7 @@ class TempController extends GetxController {
         final List<dynamic> skillsDataList = cvData['skills'] ?? [];
         skills.clear();
         for (var skill in skillsDataList) {
-          final TextEditingController controller =
-              TextEditingController(text: skill['name'] ?? '');
+          final TextEditingController controller = TextEditingController(text: skill['name'] ?? '');
           final double level = skill['level'] ?? 0;
           skills.add({controller: level});
         }
@@ -469,12 +421,9 @@ class TempController extends GetxController {
         final List<dynamic> referenceDataList = cvData['reference'] ?? [];
         reference.clear();
         for (var ref in referenceDataList) {
-          final TextEditingController personNameController =
-              TextEditingController(text: ref['person_name'] ?? '');
-          final TextEditingController contactNumberController =
-              TextEditingController(text: ref['contact_number'] ?? '');
-          final TextEditingController referenceTextController =
-              TextEditingController(text: ref['reference_text'] ?? '');
+          final TextEditingController personNameController = TextEditingController(text: ref['person_name'] ?? '');
+          final TextEditingController contactNumberController = TextEditingController(text: ref['contact_number'] ?? '');
+          final TextEditingController referenceTextController = TextEditingController(text: ref['reference_text'] ?? '');
           final GlobalKey key = GlobalKey();
           reference.add(References(
             personName: personNameController,
@@ -487,32 +436,22 @@ class TempController extends GetxController {
         final List<dynamic> projectsDataList = cvData['projects'] ?? [];
         projects.clear();
         for (var pro in projectsDataList) {
-          final TextEditingController title =
-              TextEditingController(text: pro['project_name'] ?? '');
-          final TextEditingController description =
-              TextEditingController(text: pro['description'] ?? '');
+          final TextEditingController title = TextEditingController(text: pro['project_name'] ?? '');
+          final TextEditingController description = TextEditingController(text: pro['description'] ?? '');
           final GlobalKey key = GlobalKey();
-          projects.add(Projects(
-              title: title, description: description, keyController: key));
+          projects.add(Projects(title: title, description: description, keyController: key));
         }
 
         final List<dynamic> educationDataList = cvData['education'] ?? [];
         education.clear();
         for (var edu in educationDataList) {
-          final TextEditingController fieldOfStudyController =
-              TextEditingController(text: edu['field_of_study'] ?? '');
-          final TextEditingController descriptionController =
-              TextEditingController(text: edu['description'] ?? '');
-          final TextEditingController endDateController =
-              TextEditingController(text: edu['end_date'] ?? '');
-          final TextEditingController startDateController =
-              TextEditingController(text: edu['start_date'] ?? '');
-          final TextEditingController cityController =
-              TextEditingController(text: edu['city'] ?? '');
-          final TextEditingController countryController =
-              TextEditingController(text: edu['country'] ?? '');
-          final TextEditingController instituteNameController =
-              TextEditingController(text: edu['institute_name'] ?? '');
+          final TextEditingController fieldOfStudyController = TextEditingController(text: edu['field_of_study'] ?? '');
+          final TextEditingController descriptionController = TextEditingController(text: edu['description'] ?? '');
+          final TextEditingController endDateController = TextEditingController(text: edu['end_date'] ?? '');
+          final TextEditingController startDateController = TextEditingController(text: edu['start_date'] ?? '');
+          final TextEditingController cityController = TextEditingController(text: edu['city'] ?? '');
+          final TextEditingController countryController = TextEditingController(text: edu['country'] ?? '');
+          final TextEditingController instituteNameController = TextEditingController(text: edu['institute_name'] ?? '');
           final GlobalKey key = GlobalKey();
           education.add(EducationHistory(
             fieldOfStudy: fieldOfStudyController,
@@ -526,24 +465,16 @@ class TempController extends GetxController {
           ));
         }
 
-        final List<dynamic> employmentDataList =
-            cvData['employment_history'] ?? [];
+        final List<dynamic> employmentDataList = cvData['employment_history'] ?? [];
         employmentHistory.clear();
         for (var employment in employmentDataList) {
-          final TextEditingController jobTitleController =
-              TextEditingController(text: employment['job_title'] ?? '');
-          final TextEditingController descriptionController =
-              TextEditingController(text: employment['description'] ?? '');
-          final TextEditingController endDateController =
-              TextEditingController(text: employment['end_date'] ?? '');
-          final TextEditingController startDateController =
-              TextEditingController(text: employment['start_date'] ?? '');
-          final TextEditingController cityController =
-              TextEditingController(text: employment['city'] ?? '');
-          final TextEditingController countryController =
-              TextEditingController(text: employment['country'] ?? '');
-          final TextEditingController companyNameController =
-              TextEditingController(text: employment['company_name'] ?? '');
+          final TextEditingController jobTitleController = TextEditingController(text: employment['job_title'] ?? '');
+          final TextEditingController descriptionController = TextEditingController(text: employment['description'] ?? '');
+          final TextEditingController endDateController = TextEditingController(text: employment['end_date'] ?? '');
+          final TextEditingController startDateController = TextEditingController(text: employment['start_date'] ?? '');
+          final TextEditingController cityController = TextEditingController(text: employment['city'] ?? '');
+          final TextEditingController countryController = TextEditingController(text: employment['country'] ?? '');
+          final TextEditingController companyNameController = TextEditingController(text: employment['company_name'] ?? '');
           final GlobalKey key = GlobalKey();
           employmentHistory.add(EmploymentHistory(
             jobTitle: jobTitleController,
@@ -574,7 +505,7 @@ class TempController extends GetxController {
       fillControllerFromCvObject(chatCvObj);
     } else {
       print("Controller Refreshed");
-      isAuthImage=true;
+      isAuthImage = true;
       isSsoUrl = true;
       profilePicState = true;
       isChatData = false;
@@ -603,9 +534,7 @@ class TempController extends GetxController {
         Projects(
             keyController: GlobalKey(),
             title: TextEditingController(text: 'Lorem Ipsum'),
-            description: TextEditingController(
-                text:
-                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
+            description: TextEditingController(text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type'))
       ]);
 
       // Refresh education
@@ -614,8 +543,7 @@ class TempController extends GetxController {
         EducationHistory(
           fieldOfStudy: TextEditingController(text: 'Lorem Ipsum'),
           description: TextEditingController(
-            text:
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
+            text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
           ),
           endDate: TextEditingController(text: 'November 2015'),
           startDate: TextEditingController(text: 'September 2019'),
@@ -632,8 +560,7 @@ class TempController extends GetxController {
         EmploymentHistory(
           jobTitle: TextEditingController(text: 'Lorem Ipsum'),
           description: TextEditingController(
-            text:
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
+            text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type',
           ),
           endDate: TextEditingController(text: 'November 2015'),
           startDate: TextEditingController(text: 'September 2019'),
@@ -647,12 +574,7 @@ class TempController extends GetxController {
       reference.clear();
       reference.addAll([
         References(
-            personName: TextEditingController(text: 'Lorem Ipsum'),
-            contactNumber: TextEditingController(text: '+92 3123456789'),
-            referenceText: TextEditingController(
-                text:
-                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text'),
-            keyController: GlobalKey())
+            personName: TextEditingController(text: 'Lorem Ipsum'), contactNumber: TextEditingController(text: '+92 3123456789'), referenceText: TextEditingController(text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry is simply dummy text'), keyController: GlobalKey())
       ]);
     }
   }
@@ -691,15 +613,7 @@ class EducationHistory {
   final TextEditingController instituteName;
   final TextEditingController fieldOfStudy;
 
-  EducationHistory(
-      {this.keyController,
-      required this.city,
-      required this.country,
-      required this.startDate,
-      required this.endDate,
-      required this.description,
-      required this.instituteName,
-      required this.fieldOfStudy});
+  EducationHistory({this.keyController, required this.city, required this.country, required this.startDate, required this.endDate, required this.description, required this.instituteName, required this.fieldOfStudy});
 }
 
 class References {

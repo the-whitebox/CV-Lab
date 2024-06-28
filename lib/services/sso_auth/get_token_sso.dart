@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import '../../utils/local_db.dart';
 import '../profile/retrieve_profile.dart';
 
-
 Future<bool> getTokenFromCode(String code) async {
   try {
     final url = Uri.parse("$tokenEndPoint?code=$code");
@@ -31,6 +30,8 @@ Future<bool> getTokenFromCode(String code) async {
       final refreshToken = decodedData['refresh_token'];
       final expireAtString = decodedData['expires_at'];
       final DateTime expireAt = DateTime.parse(expireAtString);
+      print('access token : $accessToken expire at : $expireAt refresh token : $refreshToken');
+
       if (accessToken != null) {
         storeAccessToken(accessToken);
         var responseData = await retrieveProfile(accessToken);
@@ -39,11 +40,11 @@ Future<bool> getTokenFromCode(String code) async {
           storeProfilePic(profilePic);
         }
         var userId = responseData['id'];
-        if(userId!=null){
+        if (userId != null) {
           storeUserId(userId.toString());
         }
-        if (refreshToken != null && expireAt !=null) {
-          TokenRefresher().startRefreshTimer(refreshToken,expireAt);
+        if (refreshToken != null && expireAt != null) {
+          TokenRefresher().startRefreshTimer(refreshToken, expireAt);
         }
         return true;
       } else {
