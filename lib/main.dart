@@ -4,16 +4,9 @@ import 'package:crewdog_cv_lab/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'helpers/http_overrides_helper.dart';
 import 'utils/local_db.dart';
 
-
-class MyHttpOverrides extends HttpOverrides{
-  @override
-  HttpClient createHttpClient(SecurityContext? context){
-    return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
-  }
-}
 
 Future<void> main() async {
   await GetStorage.init();

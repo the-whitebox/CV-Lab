@@ -499,6 +499,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const Divider(
             color: Color(0xFF95969D),
           ),
+          // GestureDetector(
+          //   onTap: () {
+          //    Get.toNamed(AppRoutes.paymentScreen);
+          //   },
+          //   child: Padding(
+          //     padding: EdgeInsets.symmetric(
+          //         horizontal: screenWidth * 0.05,
+          //         vertical: screenHeight * 0.005),
+          //     child: Row(
+          //       children: [
+          //         Image.asset(
+          //           'assets/images/lock.png',
+          //           height: 20,
+          //           width: 20,
+          //         ),
+          //         const SizedBox(
+          //           width: 5,
+          //         ),
+          //         const Text(
+          //           'Payment Details',
+          //           style: kFont14Black,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // const Divider(
+          //   color: Color(0xFF95969D),
+          // ),
           Padding(
             padding: EdgeInsets.symmetric(
                 horizontal: screenWidth * 0.05, vertical: screenHeight * 0.005),
