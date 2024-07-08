@@ -1,3 +1,4 @@
+import 'package:crewdog_cv_lab/screens/payment_screen.dart';
 import 'package:crewdog_cv_lab/screens/saved_cv.dart';
 import 'package:crewdog_cv_lab/screens/splash_screen.dart';
 import 'package:crewdog_cv_lab/screens/welcome_screen.dart';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String forgetPassword = '/forget_password';
   static const String savedCV = '/saved_cv';
   static const String bottomBar = '/bottom_bar';
+  static const String paymentScreen = '/payment_screen';
   static const String v101 = '/v101';
   static const String v102 = '/v102';
   static const String v103 = '/v103';
@@ -36,18 +38,10 @@ class AppRoutes {
         name: welcome,
         page: () => const WelcomeScreen(),
       ),
-      // GetPage(
-      //   name: signin,
-      //   page: () => const SigninScreen(),
-      // ),
-      // GetPage(
-      //   name: signup,
-      //   page: () => const SignupScreen(),
-      // ),
-      // GetPage(
-      //   name: forgetPassword,
-      //   page: () => const ForgotPasswordScreen(),
-      // ),
+      GetPage(
+        name: paymentScreen,
+        page: () => const PaymentScreen(),
+      ),
       GetPage(
         name: savedCV,
         page: () => const SavedCvScreen(),
