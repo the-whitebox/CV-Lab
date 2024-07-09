@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:crewdog_cv_lab/utils/local_db.dart';
-import '../../utils/constants.dart';
+import '../../utils/consts/api_consts.dart';
+import '../../utils/consts/constants.dart';
 import 'package:http/http.dart' as http;
 
 class TokenRefresher {

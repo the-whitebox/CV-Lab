@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../utils/constants.dart';
+import '../utils/consts/constants.dart';
 
 class CustomEditableText extends StatefulWidget {
   final TextEditingController controller;

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../services/sso_auth/get_code_sso.dart';
 import '../custom_widgets/rotating_image.dart';
-import '../utils/constants.dart';
+import '../utils/consts/constants.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);

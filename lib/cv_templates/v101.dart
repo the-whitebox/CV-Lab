@@ -19,7 +19,8 @@ import '../../pdf_custom_widgets/pdf_skill_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../../pdf_custom_widgets/pw_assets.dart';
-import '../../utils/constants.dart';
+import '../utils/consts/api_consts.dart';
+import '../utils/consts/constants.dart';
 import '../../utils/app_functions.dart';
 import 'controllers/upload_data_and_image.dart';
 

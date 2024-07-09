@@ -1,7 +1,7 @@
 import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
-
-import '../utils/constants.dart';
+import '../utils/consts/api_consts.dart';
+import '../utils/consts/constants.dart';
 
 class MessageBubble extends StatelessWidget {
   final String message;
@@ -38,7 +38,7 @@ class MessageBubble extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        !isUser && userImage.isNotEmpty
+                        !isUser && userImage.isNotEmpty &&userImage!=null
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
