@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crewdog_cv_lab/services/sso_auth/refresh_token.dart';
-import '../../utils/constants.dart';
+import '../../utils/consts/api_consts.dart';
+import '../../utils/consts/constants.dart';
 import 'package:http/http.dart' as http;
 import '../../utils/local_db.dart';
 import '../profile/retrieve_profile.dart';

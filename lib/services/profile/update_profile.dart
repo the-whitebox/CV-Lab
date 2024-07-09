@@ -2,7 +2,8 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
-import '../../utils/constants.dart';
+import '../../utils/consts/api_consts.dart';
+import '../../utils/consts/constants.dart';
 
 Future<void> updateProfile(
     String token,

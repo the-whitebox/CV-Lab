@@ -1,6 +1,6 @@
 import 'package:crewdog_cv_lab/custom_widgets/rotating_image.dart';
 import 'package:flutter/material.dart';
-import '../utils/constants.dart';
+import '../utils/consts/constants.dart';
 
 class SaveDownloadButtonsRow extends StatefulWidget {
   final Future<void> Function() onSavePressed;

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../../utils/constants.dart';
+import '../../utils/consts/api_consts.dart';
+import '../../utils/consts/constants.dart';
 
 
 Future<Map<String, dynamic>> retrieveProfile(String token) async {

@@ -13,26 +13,13 @@ import '../custom_widgets/bubble_message.dart';
 import '../custom_widgets/rotating_image.dart';
 import '../utils/app_routes.dart';
 import '../utils/app_snackbar.dart';
-import '../utils/constants.dart';
+import '../utils/consts/api_consts.dart';
+import '../utils/consts/const_images.dart';
+import '../utils/consts/constants.dart';
 import 'bottom_bar/bottom_nav_bar.dart';
 import '../cv_templates/controllers/templates_controller.dart';
 
-List<String> pdfImages = [
-  'assets/images/template/v101.png',
-  'assets/images/template/v102.png',
-  'assets/images/template/v103.png',
-  'assets/images/template/v104.png',
-  'assets/images/template/v105.png',
-  'assets/images/template/v106.png',
-];
-List<String> pdfFiles = [
-  AppRoutes.v101,
-  AppRoutes.v102,
-  AppRoutes.v103,
-  AppRoutes.v104,
-  AppRoutes.v105,
-  AppRoutes.v106,
-];
+
 
 FilePickerResult? result;
 int? tappedMyCVIndex;
@@ -64,6 +51,7 @@ String _fileSize = '';
 String _filePath = '';
 String _timeRemaining = '';
 bool _fileUploaded = false;
+bool cvNotUploaded=false;
 bool _isJobDescriptionEmpty = false;
 bool _isLoading = false;
 bool _isSubmitPressed = false;
@@ -381,6 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     _isJobDescriptionEmpty = false;
                                     result = null;
                                     _fileUploaded = false;
+                                    cvNotUploaded=false;
                                     showDialog<void>(
                                       context: context,
                                       barrierDismissible: false,
@@ -497,6 +486,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       state(() {
                                                                         _fileUploaded =
                                                                             checkFileUploaded;
+                                                                        cvNotUploaded=!checkFileUploaded;
+                                                                        _isSubmitPressed=false;
                                                                       });
                                                                       void
                                                                           updateProgress() async {
@@ -554,7 +545,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           children: [
                                                             Visibility(
                                                               visible:
-                                                                  !_fileUploaded,
+                                                                  cvNotUploaded,
                                                               child: const Text(
                                                                 '  Upload CV',
                                                                 style:
@@ -637,24 +628,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               Expanded(
                                                                 flex: 13,
                                                                 child:
-                                                                    IconButton(
-                                                                  highlightColor:
+                                                                    IgnorePointer(
+                                                                      ignoring: _isSubmitPressed,
+                                                                      child: IconButton(
+                                                                      highlightColor:
                                                                       Colors
                                                                           .transparent,
-                                                                  iconSize: 20,
-                                                                  onPressed:
-                                                                      () {
-                                                                    state(() {
-                                                                      result =
+                                                                      iconSize: 20,
+                                                                      onPressed:
+                                                                          () {
+                                                                        state(() {
+                                                                          result =
                                                                           null;
-                                                                      _fileUploaded =
+                                                                          _fileUploaded =
                                                                           false;
-                                                                    });
-                                                                  },
-                                                                  icon: const Icon(
-                                                                      Icons
-                                                                          .cancel_outlined),
-                                                                ),
+                                                                          cvNotUploaded=false;
+                                                                          _isSubmitPressed=false;
+                                                                        });
+                                                                      },
+                                                                      icon: const Icon(
+                                                                          Icons
+                                                                              .cancel_outlined),
+                                                                    ),)
                                                               ),
                                                             ],
                                                           ),
@@ -842,6 +837,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   state(() {
                                                                     _fileUploaded =
                                                                         false;
+                                                                    cvNotUploaded=true;
                                                                   });
                                                                 }
                                                                 state(() {
@@ -906,7 +902,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     _isLoading = false;
                                     _isJobDescriptionForSavedCVEmpty = false;
                                     _isCVSelected = false;
-                                    _cvNotSelected = true;
+                                    _cvNotSelected = false;
                                     _selectButton = 'Select';
                                     _jobDescriptionControllerForSavedCV.clear();
                                     _tappedIndex = null;
@@ -1415,6 +1411,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       onPressed: () {
                                         refreshResponse();
                                         tempController.refreshController();
+                                        setState(() {});
                                       },
                                       style: kInitialChatButton,
                                       child: Text(
@@ -1507,8 +1504,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: InkWell(
                             borderRadius: BorderRadius.circular(5.0),
                             onTap: () {
-                              refreshResponse();
-                              tempController.refreshController();
+                              setState(() {
+                                refreshResponse();
+                                tempController.refreshController();
+                              });
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -1661,22 +1660,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void refreshResponse() {
-    _messages.clear();
-    _messagesFromAPI.clear();
-    _allMessages.clear();
-    cvObj.clear();
-    chatCvObj.clear();
-    _messageController.clear();
-    _focusNode.unfocus();
-    _jobDescriptionControllerForUploadCV.clear();
-    result = null;
-    _fileUploaded = false;
-    imageFromApi="";
-    print("Response Refreshed");
-    setState(() {});
-    // tempController.refreshController();
-  }
+
 
   void onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
@@ -1715,14 +1699,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
     formattedMessage.writeln('𝗣𝗲𝗿𝘀𝗼𝗻𝗮𝗹 𝗜𝗻𝗳𝗼:');
     formattedMessage.writeln('Name: ${cvObj['personal_information']['name']}');
+    String jobTitle=cvObj['personal_information']['job_title']??'';
+    if(jobTitle.isNotEmpty && jobTitle!=null){
+      formattedMessage
+          .writeln('Job Title: $jobTitle');
+    }
     formattedMessage
         .writeln('Email: ${cvObj['personal_information']['email']}');
     formattedMessage
         .writeln('Phone: ${cvObj['personal_information']['number']}');
     formattedMessage
         .writeln('Address: ${cvObj['personal_information']['address']}');
-    formattedMessage
-        .writeln('Linkedin: ${cvObj['personal_information']['linkedin']}');
+    String linkedinProfile=cvObj['personal_information']['linkedin']??'';
+    if(linkedinProfile.isNotEmpty && linkedinProfile!=null){
+      formattedMessage
+          .writeln('Linkedin: $linkedinProfile');
+    }
+    String githubProfile=cvObj['personal_information']['github']??'';
+    if(githubProfile.isNotEmpty && githubProfile!=null){
+      formattedMessage
+          .writeln('Github: $githubProfile');
+    }
+    String website=cvObj['personal_information']['website']??'';
+    if(website.isNotEmpty && website!=null){
+      formattedMessage
+          .writeln('Website: $website');
+    }
     formattedMessage.writeln();
 
     formattedMessage.writeln('𝗦𝗸𝗶𝗹𝗹𝘀:');
@@ -1843,8 +1845,6 @@ class _HomeScreenState extends State<HomeScreen> {
           String summary = jsonResponse['personal_information']?['summary'] ??
               'Summary not found';
           imageFromApi=  jsonResponse['personal_information']?['profile_pic']??"";
-          print("Adnan Ashraf $imageFromApi");
-          print("Adnan Ashraf ${ jsonResponse['personal_information']?['profile_pic']}");
 
           List<Map<String, dynamic>> skillsList = [];
           if (jsonResponse['skills'] != null) {
@@ -1877,6 +1877,7 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             jobDescription = jsonResponse['job_description'] ?? '';
             String formattedMessage = _formatMessageDetails(
+
                 summary,
                 jsonResponse,
                 skillsList,
@@ -1988,4 +1989,17 @@ class _HomeScreenState extends State<HomeScreen> {
       return null;
     }
   }
+}
+void refreshResponse() {
+  _messages.clear();
+  _messagesFromAPI.clear();
+  _allMessages.clear();
+  cvObj.clear();
+  chatCvObj.clear();
+  _messageController.clear();
+  _focusNode.unfocus();
+  _jobDescriptionControllerForUploadCV.clear();
+  result = null;
+  _fileUploaded = false;
+  imageFromApi="";
 }

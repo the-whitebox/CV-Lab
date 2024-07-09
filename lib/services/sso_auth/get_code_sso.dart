@@ -1,6 +1,7 @@
 import 'package:crewdog_cv_lab/services/sso_auth/get_token_sso.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
-import '../../../utils/constants.dart';
+import '../../utils/consts/api_consts.dart';
+import '../../utils/consts/constants.dart';
 
 
 const appAuth = FlutterAppAuth();

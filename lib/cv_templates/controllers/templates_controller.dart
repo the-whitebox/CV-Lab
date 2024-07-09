@@ -4,11 +4,10 @@ import 'package:crewdog_cv_lab/cv_templates/controllers/fetch_and_upload_image.d
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
 import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../utils/constants.dart';
+import '../../utils/consts/api_consts.dart';
 import '../../screens/home_screen.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -31,6 +30,7 @@ class TempController extends GetxController {
   bool profilePicState = true;
   bool isSsoUrl = true;
   bool isAuthImage=true;
+  bool imageAvailable=getProfilePic().isNotEmpty;
   TextEditingController nameController =
       TextEditingController(text: 'Lorem Ipsum');
   TextEditingController designationController =
@@ -165,16 +165,14 @@ class TempController extends GetxController {
 
   Future<void> saveCv(String templateId) async {
     try {
-      if(isAuthImage){
+      if(isAuthImage && imageAvailable){
         String imageFetchedByUrl = await fetchAndUploadImage(
             token: token,
             templateId: templateId,
             userId: userId,
             cvImagePath: cvImagePath);
         cvImagePath=imageFetchedByUrl;
-        print("CV IMage Updated $cvImagePath");
       }
-
       final Map<String, dynamic> payload = {
         'cv_data': {
           'personal_information': {
@@ -209,13 +207,11 @@ class TempController extends GetxController {
       if (response.statusCode == 201) {
         appSuccessSnackBar('Success', 'CV saved successfully');
       } else {
-        print('Failed to save CV. Status code: ${response.statusCode}');
         print('Response: ${response.body}');
       }
     } catch (e) {
       print('Error saving CV: $e');
     }
-    print("Lasat path $cvImagePath");
   }
 
   Future<void> updateCv(String templateId, int savedCvId) async {
@@ -312,7 +308,6 @@ class TempController extends GetxController {
     personalInformation.text = personalData['summary'] ?? '';
     cvImagePath = personalData['profile_pic'] ?? getProfilePic();
     isChatData = true;
-    // isSsoUrl=false;
     isAuthImage= personalData['profile_pic'] != null
         ? false
         : true;
@@ -320,8 +315,6 @@ class TempController extends GetxController {
             personalData['profile_pic'] != null
         ? false
         : true;
-    print("This is SSO URL $isSsoUrl");
-    // saveCvId = cvId;
 
     final List<dynamic> skillsDataList = cvData['skills'] ?? [];
     skills.clear();
@@ -438,12 +431,11 @@ class TempController extends GetxController {
 
       if (response.statusCode == 200) {
         isChatData = false;
-        isSsoUrl = false;
-        isAuthImage=false;
+        
 
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final Map<String, dynamic> cvData = responseData['cv']['cv'];
-        print("hERE $cvData");
+        print("hERE ============= $cvData");
 
         final Map<String, dynamic> personalData =
             cvData['personal_information'];
@@ -454,6 +446,10 @@ class TempController extends GetxController {
         designationController.text = personalData['job_title'] ?? '';
         personalInformation.text = personalData['summary'] ?? '';
         cvImagePath = personalData['profile_pic'] ?? '';
+        if(cvImagePath.contains("cv_pictures")){
+          isSsoUrl = false;
+          isAuthImage=false;
+        }
         profilePicState = responseData['cv']['profile_pic_state'] ?? true;
         saveCvId = cvId;
 

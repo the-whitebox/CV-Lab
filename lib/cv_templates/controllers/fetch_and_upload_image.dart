@@ -2,7 +2,8 @@ import 'package:crewdog_cv_lab/cv_templates/controllers/upload_data_and_image.da
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import '../../../utils/constants.dart';
+import '../../utils/consts/api_consts.dart';
+import '../../utils/consts/constants.dart';
 
 
 Future<String> fetchAndUploadImage(

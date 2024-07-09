@@ -1,16 +1,5 @@
 import 'package:flutter/material.dart';
 
-//API
-const baseUrl = 'https://cvlab-staging-backend.crewdog.ai';
-const ssoUrl = 'https://sso-oci.crewdog.ai';
-const clientID = 'Q7haYx1JRVtCZF7UM8opeJ8IoIKb9Lxk';
-const clientSecret = '7WM1wQvffTn4ZbK8eCeshv0gbJiqlySvhU3LSqtHHL3KdCexuDLWSB1zLs9id5da';
-const authorizeEndPoint = 'https://sso-oci.crewdog.ai/authorize';
-const tokenEndPoint = "https://sso-oci.crewdog.ai/token";
-const refreshTokenEndPoint = "https://sso-oci.crewdog.ai/token/refresh/";
-const redirectUrl = 'com.crewdogcvlab://redirect';
-const issuerUrl = 'https://sso-oci.crewdog.ai';
-
 // Colors
 const Color kPrimaryColor = Color(0xFF161717);
 const Color kHighlightedColor = Color(0xFFFF5E59);

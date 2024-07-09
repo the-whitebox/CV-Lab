@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import '../cv_templates/controllers/templates_controller.dart';
-import '../utils/constants.dart';
+import '../utils/consts/api_consts.dart';
+import '../utils/consts/constants.dart';
 import '../utils/app_routes.dart';
 import 'package:http/http.dart' as http;
 

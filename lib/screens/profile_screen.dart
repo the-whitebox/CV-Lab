@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crewdog_cv_lab/screens/home_screen.dart';
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:crewdog_cv_lab/utils/app_routes.dart';
@@ -11,7 +12,8 @@ import 'package:image_picker/image_picker.dart';
 import '../services/profile/retrieve_profile.dart';
 import '../services/profile/update_profile.dart';
 import '../custom_widgets/rotating_image.dart';
-import '../utils/constants.dart';
+import '../utils/consts/api_consts.dart';
+import '../utils/consts/constants.dart';
 import '../utils/app_functions.dart';
 import '../utils/local_db.dart';
 
@@ -216,6 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           clearProfilePic();
                           clearAccessToken();
                           Get.offAllNamed(AppRoutes.welcome);
+                          refreshResponse();
                         },
                         style: kElevatedButtonWithWhiteColor.copyWith(
                           padding: MaterialStateProperty.all(
@@ -583,6 +586,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 clearProfilePic();
                 clearAccessToken();
                 Get.offAllNamed(AppRoutes.welcome);
+                refreshResponse();
               },
               style: kElevatedButtonWithWhiteColor.copyWith(
                 padding: MaterialStateProperty.all(
