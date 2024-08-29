@@ -19,8 +19,6 @@ import '../utils/consts/constants.dart';
 import 'bottom_bar/bottom_nav_bar.dart';
 import '../cv_templates/controllers/templates_controller.dart';
 
-
-
 FilePickerResult? result;
 int? tappedMyCVIndex;
 String responseFromUploadCVAPI = '';
@@ -30,8 +28,7 @@ List<String> _messages = [];
 List<Map<String, dynamic>> _allMessages = [];
 bool _newMessage = false;
 bool _errorInChatApi = false;
-String _errorApiMessage =
-    'Oops! Something went wrong on our end. Please give us a moment to fix it. Feel free to try again.';
+String _errorApiMessage = 'Oops! Something went wrong on our end. Please give us a moment to fix it. Feel free to try again.';
 Map<String, dynamic> cvObj = {};
 Map<String, dynamic> chatCvObj = {};
 bool _firstApiCalled = false;
@@ -40,10 +37,8 @@ String _selectButton = 'Select';
 bool _isCVSelected = false;
 bool _cvNotSelected = false;
 bool _isJobDescriptionForSavedCVEmpty = false;
-final TextEditingController _jobDescriptionControllerForSavedCV =
-    TextEditingController();
-final TextEditingController _jobDescriptionControllerForUploadCV =
-    TextEditingController();
+final TextEditingController _jobDescriptionControllerForSavedCV = TextEditingController();
+final TextEditingController _jobDescriptionControllerForUploadCV = TextEditingController();
 int? _tappedIndex;
 double _progress = 0.0;
 String _fileName = '';
@@ -51,7 +46,7 @@ String _fileSize = '';
 String _filePath = '';
 String _timeRemaining = '';
 bool _fileUploaded = false;
-bool cvNotUploaded=false;
+bool cvNotUploaded = false;
 bool _isJobDescriptionEmpty = false;
 bool _isLoading = false;
 bool _isSubmitPressed = false;
@@ -61,7 +56,7 @@ String words = '';
 final TextEditingController _messageController = TextEditingController();
 final FocusNode _focusNode = FocusNode();
 final ScrollController _scrollController = ScrollController();
- String imageFromApi="";
+String imageFromApi = "";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -104,9 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if (_messages.isEmpty &&
-                    _messagesFromAPI.isEmpty &&
-                    !_firstApiCalled)
+                if (_messages.isEmpty && _messagesFromAPI.isEmpty && !_firstApiCalled)
                   Expanded(
                     child: Center(
                       child: Column(
@@ -121,27 +114,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Column(
                                 children: [
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.47,
+                                        width: MediaQuery.of(context).size.width * 0.47,
                                         child: Card(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 2, vertical: 4),
+                                          margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
                                           color: Colors.white,
                                           elevation: 3,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5, vertical: 10),
+                                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
@@ -152,16 +137,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ),
                                                     Text(
                                                       'Upload',
-                                                      style: kFont13black500
-                                                          .copyWith(
-                                                              color: kPurple),
+                                                      style: kFont13black500.copyWith(color: kPurple),
                                                     )
                                                   ],
                                                 ),
                                                 Text(
                                                   'Upload your current CV\nor used a saved one.',
-                                                  style: kFont11.copyWith(
-                                                      color: Colors.black),
+                                                  style: kFont11.copyWith(color: Colors.black),
                                                 )
                                               ],
                                             ),
@@ -169,23 +151,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.47,
+                                        width: MediaQuery.of(context).size.width * 0.47,
                                         child: Card(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 2, vertical: 4),
+                                          margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
                                           color: Colors.white,
                                           elevation: 3,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5, vertical: 10),
+                                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
@@ -194,15 +169,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       width: 25,
                                                       height: 25,
                                                     ),
-                                                    const Text(
-                                                        'Job description',
-                                                        style: kFont13black500)
+                                                    const Text('Job description', style: kFont13black500)
                                                   ],
                                                 ),
                                                 Text(
                                                   'Copy and paste the job description',
-                                                  style: kFont11.copyWith(
-                                                      color: Colors.black),
+                                                  style: kFont11.copyWith(color: Colors.black),
                                                 )
                                               ],
                                             ),
@@ -212,27 +184,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
                                       SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.47,
+                                        width: MediaQuery.of(context).size.width * 0.47,
                                         child: Card(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 2, vertical: 4),
+                                          margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
                                           color: Colors.white,
                                           elevation: 3,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5, vertical: 10),
+                                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
@@ -243,17 +207,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ),
                                                     Text(
                                                       'Choose template',
-                                                      style: kFont13black500
-                                                          .copyWith(
-                                                              color:
-                                                                  kHighlightedColor),
+                                                      style: kFont13black500.copyWith(color: kHighlightedColor),
                                                     )
                                                   ],
                                                 ),
                                                 Text(
                                                   'Review your new CV and\nchoose a template',
-                                                  style: kFont11.copyWith(
-                                                      color: Colors.black),
+                                                  style: kFont11.copyWith(color: Colors.black),
                                                 )
                                               ],
                                             ),
@@ -261,23 +221,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.47,
+                                        width: MediaQuery.of(context).size.width * 0.47,
                                         child: Card(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 2, vertical: 4),
+                                          margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
                                           color: Colors.white,
                                           elevation: 3,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5)),
+                                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5, vertical: 10),
+                                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Row(
                                                   children: [
@@ -286,16 +239,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       width: 25,
                                                       height: 25,
                                                     ),
-                                                    Text('Download',
-                                                        style: kFont13black500
-                                                            .copyWith(
-                                                                color: kBlue))
+                                                    Text('Download', style: kFont13black500.copyWith(color: kBlue))
                                                   ],
                                                 ),
                                                 Text(
                                                   'Now you can save or\ndownload it!',
-                                                  style: kFont11.copyWith(
-                                                      color: Colors.black),
+                                                  style: kFont11.copyWith(color: Colors.black),
                                                 )
                                               ],
                                             ),
@@ -319,25 +268,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Padding(
                                       padding: const EdgeInsets.only(top: 10.0),
                                       child: Container(
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 5, horizontal: 13),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 13),
+                                        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
+                                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
                                         decoration: BoxDecoration(
                                           color: kLightPurple,
-                                          borderRadius:
-                                              BorderRadius.circular(12),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                         child: Padding(
-                                          padding: EdgeInsets.only(
-                                              right: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.2),
+                                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.2),
                                           child: Text(
                                             'Let\'s fine-tune your CV for a new role.\nPlease choose:',
-                                            style: kFont10.copyWith(
-                                                color: Colors.black),
+                                            style: kFont10.copyWith(color: Colors.black),
                                           ),
                                         ),
                                       ),
@@ -348,8 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Align(
                                       alignment: Alignment.topLeft,
                                       child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 4, top: 4),
+                                        padding: const EdgeInsets.only(left: 4, top: 4),
                                         child: Image.asset(
                                           'assets/images/avatars/dogDP.png',
                                           height: 25,
@@ -364,533 +304,344 @@ class _HomeScreenState extends State<HomeScreen> {
                                 padding: const EdgeInsets.only(left: 15.0),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    _jobDescriptionControllerForUploadCV
-                                        .clear();
+                                    _jobDescriptionControllerForUploadCV.clear();
                                     _isJobDescriptionEmpty = false;
                                     result = null;
                                     _fileUploaded = false;
-                                    cvNotUploaded=false;
+                                    cvNotUploaded = false;
                                     showDialog<void>(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (BuildContext context) {
-                                        return StatefulBuilder(
-                                          builder: (context, state) {
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return StatefulBuilder(builder: (context, state) {
                                             return AlertDialog(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                                side: const BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: 1.0,
-                                                ),
-                                              ),
-                                              backgroundColor: Colors.white,
-                                              titlePadding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 10),
-                                              title: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    'Please upload CV',
-                                                    style:
-                                                        kFont14Black.copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(8.0),
+                                                  side: const BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1.0,
                                                   ),
-                                                  IgnorePointer(
-                                                    ignoring: _isSubmitPressed,
-                                                    child: InkWell(
-                                                      onTap: () {
-                                                        Get.back();
-                                                      },
-                                                      child: const Icon(
-                                                          Icons.close_rounded,
-                                                          size: 16),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                              content: SingleChildScrollView(
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                ),
+                                                backgroundColor: Colors.white,
+                                                titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                title: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        DottedBorder(
-                                                          color: kPurple,
-                                                          borderType:
-                                                              BorderType.RRect,
-                                                          radius: const Radius
-                                                              .circular(10),
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                const BorderRadius
-                                                                    .all(
-                                                              Radius.circular(
-                                                                  10),
+                                                    Text(
+                                                      'Please upload CV',
+                                                      style: kFont14Black.copyWith(fontWeight: FontWeight.w600),
+                                                    ),
+                                                    IgnorePointer(
+                                                      ignoring: _isSubmitPressed,
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          Get.back();
+                                                        },
+                                                        child: const Icon(Icons.close_rounded, size: 16),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                                content: SingleChildScrollView(
+                                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      DottedBorder(
+                                                        color: kPurple,
+                                                        borderType: BorderType.RRect,
+                                                        radius: const Radius.circular(10),
+                                                        child: ClipRRect(
+                                                          borderRadius: const BorderRadius.all(
+                                                            Radius.circular(10),
+                                                          ),
+                                                          child: Container(
+                                                            width: MediaQuery.of(context).size.width * 1,
+                                                            decoration: BoxDecoration(
+                                                              shape: BoxShape.rectangle,
+                                                              color: Colors.transparent,
+                                                              borderRadius: BorderRadius.circular(10),
                                                             ),
-                                                            child: Container(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  1,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                shape: BoxShape
-                                                                    .rectangle,
-                                                                color: Colors
-                                                                    .transparent,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            10),
-                                                              ),
-                                                              child: Column(
-                                                                children: [
-                                                                  const SizedBox(
-                                                                    height:
-                                                                        15.0,
-                                                                  ),
-                                                                  Image.asset(
-                                                                    'assets/images/upload.png',
-                                                                    height: 35,
-                                                                    width: 42,
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                  Text(
-                                                                    'Upload your files here',
-                                                                    style: kFont12
-                                                                        .copyWith(
-                                                                            color:
-                                                                                Colors.black),
-                                                                  ),
-                                                                  GestureDetector(
-                                                                    onTap:
-                                                                        () async {
-                                                                      bool
-                                                                          checkFileUploaded =
-                                                                          await _openGallery();
-                                                                      state(() {
-                                                                        _fileUploaded =
-                                                                            checkFileUploaded;
-                                                                        cvNotUploaded=!checkFileUploaded;
-                                                                        _isSubmitPressed=false;
-                                                                      });
-                                                                      void
-                                                                          updateProgress() async {
-                                                                        for (int i =
-                                                                                0;
-                                                                            i <=
-                                                                                100;
-                                                                            i +=
-                                                                                10) {
-                                                                          await Future.delayed(
-                                                                              const Duration(milliseconds: 100));
-                                                                          state(
-                                                                              () {
-                                                                            _progress =
-                                                                                i / 100;
-                                                                            _timeRemaining =
-                                                                                '${(10 - i ~/ 10)} sec';
-                                                                          });
-                                                                        }
+                                                            child: Column(
+                                                              children: [
+                                                                const SizedBox(
+                                                                  height: 15.0,
+                                                                ),
+                                                                Image.asset(
+                                                                  'assets/images/upload.png',
+                                                                  height: 35,
+                                                                  width: 42,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 5.0,
+                                                                ),
+                                                                Text(
+                                                                  'Upload your files here',
+                                                                  style: kFont12.copyWith(color: Colors.black),
+                                                                ),
+                                                                GestureDetector(
+                                                                  onTap: () async {
+                                                                    bool checkFileUploaded = await _openGallery();
+                                                                    state(() {
+                                                                      _fileUploaded = checkFileUploaded;
+                                                                      cvNotUploaded = !checkFileUploaded;
+                                                                      _isSubmitPressed = false;
+                                                                    });
+                                                                    void updateProgress() async {
+                                                                      for (int i = 0; i <= 100; i += 10) {
+                                                                        await Future.delayed(const Duration(milliseconds: 100));
+                                                                        state(() {
+                                                                          _progress = i / 100;
+                                                                          _timeRemaining = '${(10 - i ~/ 10)} sec';
+                                                                        });
                                                                       }
+                                                                    }
 
-                                                                      updateProgress();
-                                                                    },
-                                                                    child: Text(
-                                                                      'Browse',
-                                                                      style: kFont12
-                                                                          .copyWith(
-                                                                        color:
-                                                                            kPurple,
-                                                                        decoration:
-                                                                            TextDecoration.underline,
-                                                                        decorationColor:
-                                                                            kPurple,
-                                                                        decorationThickness:
-                                                                            2.0,
-                                                                      ),
+                                                                    updateProgress();
+                                                                  },
+                                                                  child: Text(
+                                                                    'Browse',
+                                                                    style: kFont12.copyWith(
+                                                                      color: kPurple,
+                                                                      decoration: TextDecoration.underline,
+                                                                      decorationColor: kPurple,
+                                                                      decorationThickness: 2.0,
                                                                     ),
                                                                   ),
-                                                                  const SizedBox(
-                                                                    height:
-                                                                        15.0,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 15.0,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 2.0,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        children: [
+                                                          Visibility(
+                                                            visible: cvNotUploaded,
+                                                            child: const Text(
+                                                              '  Upload CV',
+                                                              style: TextStyle(
+                                                                fontSize: 10,
+                                                                color: Colors.red,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const Text(
+                                                            'DOC, DOCX, PDF',
+                                                            style: kFont8Black,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      // const Divider(),
+                                                    ],
+                                                  ),
+                                                  Visibility(
+                                                    visible: _fileUploaded,
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Transform.translate(
+                                                          offset: const Offset(0.0, 15.0),
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              Text(
+                                                                _fileName,
+                                                                style: kFont10.copyWith(color: Colors.black),
+                                                              ),
+                                                              Text(
+                                                                _fileSize,
+                                                                style: kFont8.copyWith(color: Colors.black),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          children: [
+                                                            Expanded(
+                                                              flex: 100,
+                                                              child: LinearProgressIndicator(
+                                                                minHeight: 1.5,
+                                                                value: _progress,
+                                                                backgroundColor: kPurple,
+                                                                valueColor: _progress == 1.0
+                                                                    ? const AlwaysStoppedAnimation<Color>(Colors.green)
+                                                                    : const AlwaysStoppedAnimation<Color>(kHighlightedColor),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                                flex: 13,
+                                                                child: IgnorePointer(
+                                                                  ignoring: _isSubmitPressed,
+                                                                  child: IconButton(
+                                                                    highlightColor: Colors.transparent,
+                                                                    iconSize: 20,
+                                                                    onPressed: () {
+                                                                      state(() {
+                                                                        result = null;
+                                                                        _fileUploaded = false;
+                                                                        cvNotUploaded = false;
+                                                                        _isSubmitPressed = false;
+                                                                      });
+                                                                    },
+                                                                    icon: const Icon(Icons.cancel_outlined),
                                                                   ),
-                                                                ],
+                                                                )),
+                                                          ],
+                                                        ),
+                                                        Transform.translate(
+                                                          offset: const Offset(0.0, -15.0),
+                                                          child: Text(
+                                                            'Time remaining: $_timeRemaining',
+                                                            style: kFont7.copyWith(
+                                                              color: const Color(0xFF4E4949),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(height: 5),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5.0,
+                                                  ),
+                                                  Text(
+                                                    'Job description',
+                                                    style: kFont14Black.copyWith(fontWeight: FontWeight.w600),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5.0,
+                                                  ),
+                                                  TextFormField(
+                                                    controller: _jobDescriptionControllerForUploadCV,
+                                                    minLines: 2,
+                                                    enabled: true,
+                                                    keyboardType: TextInputType.multiline,
+                                                    maxLines: null,
+                                                    decoration: InputDecoration(
+                                                      enabledBorder: customBorderHome,
+                                                      focusedBorder: customBorderHome,
+                                                      errorBorder: customBorderHome,
+                                                      focusedErrorBorder: customBorderHome,
+                                                      contentPadding: const EdgeInsets.symmetric(
+                                                        vertical: 10.0,
+                                                        horizontal: 10.0,
+                                                      ),
+                                                      hintText: 'Enter job description',
+                                                      hintStyle: kFadedText.copyWith(fontSize: 14),
+                                                      errorStyle: const TextStyle(
+                                                        fontSize: 10,
+                                                        color: Colors.red,
+                                                      ),
+                                                      errorText: _isJobDescriptionEmpty ? 'Job description can\'t be empty' : null,
+                                                    ),
+                                                    onChanged: (value) {
+                                                      state(() {
+                                                        _isJobDescriptionEmpty = false;
+                                                      });
+                                                    },
+                                                  ),
+                                                  const SizedBox(height: 10.0),
+                                                  Align(
+                                                      alignment: Alignment.centerRight,
+                                                      child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                                                        const SizedBox(
+                                                          width: 40,
+                                                        ),
+                                                        IgnorePointer(
+                                                          ignoring: _isSubmitPressed,
+                                                          child: ElevatedButton(
+                                                            onPressed: () {
+                                                              Get.back();
+                                                            },
+                                                            style: kElevatedButtonWhiteOpacityBG,
+                                                            child: Align(
+                                                              alignment: Alignment.center,
+                                                              child: Text(
+                                                                'Cancel',
+                                                                style: kFont12.copyWith(color: Colors.black),
                                                               ),
                                                             ),
                                                           ),
                                                         ),
                                                         const SizedBox(
-                                                          height: 2.0,
+                                                          width: 4,
                                                         ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Visibility(
-                                                              visible:
-                                                                  cvNotUploaded,
-                                                              child: const Text(
-                                                                '  Upload CV',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 10,
-                                                                  color: Colors
-                                                                      .red,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            const Text(
-                                                              'DOC, DOCX, PDF',
-                                                              style:
-                                                                  kFont8Black,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        // const Divider(),
-                                                      ],
-                                                    ),
-                                                    Visibility(
-                                                      visible: _fileUploaded,
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Transform.translate(
-                                                            offset:
-                                                                const Offset(
-                                                                    0.0, 15.0),
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text(
-                                                                  _fileName,
-                                                                  style: kFont10
-                                                                      .copyWith(
-                                                                          color:
-                                                                              Colors.black),
-                                                                ),
-                                                                Text(
-                                                                  _fileSize,
-                                                                  style: kFont8
-                                                                      .copyWith(
-                                                                          color:
-                                                                              Colors.black),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Expanded(
-                                                                flex: 100,
-                                                                child:
-                                                                    LinearProgressIndicator(
-                                                                  minHeight:
-                                                                      1.5,
-                                                                  value:
-                                                                      _progress,
-                                                                  backgroundColor:
-                                                                      kPurple,
-                                                                  valueColor: _progress ==
-                                                                          1.0
-                                                                      ? const AlwaysStoppedAnimation<
-                                                                              Color>(
-                                                                          Colors
-                                                                              .green)
-                                                                      : const AlwaysStoppedAnimation<
-                                                                              Color>(
-                                                                          kHighlightedColor),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 13,
-                                                                child:
-                                                                    IgnorePointer(
-                                                                      ignoring: _isSubmitPressed,
-                                                                      child: IconButton(
-                                                                      highlightColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                      iconSize: 20,
-                                                                      onPressed:
-                                                                          () {
-                                                                        state(() {
-                                                                          result =
-                                                                          null;
-                                                                          _fileUploaded =
-                                                                          false;
-                                                                          cvNotUploaded=false;
-                                                                          _isSubmitPressed=false;
-                                                                        });
-                                                                      },
-                                                                      icon: const Icon(
-                                                                          Icons
-                                                                              .cancel_outlined),
-                                                                    ),)
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          Transform.translate(
-                                                            offset:
-                                                                const Offset(
-                                                                    0.0, -15.0),
-                                                            child: Text(
-                                                              'Time remaining: $_timeRemaining',
-                                                              style: kFont7
-                                                                  .copyWith(
-                                                                color: const Color(
-                                                                    0xFF4E4949),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                              height: 5),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5.0,
-                                                    ),
-                                                    Text(
-                                                      'Job description',
-                                                      style:
-                                                          kFont14Black.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5.0,
-                                                    ),
-                                                    TextFormField(
-                                                      controller:
-                                                          _jobDescriptionControllerForUploadCV,
-                                                      minLines: 2,
-                                                      enabled: true,
-                                                      keyboardType:
-                                                          TextInputType
-                                                              .multiline,
-                                                      maxLines: null,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        enabledBorder:
-                                                            customBorderHome,
-                                                        focusedBorder:
-                                                            customBorderHome,
-                                                        errorBorder:
-                                                            customBorderHome,
-                                                        focusedErrorBorder:
-                                                            customBorderHome,
-                                                        contentPadding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          vertical: 10.0,
-                                                          horizontal: 10.0,
-                                                        ),
-                                                        hintText:
-                                                            'Enter job description',
-                                                        hintStyle:
-                                                            kFadedText.copyWith(
-                                                                fontSize: 14),
-                                                        errorStyle:
-                                                            const TextStyle(
-                                                          fontSize: 10,
-                                                          color: Colors.red,
-                                                        ),
-                                                        errorText:
-                                                            _isJobDescriptionEmpty
-                                                                ? 'Job description can\'t be empty'
-                                                                : null,
-                                                      ),
-                                                      onChanged: (value) {
-                                                        state(() {
-                                                          _isJobDescriptionEmpty =
-                                                              false;
-                                                        });
-                                                      },
-                                                    ),
-                                                    const SizedBox(
-                                                        height: 10.0),
-                                                    Align(
-                                                      alignment:
-                                                          Alignment.centerRight,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
-                                                        children: [
-                                                          const SizedBox(
-                                                            width: 40,
-                                                          ),
-                                                          IgnorePointer(
-                                                            ignoring:
-                                                                _isSubmitPressed,
-                                                            child:
-                                                                ElevatedButton(
-                                                              onPressed: () {
-                                                                Get.back();
-                                                              },
-                                                              style:
-                                                                  kElevatedButtonWhiteOpacityBG,
-                                                              child: Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: Text(
-                                                                  'Cancel',
-                                                                  style: kFont12
-                                                                      .copyWith(
-                                                                          color:
-                                                                              Colors.black),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 4,
-                                                          ),
-                                                          IgnorePointer(
-                                                            ignoring:
-                                                                _isSubmitPressed,
-                                                            child:
-                                                                ElevatedButton(
-                                                              onPressed:
-                                                                  () async {
-                                                                _isSubmitPressed =
-                                                                    true;
-                                                                _isJobDescriptionEmpty =
-                                                                    _jobDescriptionControllerForUploadCV
-                                                                        .text
-                                                                        .isEmpty;
-                                                                if (!_isJobDescriptionEmpty) {
-                                                                  state(() {
-                                                                    _isJobDescriptionEmpty =
-                                                                        false;
-                                                                    _isLoading =
-                                                                        true;
-                                                                  });
-                                                                } else {
-                                                                  state(() {
-                                                                    _isJobDescriptionEmpty =
-                                                                        true;
-                                                                    _isSubmitPressed =
-                                                                        false;
-                                                                  });
-                                                                }
-                                                                if (_fileUploaded &&
-                                                                    !_isJobDescriptionEmpty) {
-                                                                  state(() {
-                                                                    _fileUploaded =
-                                                                        true;
-                                                                  });
-
-                                                                  if (await isInternetConnected()) {
-                                                                    await _callUploadCVApi();
+                                                        IgnorePointer(
+                                                            ignoring: _isSubmitPressed,
+                                                            child: ElevatedButton(
+                                                                onPressed: () async {
+                                                                  _isSubmitPressed = true;
+                                                                  _isJobDescriptionEmpty = _jobDescriptionControllerForUploadCV.text.isEmpty;
+                                                                  if (!_isJobDescriptionEmpty) {
                                                                     state(() {
-                                                                      _firstApiCalled =
-                                                                          true;
-                                                                      _isSubmitPressed =
-                                                                          false;
+                                                                      _isJobDescriptionEmpty = false;
+                                                                      _isLoading = true;
                                                                     });
-                                                                    if (cvObj
-                                                                        .isNotEmpty) {
-                                                                      state(() {
-                                                                        _firstApiCalled =
-                                                                            true;
-                                                                      });
-                                                                      Get.back();
-                                                                      _chatApi(
-                                                                          cvObj,
-                                                                          jobDescription,
-                                                                          '',
-                                                                          token);
-                                                                    }
                                                                   } else {
-                                                                    appSnackBar(
-                                                                        "Error",
-                                                                        "No internet connectivity");
+                                                                    state(() {
+                                                                      _isJobDescriptionEmpty = true;
+                                                                      _isSubmitPressed = false;
+                                                                    });
                                                                   }
-                                                                } else if (!_fileUploaded) {
+                                                                  if (_fileUploaded && !_isJobDescriptionEmpty) {
+                                                                    state(() {
+                                                                      _fileUploaded = true;
+                                                                    });
+
+                                                                    if (await isInternetConnected()) {
+                                                                      await _callUploadCVApi();
+                                                                      state(() {
+                                                                        _firstApiCalled = true;
+                                                                        _isSubmitPressed = false;
+                                                                      });
+                                                                      if (cvObj.isNotEmpty) {
+                                                                        state(() {
+                                                                          _firstApiCalled = true;
+                                                                        });
+                                                                        Get.back();
+                                                                        _chatApi(cvObj, _jobDescriptionControllerForUploadCV.text, '', token);
+                                                                      }
+                                                                    } else {
+                                                                      appSnackBar("Error", "No internet connectivity");
+                                                                    }
+                                                                  } else if (!_fileUploaded) {
+                                                                    state(() {
+                                                                      _fileUploaded = false;
+                                                                      cvNotUploaded = true;
+                                                                    });
+                                                                  }
                                                                   state(() {
-                                                                    _fileUploaded =
-                                                                        false;
-                                                                    cvNotUploaded=true;
+                                                                    _isLoading = false;
                                                                   });
-                                                                }
-                                                                state(() {
-                                                                  _isLoading =
-                                                                      false;
-                                                                });
-                                                              },
-                                                              style:
-                                                                  kElevatedButtonPrimaryBG,
-                                                              child: Align(
-                                                                alignment:
-                                                                    Alignment
-                                                                        .center,
-                                                                child: _isLoading
-                                                                    ? const RotatingImage(
-                                                                        height:
-                                                                            30,
-                                                                        width:
-                                                                            30,
-                                                                      )
-                                                                    : const Align(
-                                                                        alignment:
-                                                                            Alignment.center,
-                                                                        child:
-                                                                            Text(
-                                                                          'Submit',
-                                                                          style:
-                                                                              kFont12,
-                                                                        ),
-                                                                      ),
-                                                              ),
-                                                            ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10.0,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                    );
+                                                                },
+                                                                style: kElevatedButtonPrimaryBG,
+                                                                child: Align(
+                                                                    alignment: Alignment.center,
+                                                                    child: _isLoading
+                                                                        ? const RotatingImage(
+                                                                            height: 30,
+                                                                            width: 30,
+                                                                          )
+                                                                        : const Align(alignment: Alignment.center, child: Text('Submit', style: kFont12)))))
+                                                      ])),
+                                                  const SizedBox(height: 10.0)
+                                                ])));
+                                          });
+                                        });
                                   },
                                   style: kInitialChatButton,
                                   child: Text(
                                     'Upload CV',
-                                    style:
-                                        kFont10.copyWith(color: Colors.black),
+                                    style: kFont10.copyWith(color: Colors.black),
                                   ),
                                 ),
                               ),
@@ -911,36 +662,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                     showDialog(
                                       barrierDismissible: false,
                                       builder: (BuildContext context) {
-                                        final screenHeight =
-                                            MediaQuery.of(context).size.height;
-                                        final screenWidth =
-                                            MediaQuery.of(context).size.width;
-                                        return StatefulBuilder(
-                                            builder: (context, state) {
+                                        final screenHeight = MediaQuery.of(context).size.height;
+                                        final screenWidth = MediaQuery.of(context).size.width;
+                                        return StatefulBuilder(builder: (context, state) {
                                           return AlertDialog(
                                             shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
+                                                borderRadius: BorderRadius.circular(8.0),
                                                 side: const BorderSide(
                                                   color: Colors.transparent,
                                                   width: 1.0,
                                                 )),
                                             contentPadding: EdgeInsets.zero,
                                             backgroundColor: Colors.white,
-                                            titlePadding:
-                                                const EdgeInsets.symmetric(
-                                                    vertical: 10,
-                                                    horizontal: 10),
+                                            titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                                             title: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Text(
                                                   'Select a CV',
-                                                  style: kFont14Black.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w600),
+                                                  style: kFont14Black.copyWith(fontWeight: FontWeight.w600),
                                                 ),
                                                 IgnorePointer(
                                                   ignoring: _isSubmitPressed,
@@ -948,9 +688,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     onTap: () {
                                                       Get.back();
                                                     },
-                                                    child: const Icon(
-                                                        Icons.close_rounded,
-                                                        size: 16),
+                                                    child: const Icon(Icons.close_rounded, size: 16),
                                                   ),
                                                 )
                                               ],
@@ -962,121 +700,94 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   maxHeight: screenHeight * 0.8,
                                                 ),
                                                 child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisSize: MainAxisSize.min,
                                                   children: [
                                                     SizedBox(
-                                                        height:
-                                                            screenHeight * 0.3,
-                                                        width:
-                                                            screenWidth * 0.8,
+                                                        height: screenHeight * 0.3,
+                                                        width: screenWidth * 0.8,
                                                         child: Container(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                              top:
-                                                                  screenHeight *
-                                                                      0.01,
-                                                              left:
-                                                                  screenWidth *
-                                                                      0.04,
-                                                              right:
-                                                                  screenWidth *
-                                                                      0.04,
+                                                            padding: EdgeInsets.only(
+                                                              top: screenHeight * 0.01,
+                                                              left: screenWidth * 0.04,
+                                                              right: screenWidth * 0.04,
                                                             ),
-                                                            child: cvList
-                                                                    .isEmpty
+                                                            child: cvList.isEmpty
                                                                 ? const Center(
                                                                     child: Text(
                                                                       'You have not saved any CV yet',
-                                                                      style:
-                                                                          kFont14Black,
+                                                                      style: kFont14Black,
                                                                     ),
                                                                   )
-                                                                : GridView
-                                                                    .builder(
-                                                                        scrollDirection:
-                                                                            Axis
-                                                                                .horizontal,
-                                                                        shrinkWrap:
-                                                                            true,
-                                                                        gridDelegate:
-                                                                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                          childAspectRatio:
-                                                                              1.8,
-                                                                          crossAxisCount:
-                                                                              1,
-                                                                          crossAxisSpacing:
-                                                                              8.0,
-                                                                          mainAxisSpacing:
-                                                                              8.0,
-                                                                        ),
-                                                                        itemCount:
-                                                                            cvList
-                                                                                .length,
-                                                                        itemBuilder:
-                                                                            (BuildContext context,
-                                                                                int index) {
-                                                                          final title =
-                                                                              cvList[index]['username'];
-                                                                          final templateName =
-                                                                              cvList[index]['template']['name'];
-                                                                          int cvId =
-                                                                              cvList[index]['cv']['id'];
-                                                                          final lastDigit =
-                                                                              int.tryParse(templateName.substring(templateName.length - 1)) ?? 1;
-                                                                          final templateIndex =
-                                                                              lastDigit - 1;
+                                                                : GridView.builder(
+                                                                    scrollDirection: Axis.horizontal,
+                                                                    shrinkWrap: true,
+                                                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                      childAspectRatio: 1.8,
+                                                                      crossAxisCount: 1,
+                                                                      crossAxisSpacing: 8.0,
+                                                                      mainAxisSpacing: 8.0,
+                                                                    ),
+                                                                    itemCount: cvList.length,
+                                                                    itemBuilder: (BuildContext context, int index) {
+                                                                      final title = cvList[index]['username'];
+                                                                      final templateName = cvList[index]['template']['name'];
+                                                                      int cvId = cvList[index]['cv']['id'];
+                                                                      final lastDigit = int.tryParse(templateName.substring(templateName.length - 1)) ?? 1;
+                                                                      final templateIndex = lastDigit - 1;
 
-                                                                          if (templateIndex >= 0 &&
-                                                                              templateIndex < pdfImages.length) {
-                                                                            return Column(children: [
-                                                                              GestureDetector(
-                                                                                  onTap: () {
-                                                                                    state(() {
-                                                                                      _selectButton = 'Select';
-                                                                                      _tappedIndex = index;
-                                                                                    });
-                                                                                  },
-                                                                                  child: Stack(children: [
-                                                                                    Container(
-                                                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
-                                                                                      child: Image.asset(pdfImages[templateIndex]),
-                                                                                    ),
-                                                                                    if (_tappedIndex == index)
-                                                                                      Center(
-                                                                                          child: Column(children: [
-                                                                                        SizedBox(
-                                                                                          height: screenHeight * 0.1,
-                                                                                        ),
-                                                                                        ElevatedButton(
-                                                                                            onPressed: () async {
-                                                                                              state(() {
-                                                                                                _selectButton = 'Selected';
-                                                                                                _isCVSelected = true;
-                                                                                                _cvNotSelected = false;
-                                                                                              });
-                                                                                              chatCvObj = (await tempController.fetchCvObjectFromBackend(cvId, templateName))!;
-                                                                                            },
-                                                                                            style: kElevatedButtonPrimaryBG,
-                                                                                            child: Text(_selectButton, style: const TextStyle(color: Colors.white)))
-                                                                                      ]))
-                                                                                  ])),
-                                                                              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                                                                const Text(
-                                                                                  'Title: ',
+                                                                      if (templateIndex >= 0 && templateIndex < pdfImages.length) {
+                                                                        return Column(children: [
+                                                                          GestureDetector(
+                                                                              onTap: () {
+                                                                                state(() {
+                                                                                  _selectButton = 'Select';
+                                                                                  _tappedIndex = index;
+                                                                                });
+                                                                              },
+                                                                              child: Stack(children: [
+                                                                                Container(
+                                                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
+                                                                                  child: Image.asset(pdfImages[templateIndex]),
                                                                                 ),
-                                                                                Expanded(child: Text(title, maxLines: 2, style: const TextStyle(overflow: TextOverflow.ellipsis, fontWeight: FontWeight.w500)))
-                                                                              ])
-                                                                            ]);
-                                                                          } else {
-                                                                            return Container(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                color: kHighlightedColor,
-                                                                                child: const Center(child: Text('Invalid template version', style: TextStyle(color: Colors.white))));
-                                                                          }
-                                                                        }))),
+                                                                                if (_tappedIndex == index)
+                                                                                  Center(
+                                                                                      child: Column(children: [
+                                                                                    SizedBox(
+                                                                                      height: screenHeight * 0.1,
+                                                                                    ),
+                                                                                    ElevatedButton(
+                                                                                        onPressed: () async {
+                                                                                          state(() {
+                                                                                            _selectButton = 'Selected';
+                                                                                            _isCVSelected = true;
+                                                                                            _cvNotSelected = false;
+                                                                                          });
+                                                                                          chatCvObj =
+                                                                                              (await tempController.fetchCvObjectFromBackend(cvId, templateName))!;
+                                                                                        },
+                                                                                        style: kElevatedButtonPrimaryBG,
+                                                                                        child: Text(_selectButton, style: const TextStyle(color: Colors.white)))
+                                                                                  ]))
+                                                                              ])),
+                                                                          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                                                            const Text(
+                                                                              'Title: ',
+                                                                            ),
+                                                                            Expanded(
+                                                                                child: Text(title,
+                                                                                    maxLines: 2,
+                                                                                    style: const TextStyle(overflow: TextOverflow.ellipsis, fontWeight: FontWeight.w500)))
+                                                                          ])
+                                                                        ]);
+                                                                      } else {
+                                                                        return Container(
+                                                                            padding: const EdgeInsets.all(8.0),
+                                                                            color: kHighlightedColor,
+                                                                            child: const Center(
+                                                                                child: Text('Invalid template version', style: TextStyle(color: Colors.white))));
+                                                                      }
+                                                                    }))),
                                                     Row(children: [
                                                       const SizedBox(
                                                         width: 25.0,
@@ -1085,113 +796,70 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         visible: _cvNotSelected,
                                                         child: const Text(
                                                           'CV must be selected',
-                                                          style: TextStyle(
-                                                              color: Colors.red,
-                                                              fontSize: 10.0),
+                                                          style: TextStyle(color: Colors.red, fontSize: 10.0),
                                                         ),
                                                       ),
                                                     ]),
                                                     Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 16,
-                                                          vertical: 5),
+                                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
                                                       child: Text(
                                                         'Job description',
-                                                        style: kFont14Black
-                                                            .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600),
+                                                        style: kFont14Black.copyWith(fontWeight: FontWeight.w600),
                                                       ),
                                                     ),
                                                     Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 16.0),
+                                                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                                                       child: TextFormField(
-                                                          controller:
-                                                              _jobDescriptionControllerForSavedCV,
+                                                          controller: _jobDescriptionControllerForSavedCV,
                                                           minLines: 2,
                                                           enabled: true,
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .multiline,
+                                                          keyboardType: TextInputType.multiline,
                                                           maxLines: null,
-                                                          decoration:
-                                                              InputDecoration(
-                                                            enabledBorder:
-                                                                customBorderHome,
-                                                            focusedBorder:
-                                                                customBorderHome,
-                                                            errorBorder:
-                                                                customBorderHome,
-                                                            focusedErrorBorder:
-                                                                customBorderHome,
-                                                            contentPadding:
-                                                                const EdgeInsets
-                                                                    .symmetric(
+                                                          decoration: InputDecoration(
+                                                            enabledBorder: customBorderHome,
+                                                            focusedBorder: customBorderHome,
+                                                            errorBorder: customBorderHome,
+                                                            focusedErrorBorder: customBorderHome,
+                                                            contentPadding: const EdgeInsets.symmetric(
                                                               vertical: 10.0,
                                                               horizontal: 10.0,
                                                             ),
-                                                            hintText:
-                                                                'Enter job description',
-                                                            hintStyle: kFadedText
-                                                                .copyWith(
-                                                                    fontSize:
-                                                                        14),
-                                                            errorStyle:
-                                                                const TextStyle(
+                                                            hintText: 'Enter job description',
+                                                            hintStyle: kFadedText.copyWith(fontSize: 14),
+                                                            errorStyle: const TextStyle(
                                                               fontSize: 10,
                                                               color: Colors.red,
                                                             ),
-                                                            errorText:
-                                                                _isJobDescriptionForSavedCVEmpty
-                                                                    ? 'Job description can\'t be empty'
-                                                                    : null,
+                                                            errorText: _isJobDescriptionForSavedCVEmpty ? 'Job description can\'t be empty' : null,
                                                           ),
                                                           onChanged: (value) {
                                                             state(() {
-                                                              _isJobDescriptionForSavedCVEmpty =
-                                                                  false;
+                                                              _isJobDescriptionForSavedCVEmpty = false;
                                                             });
                                                           }),
                                                     ),
                                                     Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              16.0),
+                                                      padding: const EdgeInsets.all(16.0),
                                                       child: Align(
-                                                        alignment: Alignment
-                                                            .centerRight,
+                                                        alignment: Alignment.centerRight,
                                                         child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .end,
+                                                          mainAxisAlignment: MainAxisAlignment.end,
                                                           children: [
                                                             const SizedBox(
                                                               width: 40,
                                                             ),
                                                             IgnorePointer(
-                                                              ignoring:
-                                                                  _isSubmitPressed,
-                                                              child:
-                                                                  ElevatedButton(
+                                                              ignoring: _isSubmitPressed,
+                                                              child: ElevatedButton(
                                                                 onPressed: () {
                                                                   Get.back();
                                                                 },
-                                                                style:
-                                                                    kElevatedButtonWhiteOpacityBG,
+                                                                style: kElevatedButtonWhiteOpacityBG,
                                                                 child: Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
+                                                                  alignment: Alignment.center,
                                                                   child: Text(
                                                                     'Cancel',
-                                                                    style: kFont12
-                                                                        .copyWith(
-                                                                            color:
-                                                                                Colors.black),
+                                                                    style: kFont12.copyWith(color: Colors.black),
                                                                   ),
                                                                 ),
                                                               ),
@@ -1200,88 +868,54 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               width: 4,
                                                             ),
                                                             IgnorePointer(
-                                                              ignoring:
-                                                                  _isSubmitPressed,
-                                                              child:
-                                                                  ElevatedButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  _isJobDescriptionForSavedCVEmpty =
-                                                                      _jobDescriptionControllerForSavedCV
-                                                                          .text
-                                                                          .isEmpty;
+                                                              ignoring: _isSubmitPressed,
+                                                              child: ElevatedButton(
+                                                                onPressed: () async {
+                                                                  _isJobDescriptionForSavedCVEmpty = _jobDescriptionControllerForSavedCV.text.isEmpty;
                                                                   if (!_isCVSelected) {
                                                                     state(() {
-                                                                      _cvNotSelected =
-                                                                          true;
+                                                                      _cvNotSelected = true;
                                                                     });
                                                                   } else {
                                                                     state(() {
-                                                                      _cvNotSelected =
-                                                                          false;
+                                                                      _cvNotSelected = false;
                                                                     });
                                                                   }
-                                                                  if (!_jobDescriptionControllerForSavedCV
-                                                                          .text
-                                                                          .isEmpty &&
-                                                                      _isCVSelected) {
-                                                                    _isSubmitPressed =
-                                                                        true;
-                                                                    _isLoading =
-                                                                        true;
+                                                                  if (!_jobDescriptionControllerForSavedCV.text.isEmpty && _isCVSelected) {
+                                                                    _isSubmitPressed = true;
+                                                                    _isLoading = true;
                                                                     if (await isInternetConnected()) {
-                                                                      await _chatApi(
-                                                                          chatCvObj,
-                                                                          _jobDescriptionControllerForSavedCV
-                                                                              .text,
-                                                                          '',
-                                                                          token);
-                                                                      _isSubmitPressed =
-                                                                          false;
-                                                                      Navigator.pop(
-                                                                          context);
+                                                                      await _chatApi(chatCvObj, _jobDescriptionControllerForSavedCV.text, '', token);
+                                                                      _isSubmitPressed = false;
+                                                                      Navigator.pop(context);
                                                                     } else {
-                                                                      appSnackBar(
-                                                                          "Error",
-                                                                          "No internet connectivity");
+                                                                      appSnackBar("Error", "No internet connectivity");
                                                                     }
                                                                   } else {
                                                                     state(() {
-                                                                      if (_jobDescriptionControllerForSavedCV
-                                                                          .text
-                                                                          .isEmpty) {
-                                                                        _isJobDescriptionForSavedCVEmpty =
-                                                                            true;
+                                                                      if (_jobDescriptionControllerForSavedCV.text.isEmpty) {
+                                                                        _isJobDescriptionForSavedCVEmpty = true;
                                                                       }
                                                                     });
                                                                   }
 
                                                                   state(() {
-                                                                    _isLoading =
-                                                                        false;
+                                                                    _isLoading = false;
                                                                   });
                                                                 },
-                                                                style:
-                                                                    kElevatedButtonPrimaryBG,
+                                                                style: kElevatedButtonPrimaryBG,
                                                                 child: Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
+                                                                  alignment: Alignment.center,
                                                                   child: _isLoading
                                                                       ? const RotatingImage(
-                                                                          height:
-                                                                              30,
-                                                                          width:
-                                                                              30,
+                                                                          height: 30,
+                                                                          width: 30,
                                                                         )
                                                                       : const Align(
-                                                                          alignment:
-                                                                              Alignment.center,
-                                                                          child:
-                                                                              Text(
+                                                                          alignment: Alignment.center,
+                                                                          child: Text(
                                                                             'Submit',
-                                                                            style:
-                                                                                kFont12,
+                                                                            style: kFont12,
                                                                           ),
                                                                         ),
                                                                 ),
@@ -1304,8 +938,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: kInitialChatButton,
                                   child: Text(
                                     'Use My Saved CV\'s',
-                                    style:
-                                        kFont10.copyWith(color: Colors.black),
+                                    style: kFont10.copyWith(color: Colors.black),
                                   ),
                                 ),
                               ),
@@ -1337,10 +970,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(
                                 width: 10.0,
                               ),
-                              const SizedBox(
-                                  height: 20.0,
-                                  width: 20.0,
-                                  child: CircularProgressIndicator()),
+                              const SizedBox(height: 20.0, width: 20.0, child: CircularProgressIndicator()),
                               const SizedBox(
                                 width: 5.0,
                               ),
@@ -1359,8 +989,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemCount: _allMessages.length + 1,
                       itemBuilder: (context, index) {
                         if (index == _allMessages.length) {
-                          print(
-                              'New Message : $_newMessage and Error in API :: $_errorInChatApi');
+                          print('New Message : $_newMessage and Error in API :: $_errorInChatApi');
                           if (!_newMessage && !_errorInChatApi) {
                             if (!_newMessage) {
                               return Column(
@@ -1371,29 +1000,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Align(
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 10.0),
+                                          padding: const EdgeInsets.only(top: 10.0),
                                           child: Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 5, horizontal: 13),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10, vertical: 13),
+                                            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
+                                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 13),
                                             decoration: BoxDecoration(
                                               color: kLightPurple,
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
                                             child: Text(
                                               'Do you want to choose a template now?',
-                                              style: kFont10.copyWith(
-                                                  color: Colors.black),
+                                              style: kFont10.copyWith(color: Colors.black),
                                             ),
                                           ),
                                         ),
                                       ),
                                       Container(
-                                        margin:
-                                            const EdgeInsets.only(bottom: 10.0),
+                                        margin: const EdgeInsets.only(bottom: 10.0),
                                         child: Align(
                                           alignment: Alignment.topLeft,
                                           child: Image.asset(
@@ -1416,8 +1039,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       style: kInitialChatButton,
                                       child: Text(
                                         'No',
-                                        style: kFont10.copyWith(
-                                            color: Colors.black),
+                                        style: kFont10.copyWith(color: Colors.black),
                                       ),
                                     ),
                                   ),
@@ -1426,16 +1048,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.only(left: 15.0),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        final BottomBarController controller =
-                                            Get.find();
-                                        controller.changePage(
-                                            controller.currentIndex.value + 1);
+                                        final BottomBarController controller = Get.find();
+                                        controller.changePage(controller.currentIndex.value + 1);
                                       },
                                       style: kInitialChatButton,
                                       child: Text(
                                         'Yes',
-                                        style: kFont10.copyWith(
-                                            color: Colors.black),
+                                        style: kFont10.copyWith(color: Colors.black),
                                       ),
                                     ),
                                   ),
@@ -1465,10 +1084,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       const SizedBox(
                                         width: 10.0,
                                       ),
-                                      const SizedBox(
-                                          height: 20.0,
-                                          width: 20.0,
-                                          child: CircularProgressIndicator()),
+                                      const SizedBox(height: 20.0, width: 20.0, child: CircularProgressIndicator()),
                                       const SizedBox(
                                         width: 5.0,
                                       ),
@@ -1510,8 +1126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               });
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 11),
+                              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 11),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -1523,8 +1138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const SizedBox(width: 2),
                                   const Text(
                                     'New Topic',
-                                    style: TextStyle(
-                                        fontSize: 8, color: Colors.white),
+                                    style: TextStyle(fontSize: 8, color: Colors.white),
                                   )
                                 ],
                               ),
@@ -1543,50 +1157,38 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: InputDecoration(
                                 filled: true,
                                 fillColor: Colors.white,
-                                hintStyle: const TextStyle(
-                                    color: Color(0xFF95969D), fontSize: 12),
+                                hintStyle: const TextStyle(color: Color(0xFF95969D), fontSize: 12),
                                 hintText: 'Hello, how can I help you...',
                                 contentPadding: const EdgeInsets.symmetric(
                                   vertical: 0,
                                   horizontal: 10,
                                 ),
                                 border: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5.0)),
+                                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
                                 ),
                                 enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color(0xFFF1F1F1), width: 1.0),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5.0)),
+                                  borderSide: BorderSide(color: Color(0xFFF1F1F1), width: 1.0),
+                                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
                                 ),
                                 focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color(0xFFEBEBEB), width: 1.0),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5.0)),
+                                  borderSide: BorderSide(color: Color(0xFFEBEBEB), width: 1.0),
+                                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
                                 ),
                                 suffixIcon: GestureDetector(
                                   onTap: () {
                                     _newMessage = true;
-                                    if (cvObj.isNotEmpty ||
-                                        chatCvObj.isNotEmpty) {
+                                    if (cvObj.isNotEmpty || chatCvObj.isNotEmpty) {
                                       String message = _messageController.text;
                                       _secondApiCalled = true;
-                                      _messageController.text.isNotEmpty
-                                          ? _chatApi(chatCvObj, jobDescription,
-                                              message, token)
-                                          : '';
+                                      _messageController.text.isNotEmpty ? _chatApi(chatCvObj, jobDescription, message, token) : '';
                                       if (message.isNotEmpty) {
                                         setState(() {
                                           _messages.add(message);
                                           _messageController.clear();
                                         });
                                         _scrollController.animateTo(
-                                          _scrollController
-                                              .position.maxScrollExtent,
-                                          duration:
-                                              const Duration(milliseconds: 300),
+                                          _scrollController.position.maxScrollExtent,
+                                          duration: const Duration(milliseconds: 300),
                                           curve: Curves.easeOut,
                                         );
                                         _focusNode.unfocus();
@@ -1613,9 +1215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             elevation: 2.0,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(50),
-                              onTap: speechToText.isListening
-                                  ? stopListening
-                                  : startListening,
+                              onTap: speechToText.isListening ? stopListening : startListening,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
@@ -1660,8 +1260,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
   void onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
       _messageController.text = result.recognizedWords;
@@ -1684,13 +1282,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  String _formatMessageDetails(
-      String summary,
-      Map<String, dynamic> cvObj,
-      List<Map<String, dynamic>> skillsList,
-      List<Map<String, dynamic>> educationList,
-      List<Map<String, dynamic>> employmentHistoryList,
-      List<Map<String, dynamic>> projectsList) {
+  String _formatMessageDetails(String summary, Map<String, dynamic> cvObj, List<Map<String, dynamic>> skillsList, List<Map<String, dynamic>> educationList,
+      List<Map<String, dynamic>> employmentHistoryList, List<Map<String, dynamic>> projectsList) {
     final StringBuffer formattedMessage = StringBuffer();
 
     formattedMessage.writeln('𝗦𝘂𝗺𝗺𝗮𝗿𝘆:');
@@ -1699,31 +1292,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
     formattedMessage.writeln('𝗣𝗲𝗿𝘀𝗼𝗻𝗮𝗹 𝗜𝗻𝗳𝗼:');
     formattedMessage.writeln('Name: ${cvObj['personal_information']['name']}');
-    String jobTitle=cvObj['personal_information']['job_title']??'';
-    if(jobTitle.isNotEmpty && jobTitle!=null){
-      formattedMessage
-          .writeln('Job Title: $jobTitle');
+    String jobTitle = cvObj['personal_information']['job_title'] ?? '';
+    if (jobTitle.isNotEmpty && jobTitle != null) {
+      formattedMessage.writeln('Job Title: $jobTitle');
     }
-    formattedMessage
-        .writeln('Email: ${cvObj['personal_information']['email']}');
-    formattedMessage
-        .writeln('Phone: ${cvObj['personal_information']['number']}');
-    formattedMessage
-        .writeln('Address: ${cvObj['personal_information']['address']}');
-    String linkedinProfile=cvObj['personal_information']['linkedin']??'';
-    if(linkedinProfile.isNotEmpty && linkedinProfile!=null){
-      formattedMessage
-          .writeln('Linkedin: $linkedinProfile');
+    formattedMessage.writeln('Email: ${cvObj['personal_information']['email']}');
+    formattedMessage.writeln('Phone: ${cvObj['personal_information']['number']}');
+    formattedMessage.writeln('Address: ${cvObj['personal_information']['address']}');
+    String linkedinProfile = cvObj['personal_information']['linkedin'] ?? '';
+    if (linkedinProfile.isNotEmpty && linkedinProfile != null) {
+      formattedMessage.writeln('Linkedin: $linkedinProfile');
     }
-    String githubProfile=cvObj['personal_information']['github']??'';
-    if(githubProfile.isNotEmpty && githubProfile!=null){
-      formattedMessage
-          .writeln('Github: $githubProfile');
+    String githubProfile = cvObj['personal_information']['github'] ?? '';
+    if (githubProfile.isNotEmpty && githubProfile != null) {
+      formattedMessage.writeln('Github: $githubProfile');
     }
-    String website=cvObj['personal_information']['website']??'';
-    if(website.isNotEmpty && website!=null){
-      formattedMessage
-          .writeln('Website: $website');
+    String website = cvObj['personal_information']['website'] ?? '';
+    if (website.isNotEmpty && website != null) {
+      formattedMessage.writeln('Website: $website');
     }
     formattedMessage.writeln();
 
@@ -1807,8 +1393,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _chatApi(Map<String, dynamic> cvObj, String jobDescription,
-      String userQuery, String token) async {
+  Future<void> _chatApi(Map<String, dynamic> cvObj, String jobDescription, String userQuery, String token) async {
     final chatApiUrl = Uri.parse('$baseUrl/api/chat/');
     final client = http.Client();
     try {
@@ -1842,48 +1427,32 @@ class _HomeScreenState extends State<HomeScreen> {
           setState(() {
             chatCvObj = jsonResponse;
           });
-          String summary = jsonResponse['personal_information']?['summary'] ??
-              'Summary not found';
-          imageFromApi=  jsonResponse['personal_information']?['profile_pic']??"";
+          String summary = jsonResponse['personal_information']?['summary'] ?? 'Summary not found';
+          imageFromApi = jsonResponse['personal_information']?['profile_pic'] ?? "";
 
           List<Map<String, dynamic>> skillsList = [];
           if (jsonResponse['skills'] != null) {
-            skillsList = (jsonResponse['skills'] as List)
-                .map((skill) => Map<String, dynamic>.from(skill))
-                .toList();
+            skillsList = (jsonResponse['skills'] as List).map((skill) => Map<String, dynamic>.from(skill)).toList();
           }
 
           List<Map<String, dynamic>> educationList = [];
           if (jsonResponse['education'] != null) {
-            educationList = (jsonResponse['education'] as List)
-                .map((education) => Map<String, dynamic>.from(education))
-                .toList();
+            educationList = (jsonResponse['education'] as List).map((education) => Map<String, dynamic>.from(education)).toList();
           }
 
           List<Map<String, dynamic>> employmentHistoryList = [];
           if (jsonResponse['employment_history'] != null) {
-            employmentHistoryList = (jsonResponse['employment_history'] as List)
-                .map((employment) => Map<String, dynamic>.from(employment))
-                .toList();
+            employmentHistoryList = (jsonResponse['employment_history'] as List).map((employment) => Map<String, dynamic>.from(employment)).toList();
           }
 
           List<Map<String, dynamic>> projectsList = [];
           if (jsonResponse['projects'] != null) {
-            projectsList = (jsonResponse['projects'] as List)
-                .map((project) => Map<String, dynamic>.from(project))
-                .toList();
+            projectsList = (jsonResponse['projects'] as List).map((project) => Map<String, dynamic>.from(project)).toList();
           }
 
           setState(() {
             jobDescription = jsonResponse['job_description'] ?? '';
-            String formattedMessage = _formatMessageDetails(
-
-                summary,
-                jsonResponse,
-                skillsList,
-                educationList,
-                employmentHistoryList,
-                projectsList);
+            String formattedMessage = _formatMessageDetails(summary, jsonResponse, skillsList, educationList, employmentHistoryList, projectsList);
             _messagesFromAPI.add(formattedMessage);
             updateMessages();
             _newMessage = false;
@@ -1900,8 +1469,7 @@ class _HomeScreenState extends State<HomeScreen> {
           _messagesFromAPI.add(_errorApiMessage);
           updateMessages();
         });
-        print(
-            'Second API call failed with status code ${chatResponse.statusCode}');
+        print('Second API call failed with status code ${chatResponse.statusCode}');
         print(chatResponse.body);
       }
     } catch (e) {
@@ -1961,8 +1529,7 @@ class _HomeScreenState extends State<HomeScreen> {
           file.path,
         ),
       );
-      request.fields['job_description'] =
-          _jobDescriptionControllerForUploadCV.text;
+      request.fields['job_description'] = _jobDescriptionControllerForUploadCV.text;
 
       var response = await request.send();
 
@@ -1974,11 +1541,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
         Map<String, dynamic> jsonResponse = json.decode(apiResponse);
         cvObj = jsonResponse['cv_obj'];
-        print("Adnan this is CV Obj $cvObj");
+        print("This is CV Obj $cvObj");
         return cvObj;
       } else {
-        print(
-            'API call failed with status code ${response.statusCode} and response $response');
+        print('API call failed with status code ${response.statusCode} and response $response');
 
         String apiResponse = await response.stream.bytesToString();
         print(apiResponse);
@@ -1990,6 +1556,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 }
+
 void refreshResponse() {
   _messages.clear();
   _messagesFromAPI.clear();
@@ -2001,5 +1568,5 @@ void refreshResponse() {
   _jobDescriptionControllerForUploadCV.clear();
   result = null;
   _fileUploaded = false;
-  imageFromApi="";
+  imageFromApi = "";
 }
