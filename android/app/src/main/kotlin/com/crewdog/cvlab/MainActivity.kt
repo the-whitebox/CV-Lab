@@ -1,4 +1,4 @@
-package com.example.crewdog_cv_lab
+package com.crewdog.cvlab
 
 import io.flutter.embedding.android.FlutterActivity
 
