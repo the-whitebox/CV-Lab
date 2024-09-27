@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:crewdog_cv_lab/screens/home/components/change_description_dialog.dart';
 import 'package:crewdog_cv_lab/screens/saved_cv.dart';
 import 'package:crewdog_cv_lab/utils/app_functions.dart';
 import 'package:flutter/material.dart';
@@ -9,15 +10,15 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
-import '../custom_widgets/bubble_message.dart';
-import '../custom_widgets/rotating_image.dart';
-import '../utils/app_routes.dart';
-import '../utils/app_snackbar.dart';
-import '../utils/consts/api_consts.dart';
-import '../utils/consts/const_images.dart';
-import '../utils/consts/constants.dart';
-import 'bottom_bar/bottom_nav_bar.dart';
-import '../cv_templates/controllers/templates_controller.dart';
+import '../../custom_widgets/bubble_message.dart';
+import '../../custom_widgets/rotating_image.dart';
+import '../../utils/app_routes.dart';
+import '../../utils/app_snackbar.dart';
+import '../../utils/consts/api_consts.dart';
+import '../../utils/consts/const_images.dart';
+import '../../utils/consts/constants.dart';
+import '../bottom_bar/bottom_nav_bar.dart';
+import '../../cv_templates/controllers/templates_controller.dart';
 
 FilePickerResult? result;
 int? tappedMyCVIndex;
@@ -597,6 +598,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       _fileUploaded = true;
                                                                     });
 
+                                                                    ///todo
                                                                     if (await isInternetConnected()) {
                                                                       await _callUploadCVApi();
                                                                       state(() {
@@ -610,7 +612,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         Get.back();
                                                                         _chatApi(cvObj, _jobDescriptionControllerForUploadCV.text, '', token);
                                                                       }
-                                                                    } else {
+                                                                    }
+
+                                                                    ///todo
+                                                                    else {
                                                                       appSnackBar("Error", "No internet connectivity");
                                                                     }
                                                                   } else if (!_fileUploaded) {
@@ -660,280 +665,259 @@ class _HomeScreenState extends State<HomeScreen> {
                                     cvList = await fetchMyCVsData(token);
 
                                     showDialog(
-                                      barrierDismissible: false,
-                                      builder: (BuildContext context) {
-                                        final screenHeight = MediaQuery.of(context).size.height;
-                                        final screenWidth = MediaQuery.of(context).size.width;
-                                        return StatefulBuilder(builder: (context, state) {
-                                          return AlertDialog(
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(8.0),
-                                                side: const BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: 1.0,
-                                                )),
-                                            contentPadding: EdgeInsets.zero,
-                                            backgroundColor: Colors.white,
-                                            titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                            title: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'Select a CV',
-                                                  style: kFont14Black.copyWith(fontWeight: FontWeight.w600),
-                                                ),
-                                                IgnorePointer(
-                                                  ignoring: _isSubmitPressed,
-                                                  child: InkWell(
-                                                    onTap: () {
-                                                      Get.back();
-                                                    },
-                                                    child: const Icon(Icons.close_rounded, size: 16),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            content: SingleChildScrollView(
-                                              child: ConstrainedBox(
-                                                constraints: BoxConstraints(
-                                                  maxWidth: 600.0,
-                                                  maxHeight: screenHeight * 0.8,
-                                                ),
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisSize: MainAxisSize.min,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          final screenHeight = MediaQuery.of(context).size.height;
+                                          final screenWidth = MediaQuery.of(context).size.width;
+                                          return StatefulBuilder(builder: (context, state) {
+                                            return AlertDialog(
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(8.0),
+                                                    side: const BorderSide(
+                                                      color: Colors.transparent,
+                                                      width: 1.0,
+                                                    )),
+                                                contentPadding: EdgeInsets.zero,
+                                                backgroundColor: Colors.white,
+                                                titlePadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                title: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                    SizedBox(
-                                                        height: screenHeight * 0.3,
-                                                        width: screenWidth * 0.8,
-                                                        child: Container(
-                                                            padding: EdgeInsets.only(
-                                                              top: screenHeight * 0.01,
-                                                              left: screenWidth * 0.04,
-                                                              right: screenWidth * 0.04,
-                                                            ),
-                                                            child: cvList.isEmpty
-                                                                ? const Center(
-                                                                    child: Text(
-                                                                      'You have not saved any CV yet',
-                                                                      style: kFont14Black,
-                                                                    ),
-                                                                  )
-                                                                : GridView.builder(
-                                                                    scrollDirection: Axis.horizontal,
-                                                                    shrinkWrap: true,
-                                                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                      childAspectRatio: 1.8,
-                                                                      crossAxisCount: 1,
-                                                                      crossAxisSpacing: 8.0,
-                                                                      mainAxisSpacing: 8.0,
-                                                                    ),
-                                                                    itemCount: cvList.length,
-                                                                    itemBuilder: (BuildContext context, int index) {
-                                                                      final title = cvList[index]['username'];
-                                                                      final templateName = cvList[index]['template']['name'];
-                                                                      int cvId = cvList[index]['cv']['id'];
-                                                                      final lastDigit = int.tryParse(templateName.substring(templateName.length - 1)) ?? 1;
-                                                                      final templateIndex = lastDigit - 1;
-
-                                                                      if (templateIndex >= 0 && templateIndex < pdfImages.length) {
-                                                                        return Column(children: [
-                                                                          GestureDetector(
-                                                                              onTap: () {
-                                                                                state(() {
-                                                                                  _selectButton = 'Select';
-                                                                                  _tappedIndex = index;
-                                                                                });
-                                                                              },
-                                                                              child: Stack(children: [
-                                                                                Container(
-                                                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
-                                                                                  child: Image.asset(pdfImages[templateIndex]),
-                                                                                ),
-                                                                                if (_tappedIndex == index)
-                                                                                  Center(
-                                                                                      child: Column(children: [
-                                                                                    SizedBox(
-                                                                                      height: screenHeight * 0.1,
-                                                                                    ),
-                                                                                    ElevatedButton(
-                                                                                        onPressed: () async {
-                                                                                          state(() {
-                                                                                            _selectButton = 'Selected';
-                                                                                            _isCVSelected = true;
-                                                                                            _cvNotSelected = false;
-                                                                                          });
-                                                                                          chatCvObj =
-                                                                                              (await tempController.fetchCvObjectFromBackend(cvId, templateName))!;
-                                                                                        },
-                                                                                        style: kElevatedButtonPrimaryBG,
-                                                                                        child: Text(_selectButton, style: const TextStyle(color: Colors.white)))
-                                                                                  ]))
-                                                                              ])),
-                                                                          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                                                            const Text(
-                                                                              'Title: ',
-                                                                            ),
-                                                                            Expanded(
-                                                                                child: Text(title,
-                                                                                    maxLines: 2,
-                                                                                    style: const TextStyle(overflow: TextOverflow.ellipsis, fontWeight: FontWeight.w500)))
-                                                                          ])
-                                                                        ]);
-                                                                      } else {
-                                                                        return Container(
-                                                                            padding: const EdgeInsets.all(8.0),
-                                                                            color: kHighlightedColor,
-                                                                            child: const Center(
-                                                                                child: Text('Invalid template version', style: TextStyle(color: Colors.white))));
-                                                                      }
-                                                                    }))),
-                                                    Row(children: [
-                                                      const SizedBox(
-                                                        width: 25.0,
-                                                      ),
-                                                      Visibility(
-                                                        visible: _cvNotSelected,
-                                                        child: const Text(
-                                                          'CV must be selected',
-                                                          style: TextStyle(color: Colors.red, fontSize: 10.0),
-                                                        ),
-                                                      ),
-                                                    ]),
-                                                    Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                                                      child: Text(
-                                                        'Job description',
-                                                        style: kFont14Black.copyWith(fontWeight: FontWeight.w600),
-                                                      ),
+                                                    Text(
+                                                      'Select a CV',
+                                                      style: kFont14Black.copyWith(fontWeight: FontWeight.w600),
                                                     ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                                      child: TextFormField(
-                                                          controller: _jobDescriptionControllerForSavedCV,
-                                                          minLines: 2,
-                                                          enabled: true,
-                                                          keyboardType: TextInputType.multiline,
-                                                          maxLines: null,
-                                                          decoration: InputDecoration(
-                                                            enabledBorder: customBorderHome,
-                                                            focusedBorder: customBorderHome,
-                                                            errorBorder: customBorderHome,
-                                                            focusedErrorBorder: customBorderHome,
-                                                            contentPadding: const EdgeInsets.symmetric(
-                                                              vertical: 10.0,
-                                                              horizontal: 10.0,
-                                                            ),
-                                                            hintText: 'Enter job description',
-                                                            hintStyle: kFadedText.copyWith(fontSize: 14),
-                                                            errorStyle: const TextStyle(
-                                                              fontSize: 10,
-                                                              color: Colors.red,
-                                                            ),
-                                                            errorText: _isJobDescriptionForSavedCVEmpty ? 'Job description can\'t be empty' : null,
-                                                          ),
-                                                          onChanged: (value) {
-                                                            state(() {
-                                                              _isJobDescriptionForSavedCVEmpty = false;
-                                                            });
-                                                          }),
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.all(16.0),
-                                                      child: Align(
-                                                        alignment: Alignment.centerRight,
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.end,
-                                                          children: [
-                                                            const SizedBox(
-                                                              width: 40,
-                                                            ),
-                                                            IgnorePointer(
-                                                              ignoring: _isSubmitPressed,
-                                                              child: ElevatedButton(
-                                                                onPressed: () {
-                                                                  Get.back();
-                                                                },
-                                                                style: kElevatedButtonWhiteOpacityBG,
-                                                                child: Align(
-                                                                  alignment: Alignment.center,
-                                                                  child: Text(
-                                                                    'Cancel',
-                                                                    style: kFont12.copyWith(color: Colors.black),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 4,
-                                                            ),
-                                                            IgnorePointer(
-                                                              ignoring: _isSubmitPressed,
-                                                              child: ElevatedButton(
-                                                                onPressed: () async {
-                                                                  _isJobDescriptionForSavedCVEmpty = _jobDescriptionControllerForSavedCV.text.isEmpty;
-                                                                  if (!_isCVSelected) {
-                                                                    state(() {
-                                                                      _cvNotSelected = true;
-                                                                    });
-                                                                  } else {
-                                                                    state(() {
-                                                                      _cvNotSelected = false;
-                                                                    });
-                                                                  }
-                                                                  if (!_jobDescriptionControllerForSavedCV.text.isEmpty && _isCVSelected) {
-                                                                    _isSubmitPressed = true;
-                                                                    _isLoading = true;
-                                                                    if (await isInternetConnected()) {
-                                                                      await _chatApi(chatCvObj, _jobDescriptionControllerForSavedCV.text, '', token);
-                                                                      _isSubmitPressed = false;
-                                                                      Navigator.pop(context);
-                                                                    } else {
-                                                                      appSnackBar("Error", "No internet connectivity");
-                                                                    }
-                                                                  } else {
-                                                                    state(() {
-                                                                      if (_jobDescriptionControllerForSavedCV.text.isEmpty) {
-                                                                        _isJobDescriptionForSavedCVEmpty = true;
-                                                                      }
-                                                                    });
-                                                                  }
-
-                                                                  state(() {
-                                                                    _isLoading = false;
-                                                                  });
-                                                                },
-                                                                style: kElevatedButtonPrimaryBG,
-                                                                child: Align(
-                                                                  alignment: Alignment.center,
-                                                                  child: _isLoading
-                                                                      ? const RotatingImage(
-                                                                          height: 30,
-                                                                          width: 30,
-                                                                        )
-                                                                      : const Align(
-                                                                          alignment: Alignment.center,
-                                                                          child: Text(
-                                                                            'Submit',
-                                                                            style: kFont12,
-                                                                          ),
-                                                                        ),
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
+                                                    IgnorePointer(
+                                                      ignoring: _isSubmitPressed,
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          Get.back();
+                                                        },
+                                                        child: const Icon(Icons.close_rounded, size: 16),
                                                       ),
-                                                    ),
+                                                    )
                                                   ],
                                                 ),
-                                              ),
-                                            ),
-                                          );
-                                        });
-                                      },
-                                      context: context,
-                                    );
+                                                content: SingleChildScrollView(
+                                                    child: ConstrainedBox(
+                                                        constraints: BoxConstraints(
+                                                          maxWidth: 600.0,
+                                                          maxHeight: screenHeight * 0.8,
+                                                        ),
+                                                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                                                          SizedBox(
+                                                              height: screenHeight * 0.3,
+                                                              width: screenWidth * 0.8,
+                                                              child: Container(
+                                                                  padding: EdgeInsets.only(
+                                                                    top: screenHeight * 0.01,
+                                                                    left: screenWidth * 0.04,
+                                                                    right: screenWidth * 0.04,
+                                                                  ),
+                                                                  child: cvList.isEmpty
+                                                                      ? const Center(
+                                                                          child: Text(
+                                                                            'You have not saved any CV yet',
+                                                                            style: kFont14Black,
+                                                                          ),
+                                                                        )
+                                                                      : GridView.builder(
+                                                                          scrollDirection: Axis.horizontal,
+                                                                          shrinkWrap: true,
+                                                                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                                                            childAspectRatio: 1.8,
+                                                                            crossAxisCount: 1,
+                                                                            crossAxisSpacing: 8.0,
+                                                                            mainAxisSpacing: 8.0,
+                                                                          ),
+                                                                          itemCount: cvList.length,
+                                                                          itemBuilder: (BuildContext context, int index) {
+                                                                            final title = cvList[index]['username'];
+                                                                            final templateName = cvList[index]['template']['name'];
+                                                                            int cvId = cvList[index]['cv']['id'];
+                                                                            final lastDigit = int.tryParse(templateName.substring(templateName.length - 1)) ?? 1;
+                                                                            final templateIndex = lastDigit - 1;
+
+                                                                            if (templateIndex >= 0 && templateIndex < pdfImages.length) {
+                                                                              return Column(children: [
+                                                                                GestureDetector(
+                                                                                    onTap: () {
+                                                                                      state(() {
+                                                                                        _selectButton = 'Select';
+                                                                                        _tappedIndex = index;
+                                                                                      });
+                                                                                    },
+                                                                                    child: Stack(children: [
+                                                                                      Container(
+                                                                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
+                                                                                        child: Image.asset(pdfImages[templateIndex]),
+                                                                                      ),
+                                                                                      if (_tappedIndex == index)
+                                                                                        Center(
+                                                                                            child: Column(children: [
+                                                                                          SizedBox(
+                                                                                            height: screenHeight * 0.1,
+                                                                                          ),
+                                                                                          ElevatedButton(
+                                                                                              onPressed: () async {
+                                                                                                state(() {
+                                                                                                  _selectButton = 'Selected';
+                                                                                                  _isCVSelected = true;
+                                                                                                  _cvNotSelected = false;
+                                                                                                });
+                                                                                                chatCvObj =
+                                                                                                    (await tempController.fetchCvObjectFromBackend(cvId, templateName))!;
+                                                                                              },
+                                                                                              style: kElevatedButtonPrimaryBG,
+                                                                                              child: Text(_selectButton, style: const TextStyle(color: Colors.white)))
+                                                                                        ]))
+                                                                                    ])),
+                                                                                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                                                                  const Text(
+                                                                                    'Title: ',
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                      child: Text(title,
+                                                                                          maxLines: 2,
+                                                                                          style: const TextStyle(
+                                                                                              overflow: TextOverflow.ellipsis, fontWeight: FontWeight.w500)))
+                                                                                ])
+                                                                              ]);
+                                                                            } else {
+                                                                              return Container(
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  color: kHighlightedColor,
+                                                                                  child: const Center(
+                                                                                      child: Text('Invalid template version', style: TextStyle(color: Colors.white))));
+                                                                            }
+                                                                          }))),
+                                                          Row(children: [
+                                                            const SizedBox(
+                                                              width: 25.0,
+                                                            ),
+                                                            Visibility(
+                                                              visible: _cvNotSelected,
+                                                              child: const Text(
+                                                                'CV must be selected',
+                                                                style: TextStyle(color: Colors.red, fontSize: 10.0),
+                                                              ),
+                                                            ),
+                                                          ]),
+                                                          Padding(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                                                            child: Text(
+                                                              'Job description',
+                                                              style: kFont14Black.copyWith(fontWeight: FontWeight.w600),
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                            child: TextFormField(
+                                                                controller: _jobDescriptionControllerForSavedCV,
+                                                                minLines: 2,
+                                                                enabled: true,
+                                                                keyboardType: TextInputType.multiline,
+                                                                maxLines: null,
+                                                                decoration: InputDecoration(
+                                                                  enabledBorder: customBorderHome,
+                                                                  focusedBorder: customBorderHome,
+                                                                  errorBorder: customBorderHome,
+                                                                  focusedErrorBorder: customBorderHome,
+                                                                  contentPadding: const EdgeInsets.symmetric(
+                                                                    vertical: 10.0,
+                                                                    horizontal: 10.0,
+                                                                  ),
+                                                                  hintText: 'Enter job description',
+                                                                  hintStyle: kFadedText.copyWith(fontSize: 14),
+                                                                  errorStyle: const TextStyle(
+                                                                    fontSize: 10,
+                                                                    color: Colors.red,
+                                                                  ),
+                                                                  errorText: _isJobDescriptionForSavedCVEmpty ? 'Job description can\'t be empty' : null,
+                                                                ),
+                                                                onChanged: (value) {
+                                                                  state(() {
+                                                                    _isJobDescriptionForSavedCVEmpty = false;
+                                                                  });
+                                                                }),
+                                                          ),
+                                                          Padding(
+                                                              padding: const EdgeInsets.all(16.0),
+                                                              child: Align(
+                                                                  alignment: Alignment.centerRight,
+                                                                  child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                                                                    const SizedBox(
+                                                                      width: 40,
+                                                                    ),
+                                                                    IgnorePointer(
+                                                                      ignoring: _isSubmitPressed,
+                                                                      child: ElevatedButton(
+                                                                        onPressed: () {
+                                                                          Get.back();
+                                                                        },
+                                                                        style: kElevatedButtonWhiteOpacityBG,
+                                                                        child: Align(
+                                                                          alignment: Alignment.center,
+                                                                          child: Text(
+                                                                            'Cancel',
+                                                                            style: kFont12.copyWith(color: Colors.black),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      width: 4,
+                                                                    ),
+                                                                    IgnorePointer(
+                                                                        ignoring: _isSubmitPressed,
+                                                                        child: ElevatedButton(
+                                                                            onPressed: () async {
+                                                                              _isJobDescriptionForSavedCVEmpty = _jobDescriptionControllerForSavedCV.text.isEmpty;
+                                                                              if (!_isCVSelected) {
+                                                                                state(() {
+                                                                                  _cvNotSelected = true;
+                                                                                });
+                                                                              } else {
+                                                                                state(() {
+                                                                                  _cvNotSelected = false;
+                                                                                });
+                                                                              }
+                                                                              if (!_jobDescriptionControllerForSavedCV.text.isEmpty && _isCVSelected) {
+                                                                                _isSubmitPressed = true;
+                                                                                _isLoading = true;
+                                                                                if (await isInternetConnected()) {
+                                                                                  await _chatApi(chatCvObj, _jobDescriptionControllerForSavedCV.text, '', token);
+                                                                                  _isSubmitPressed = false;
+                                                                                  Navigator.pop(context);
+                                                                                } else {
+                                                                                  appSnackBar("Error", "No internet connectivity");
+                                                                                }
+                                                                              } else {
+                                                                                state(() {
+                                                                                  if (_jobDescriptionControllerForSavedCV.text.isEmpty) {
+                                                                                    _isJobDescriptionForSavedCVEmpty = true;
+                                                                                  }
+                                                                                });
+                                                                              }
+
+                                                                              state(() {
+                                                                                _isLoading = false;
+                                                                              });
+                                                                            },
+                                                                            style: kElevatedButtonPrimaryBG,
+                                                                            child: Align(
+                                                                                alignment: Alignment.center,
+                                                                                child: _isLoading
+                                                                                    ? const RotatingImage(
+                                                                                        height: 30,
+                                                                                        width: 30,
+                                                                                      )
+                                                                                    : const Align(alignment: Alignment.center, child: Text('Submit', style: kFont12)))))
+                                                                  ])))
+                                                        ]))));
+                                          });
+                                        },
+                                        context: context);
                                   },
                                   style: kInitialChatButton,
                                   child: Text(
@@ -1534,15 +1518,24 @@ class _HomeScreenState extends State<HomeScreen> {
       var response = await request.send();
 
       if (response.statusCode == 200) {
-        setState(() {
-          _firstApiCalled = true;
-        });
         String apiResponse = await response.stream.bytesToString();
 
         Map<String, dynamic> jsonResponse = json.decode(apiResponse);
-        cvObj = jsonResponse['cv_obj'];
+        if ( jsonResponse['result'] != null) {
+          String resultMessage = jsonResponse['result'];
+          if (resultMessage.contains("not relevent to job description")) {
+            changeDescriptionDialog(context);
+            return null;
+          }
+        }
+
+    else{
+          setState(() {
+            _firstApiCalled = true;
+          });
+          cvObj = jsonResponse['cv_obj'];
         print("This is CV Obj $cvObj");
-        return cvObj;
+        return cvObj;}
       } else {
         print('API call failed with status code ${response.statusCode} and response $response');
 
