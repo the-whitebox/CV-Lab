@@ -135,6 +135,10 @@ const TextStyle kFont20White = TextStyle(
   fontSize: 20,
   color: Colors.white,
 );
+const TextStyle kFont15White = TextStyle(
+  fontSize: 15,
+  color: Colors.white,
+);
 const TextStyle kFont14Black = TextStyle(
   fontSize: 14,
   color: Colors.black,

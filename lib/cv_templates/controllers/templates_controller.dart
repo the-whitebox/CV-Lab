@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../utils/consts/api_consts.dart';
-import '../../screens/home_screen.dart';
+import '../../screens/home/home_screen.dart';
 import 'package:http_parser/http_parser.dart';
 
 String token = getAccessToken();

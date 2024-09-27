@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:crewdog_cv_lab/screens/home_screen.dart';
+import 'package:crewdog_cv_lab/screens/home/home_screen.dart';
 import 'package:crewdog_cv_lab/utils/app_snackbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:crewdog_cv_lab/utils/app_routes.dart';
@@ -111,8 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (errorData['detail'] != "") {
           appSnackBar(" Error", " ${errorData['detail']}");
         } else {
-          appSnackBar(" Error",
-              'Failed to change password. Status code: ${response.statusCode}');
+          appSnackBar(" Error", 'Failed to change password. Status code: ${response.statusCode}');
         }
       }
     } else {
@@ -176,11 +175,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: RotatingImage(
-                    height: isLargerScreen
-                        ? screenHeight * 0.25
-                        : screenHeight * 0.20,
-                    width:
-                        isLargerScreen ? screenWidth * 0.25 : screenWidth * 0.2,
+                    height: isLargerScreen ? screenHeight * 0.25 : screenHeight * 0.20,
+                    width: isLargerScreen ? screenWidth * 0.25 : screenWidth * 0.2,
                   ),
                 );
               } else if (snapshot.hasError) {
@@ -196,8 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     snapshot.error.toString().contains("SocketException")
                         ? const Padding(
                             padding: EdgeInsets.all(8),
-                            child: Text(
-                                "Please Check your internet connection and try again."),
+                            child: Text("Please Check your internet connection and try again."),
                           )
                         : Text("Error : ${snapshot.error}"),
                     const Expanded(flex: 2, child: SizedBox()),
@@ -209,9 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     const Expanded(flex: 2, child: SizedBox()),
                     Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.07,
-                          vertical: screenHeight * 0.04),
+                      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.07, vertical: screenHeight * 0.04),
                       child: ElevatedButton(
                         onPressed: () async {
                           clearUserId();
@@ -223,12 +216,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         style: kElevatedButtonWithWhiteColor.copyWith(
                           padding: MaterialStateProperty.all(
                             EdgeInsets.symmetric(
-                                vertical: isLargerScreen
-                                    ? screenHeight * 0.009
-                                    : screenHeight * 0.005,
-                                horizontal: isLargerScreen
-                                    ? screenWidth * 0.05
-                                    : screenWidth * 0.05),
+                                vertical: isLargerScreen ? screenHeight * 0.009 : screenHeight * 0.005,
+                                horizontal: isLargerScreen ? screenWidth * 0.05 : screenWidth * 0.05),
                           ),
                         ),
                         child: Row(
@@ -244,9 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             Text(
                               'Log out',
-                              style: kButtonTextStyle.copyWith(
-                                  color: kHighlightedColor,
-                                  fontSize: isLargerScreen ? 20 : 18),
+                              style: kButtonTextStyle.copyWith(color: kHighlightedColor, fontSize: isLargerScreen ? 20 : 18),
                             ),
                           ],
                         ),
@@ -257,9 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               } else {
                 return SafeArea(
                   child: SingleChildScrollView(
-                    physics: isLargerScreen
-                        ? const BouncingScrollPhysics()
-                        : const BouncingScrollPhysics(),
+                    physics: isLargerScreen ? const BouncingScrollPhysics() : const BouncingScrollPhysics(),
                     child: Stack(
                       children: [
                         Image.asset('assets/images/bg_paws_with_orange.png'),
@@ -268,43 +253,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: Column(
                             children: [
                               SizedBox(
-                                height: isLargerScreen
-                                    ? screenHeight * 0.02
-                                    : screenHeight * 0.06,
+                                height: isLargerScreen ? screenHeight * 0.02 : screenHeight * 0.06,
                               ),
                               Visibility(
                                 visible: _isMyProfile,
                                 child: Text(
                                   'My profile',
-                                  style: isLargerScreen
-                                      ? kFont24
-                                      : kFont24SmallScreen,
+                                  style: isLargerScreen ? kFont24 : kFont24SmallScreen,
                                 ),
                               ),
                               Visibility(
                                 visible: _isEditProfile,
                                 child: Text(
                                   'Edit profile',
-                                  style: isLargerScreen
-                                      ? kFont24
-                                      : kFont24SmallScreen,
+                                  style: isLargerScreen ? kFont24 : kFont24SmallScreen,
                                 ),
                               ),
                               Visibility(
                                 visible: _isChangePassword,
                                 child: Text(
                                   'Change password',
-                                  style: isLargerScreen
-                                      ? kFont24
-                                      : kFont24SmallScreen,
+                                  style: isLargerScreen ? kFont24 : kFont24SmallScreen,
                                 ),
                               ),
                               Visibility(
                                 visible: _isMyProfile,
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: screenHeight * 0.025,
-                                      horizontal: screenWidth * 0.03),
+                                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025, horizontal: screenWidth * 0.03),
                                   child: buildProfileContainer(
                                     screenHeight,
                                     screenWidth,
@@ -317,9 +292,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Visibility(
                                 visible: _isEditProfile,
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: screenHeight * 0.025,
-                                      horizontal: screenWidth * 0.03),
+                                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025, horizontal: screenWidth * 0.03),
                                   child: buildEditProfileContainer(
                                     context,
                                     snapshot.data!,
@@ -332,9 +305,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Visibility(
                                 visible: _isChangePassword,
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: screenHeight * 0.025,
-                                      horizontal: screenWidth * 0.03),
+                                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.025, horizontal: screenWidth * 0.03),
                                   child: buildChangePasswordContainer(
                                     context,
                                     screenHeight,
@@ -371,13 +342,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       storeProfilePic("");
     }
     return Container(
-      padding: EdgeInsets.only(
-          top: isLargerScreen ? screenHeight * 0.02 : screenHeight * 0.035),
+      padding: EdgeInsets.only(top: isLargerScreen ? screenHeight * 0.02 : screenHeight * 0.035),
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(25.0),
-        border: Border.all(
-            color: const Color(0x4D000000).withOpacity(0.08), width: 3),
+        border: Border.all(color: const Color(0x4D000000).withOpacity(0.08), width: 3),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -418,20 +387,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 CircleAvatar(
                   radius: screenHeight * 0.075,
                   backgroundImage: (tempImage != null)
-                      ? FileImage(
-                          File(tempImage!.path)) // Show tempImage if present
+                      ? FileImage(File(tempImage!.path)) // Show tempImage if present
                       : (selectedAvatarIndex != 0)
-                          ? AssetImage(avatarList[selectedAvatarIndex])
-                              as ImageProvider<Object>
+                          ? AssetImage(avatarList[selectedAvatarIndex]) as ImageProvider<Object>
                           : (imageNetwork != null)
                               ? NetworkImage(imageNetwork!)
                               : (avatarIndexNetwork != null)
-                                  ? AssetImage(
-                                      avatarList[
-                                          avatarIndexNetwork!]) as ImageProvider<
-                                      Object> // Show avatarIndex image if present
-                                  : const AssetImage('fallback_image_path')
-                                      as ImageProvider<Object>,
+                                  ? AssetImage(avatarList[avatarIndexNetwork!]) as ImageProvider<Object> // Show avatarIndex image if present
+                                  : const AssetImage('fallback_image_path') as ImageProvider<Object>,
                 ),
                 Positioned.fill(
                   child: Transform.rotate(
@@ -455,9 +418,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Text(
                     '${userData['first_name']} ${userData['last_name']}',
-                    style: isLargerScreen
-                        ? kFont24Username
-                        : kFont24Username.copyWith(fontSize: 20),
+                    style: isLargerScreen ? kFont24Username : kFont24Username.copyWith(fontSize: 20),
                   ),
                   Text('${userData['email']}', style: kFont14Black),
                 ],
@@ -478,9 +439,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               });
             },
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.05,
-                  vertical: screenHeight * 0.005),
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.005),
               child: Row(
                 children: [
                   Image.asset(
@@ -532,8 +491,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           //   color: Color(0xFF95969D),
           // ),
           Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.05, vertical: screenHeight * 0.005),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.005),
             child: Row(
               children: [
                 Image.asset(
@@ -574,12 +532,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const Divider(
             color: Color(0xFF95969D),
           ),
-          SizedBox(
-              height:
-                  isLargerScreen ? screenHeight * 0.18 : screenHeight * 0.05),
+          SizedBox(height: isLargerScreen ? screenHeight * 0.18 : screenHeight * 0.05),
           Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.07, vertical: screenHeight * 0.04),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.07, vertical: screenHeight * 0.04),
             child: ElevatedButton(
               onPressed: () async {
                 clearUserId();
@@ -591,12 +546,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: kElevatedButtonWithWhiteColor.copyWith(
                 padding: MaterialStateProperty.all(
                   EdgeInsets.symmetric(
-                      vertical: isLargerScreen
-                          ? screenHeight * 0.009
-                          : screenHeight * 0.005,
-                      horizontal: isLargerScreen
-                          ? screenWidth * 0.05
-                          : screenWidth * 0.05),
+                      vertical: isLargerScreen ? screenHeight * 0.009 : screenHeight * 0.005, horizontal: isLargerScreen ? screenWidth * 0.05 : screenWidth * 0.05),
                 ),
               ),
               child: Row(
@@ -612,9 +562,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   Text(
                     'Log out',
-                    style: kButtonTextStyle.copyWith(
-                        color: kHighlightedColor,
-                        fontSize: isLargerScreen ? 20 : 18),
+                    style: kButtonTextStyle.copyWith(color: kHighlightedColor, fontSize: isLargerScreen ? 20 : 18),
                   ),
                 ],
               ),
@@ -642,8 +590,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(25.0),
-        border: Border.all(
-            color: const Color(0x4D000000).withOpacity(0.08), width: 3),
+        border: Border.all(color: const Color(0x4D000000).withOpacity(0.08), width: 3),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -657,22 +604,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     CircleAvatar(
                       radius: screenHeight * 0.075,
                       backgroundImage: (tempImage != null)
-                          ? FileImage(File(
-                              tempImage!.path)) // Show tempImage if present
+                          ? FileImage(File(tempImage!.path)) // Show tempImage if present
                           : (selectedAvatarIndex != 0)
-                              ? AssetImage(avatarList[selectedAvatarIndex])
-                                  as ImageProvider<Object>
+                              ? AssetImage(avatarList[selectedAvatarIndex]) as ImageProvider<Object>
                               : (imageNetwork != null)
-                                  ? NetworkImage(
-                                      imageNetwork!) // Show imageNetwork if present
+                                  ? NetworkImage(imageNetwork!) // Show imageNetwork if present
                                   : (avatarIndexNetwork != null)
-                                      ? AssetImage(
-                                              avatarList[avatarIndexNetwork!])
-                                          as ImageProvider<
-                                              Object> // Show avatarIndex image if present
-                                      : const AssetImage('fallback_image_path')
-                                          as ImageProvider<
-                                              Object>, // Provide a fallback image path or handle accordingly
+                                      ? AssetImage(avatarList[avatarIndexNetwork!]) as ImageProvider<Object> // Show avatarIndex image if present
+                                      : const AssetImage('fallback_image_path') as ImageProvider<Object>, // Provide a fallback image path or handle accordingly
                     ),
                     Positioned.fill(
                       child: Transform.rotate(
@@ -769,14 +708,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             style: kTextFieldTextStyle,
             decoration: kTextFieldDecoration.copyWith(
               isDense: isLargerScreen ? false : true,
-              disabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.transparent)),
+              disabledBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent)),
               hintText: '${userData['email']}',
             ),
           ),
-          SizedBox(
-              height:
-                  isLargerScreen ? screenHeight * 0.03 : screenHeight * 0.01),
+          SizedBox(height: isLargerScreen ? screenHeight * 0.03 : screenHeight * 0.01),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -794,8 +730,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: kElevatedButtonWhiteOpacityBG.copyWith(
                   elevation: MaterialStateProperty.all(0.001),
                   padding: MaterialStateProperty.all(
-                    EdgeInsets.symmetric(
-                        vertical: 0, horizontal: screenWidth * 0.08),
+                    EdgeInsets.symmetric(vertical: 0, horizontal: screenWidth * 0.08),
                   ),
                 ),
                 child: Text(
@@ -811,30 +746,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _validateFirstName = true;
                       _firstNameErrorText = 'Please enter first name';
                     });
-                  } else if (!isNameValid(
-                      _firstNameTextController.text.trim())) {
+                  } else if (!isNameValid(_firstNameTextController.text.trim())) {
                     setState(() {
                       _validateFirstName = true;
-                      _firstNameErrorText =
-                          'Special characters are not allowed';
-                    });
-                  } else if (_firstNameTextController.text.contains(' ')) {
-                    setState(() {
-                      _validateFirstName = true;
-                      _firstNameErrorText = 'Spaces are not allowed';
+                      _firstNameErrorText = 'Special characters are not allowed';
                     });
                   }
-
-                  if (_lastNameTextController.text.trim().isNotEmpty &&
-                      !isNameValid(_lastNameTextController.text.trim())) {
+                  if (_lastNameTextController.text.trim().isNotEmpty && !isNameValid(_lastNameTextController.text.trim())) {
                     setState(() {
                       _validateLastName = true;
                       _lastNameErrorText = 'Special characters are not allowed';
-                    });
-                  } else if (_lastNameTextController.text.contains(' ')) {
-                    setState(() {
-                      _validateLastName = true;
-                      _lastNameErrorText = 'Spaces are not allowed';
                     });
                   } else {
                     setState(() {
@@ -848,12 +769,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   }
 
                   if (await isInternetConnected()) {
-                    await updateProfile(
-                        token,
-                        _firstNameTextController.text.trim(),
-                        _lastNameTextController.text.trim(),
-                        tempImage,
-                        selectedAvatarIndex);
+                    await updateProfile(token, _firstNameTextController.text.trim(), _lastNameTextController.text.trim(), tempImage, selectedAvatarIndex);
                   } else {
                     appSnackBar("Error", "No internet connectivity");
                   }
@@ -868,11 +784,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: kElevatedButtonWhiteOpacityBG.copyWith(
                   elevation: MaterialStateProperty.all(0.001),
                   padding: MaterialStateProperty.all(
-                    EdgeInsets.symmetric(
-                        vertical: 0, horizontal: screenWidth * 0.08),
+                    EdgeInsets.symmetric(vertical: 0, horizontal: screenWidth * 0.08),
                   ),
-                  backgroundColor:
-                      const MaterialStatePropertyAll(kHighlightedColor),
+                  backgroundColor: const MaterialStatePropertyAll(kHighlightedColor),
                 ),
                 child: Text(
                   'Save',
@@ -904,8 +818,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(25.0),
-        border: Border.all(
-            color: const Color(0x4D000000).withOpacity(0.08), width: 3),
+        border: Border.all(color: const Color(0x4D000000).withOpacity(0.08), width: 3),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -931,14 +844,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 maxHeight: isLargerScreen ? 40 : 30,
                 maxWidth: 50,
               ),
-              errorText:
-                  _validateCurrentPassword ? _currentPasswordErrorText : null,
+              errorText: _validateCurrentPassword ? _currentPasswordErrorText : null,
               hintText: '**********',
               suffixIcon: IconButton(
                 icon: Icon(
-                  _currentPasswordVisible
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
+                  _currentPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                   color: const Color(0xFF95969D),
                 ),
                 onPressed: () {
@@ -972,9 +882,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               hintText: 'New password...',
               suffixIcon: IconButton(
                 icon: Icon(
-                  _newPasswordVisible
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
+                  _newPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                   color: const Color(0xFF95969D),
                 ),
                 onPressed: () {
@@ -1004,14 +912,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 maxHeight: isLargerScreen ? 40 : 30,
                 maxWidth: 50,
               ),
-              errorText:
-                  _validateConfirmPassword ? _confirmPasswordErrorText : null,
+              errorText: _validateConfirmPassword ? _confirmPasswordErrorText : null,
               hintText: 'Confirm password...',
               suffixIcon: IconButton(
                 icon: Icon(
-                  _confirmNewPasswordVisible
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
+                  _confirmNewPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                   color: const Color(0xFF95969D),
                 ),
                 onPressed: () {
@@ -1038,8 +943,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (_currentPasswordTextController.text.isEmpty) {
                 setState(() {
                   _validateCurrentPassword = true;
-                  _currentPasswordErrorText =
-                      'Current password can\'t be empty';
+                  _currentPasswordErrorText = 'Current password can\'t be empty';
                 });
                 return;
               }
@@ -1056,12 +960,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _newPasswordErrorText = 'Must contain at least 6 characters';
                 });
                 return;
-              } else if (!passwordContainsAlphabeticAndSpecial
-                  .hasMatch(_newPasswordTextController.text)) {
+              } else if (!passwordContainsAlphabeticAndSpecial.hasMatch(_newPasswordTextController.text)) {
                 setState(() {
                   _validateNewPassword = true;
-                  _newPasswordErrorText =
-                      'One alphabetic and special character';
+                  _newPasswordErrorText = 'One alphabetic and special character';
                 });
                 return;
               }
@@ -1069,12 +971,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               if (_newPasswordConfirmTextController.text.isEmpty) {
                 setState(() {
                   _validateConfirmPassword = true;
-                  _confirmPasswordErrorText =
-                      'Confirm password can\'t be empty';
+                  _confirmPasswordErrorText = 'Confirm password can\'t be empty';
                 });
                 return;
-              } else if (_newPasswordConfirmTextController.text !=
-                  _newPasswordTextController.text) {
+              } else if (_newPasswordConfirmTextController.text != _newPasswordTextController.text) {
                 setState(() {
                   _validateConfirmPassword = true;
                   _confirmPasswordErrorText = 'Password must match';
@@ -1101,11 +1001,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
             style: kElevatedButtonStyle.copyWith(
               padding: MaterialStateProperty.all(
-                EdgeInsets.symmetric(
-                    vertical: isLargerScreen
-                        ? screenHeight * 0.009
-                        : screenHeight * 0.007,
-                    horizontal: screenWidth * 0.08),
+                EdgeInsets.symmetric(vertical: isLargerScreen ? screenHeight * 0.009 : screenHeight * 0.007, horizontal: screenWidth * 0.08),
               ),
             ),
             child: _isLoading
@@ -1117,9 +1013,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     alignment: Alignment.center,
                     child: Text(
                       'Change password',
-                      style: isLargerScreen
-                          ? kButtonTextStyle
-                          : kButtonTextStyleSmallScreen,
+                      style: isLargerScreen ? kButtonTextStyle : kButtonTextStyleSmallScreen,
                     ),
                   ),
           ),
@@ -1138,404 +1032,348 @@ class _ProfileScreenState extends State<ProfileScreen> {
     bool isLargerScreen,
   ) async {
     return showDialog<void>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, state) => AlertDialog(
-            insetPadding: EdgeInsets.only(
-                left: screenWidth * 0.07, right: screenWidth * 0.07),
-            titlePadding: EdgeInsets.zero,
-            contentPadding: EdgeInsets.only(
-                left: screenWidth * 0.035, right: screenWidth * 0.035),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () async {
-                      Navigator.pop(context);
-                      state(() {
-                        tempImage = null;
-                        _fileUploaded = false;
-                      });
-                    },
-                    child: const Icon(Icons.close_rounded, size: 16),
-                  ),
-                ),
-              ],
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6.0),
-            ),
-            backgroundColor: Colors.white,
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(6.0),
-                      ),
-                      color: const Color(0xFF4E4949).withOpacity(0.1),
-                    ),
-                    child: ToggleButtons(
-                      renderBorder: false,
-                      isSelected: isPictureSelected,
-                      textStyle: dialogButtonTextStyle,
-                      onPressed: (int index) {
-                        state(() {
-                          for (int buttonIndex = 0;
-                              buttonIndex < 2;
-                              buttonIndex++) {
-                            if (buttonIndex == index) {
-                              isPictureSelected[buttonIndex] = true;
-
-                              selectedAvatarIndex = 0;
-                              isFirstIndex = false;
-                              isSecondIndex = true;
-                            } else {
-                              isPictureSelected[buttonIndex] = false;
+        barrierDismissible: false,
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+              builder: (context, state) => AlertDialog(
+                  insetPadding: EdgeInsets.only(left: screenWidth * 0.07, right: screenWidth * 0.07),
+                  titlePadding: EdgeInsets.zero,
+                  contentPadding: EdgeInsets.only(left: screenWidth * 0.035, right: screenWidth * 0.035),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            Navigator.pop(context);
+                            state(() {
                               tempImage = null;
                               _fileUploaded = false;
-                              isFirstIndex = true;
-                              isSecondIndex = false;
-                            }
-                          }
-                        });
-                      },
-                      splashColor: Colors.transparent,
-                      fillColor: Colors.transparent,
-                      selectedColor: kHighlightedColor,
-                      constraints: BoxConstraints(
-                        minHeight: screenHeight * 0.04,
-                        minWidth: screenWidth * 0.385,
-                        maxHeight: screenHeight * 0.06,
-                        maxWidth: screenWidth * 0.41,
-                      ),
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: screenWidth * 0.11, vertical: 10),
-                          decoration: BoxDecoration(
-                              color: isFirstIndex
-                                  ? const Color(0xFFFFFFFF)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(6)),
-                          child: Text(
-                            "Picture",
-                            style: kFont8Black.copyWith(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                              color: isFirstIndex
-                                  ? kHighlightedColor
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
-
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: screenWidth * 0.12, vertical: 10),
-                          decoration: BoxDecoration(
-                              color: isSecondIndex
-                                  ? const Color(0xFFFFFFFF)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(6)),
-                          child: Text(
-                            "Avatar",
-                            style: kFont8Black.copyWith(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                              color: !isFirstIndex
-                                  ? kHighlightedColor
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
-                        // Text('Avatar'),
-                      ],
-                    ),
-                  ),
-                ),
-                if (isPictureSelected[1])
-                  Column(
-                    children: [
-                      SizedBox(height: screenHeight * 0.015),
-                      Text('Choose avatar',
-                          style: kFont8Black.copyWith(
-                              fontSize: 17, fontWeight: FontWeight.w500)),
-                      SizedBox(height: screenHeight * 0.015),
-                      Center(
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            CircleAvatar(
-                                radius: screenHeight * 0.05,
-                                backgroundImage: AssetImage(
-                                    avatarList[selectedAvatarIndex])),
-                            Positioned.fill(
-                              child: Transform.rotate(
-                                angle: 3.14 / 2,
-                                child: const CircularProgressIndicator(
-                                  backgroundColor: Colors.white,
-                                  value: 0.5,
-                                  color: kPurple,
-                                  strokeWidth: 7,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.01),
-                      Row(
-                        children: [
-                          Text('Select avatar',
-                              style: kFont8Black.copyWith(fontSize: 14)),
-                        ],
-                      ),
-                      const Divider(),
-                      SizedBox(height: screenHeight * 0.01),
-                      SizedBox(
-                        height: screenHeight * 0.17,
-                        width: screenWidth * 0.75,
-                        child: GridView.builder(
-                          scrollDirection: Axis.horizontal,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 8.0,
-                            mainAxisSpacing: 8.0,
-                          ),
-                          itemCount: avatarList.length - 1,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                state(() {
-                                  selectedAvatarIndex = index + 1;
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: AssetImage(avatarList[index + 1]),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            );
+                            });
                           },
+                          child: const Icon(Icons.close_rounded, size: 16),
                         ),
                       ),
                     ],
                   ),
-                if (isPictureSelected[0])
-                  Column(
-                    children: [
-                      SizedBox(height: screenHeight * 0.015),
-                      Text(
-                        'Upload picture',
-                        style: kFont8Black.copyWith(
-                            fontSize: 18, fontWeight: FontWeight.w500),
-                      ),
-                      SizedBox(height: screenHeight * 0.015),
-                      DottedBorder(
-                        color: kPurple,
-                        borderType: BorderType.RRect,
-                        radius: const Radius.circular(8),
-                        child: ClipRRect(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6.0),
+                  ),
+                  backgroundColor: Colors.white,
+                  content: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                        decoration: BoxDecoration(
                           borderRadius: const BorderRadius.all(
-                            Radius.circular(8),
+                            Radius.circular(6.0),
                           ),
-                          child: Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.rectangle,
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.circular(8),
+                          color: const Color(0xFF4E4949).withOpacity(0.1),
+                        ),
+                        child: ToggleButtons(
+                          renderBorder: false,
+                          isSelected: isPictureSelected,
+                          textStyle: dialogButtonTextStyle,
+                          onPressed: (int index) {
+                            state(() {
+                              for (int buttonIndex = 0; buttonIndex < 2; buttonIndex++) {
+                                if (buttonIndex == index) {
+                                  isPictureSelected[buttonIndex] = true;
+
+                                  selectedAvatarIndex = 0;
+                                  isFirstIndex = false;
+                                  isSecondIndex = true;
+                                } else {
+                                  isPictureSelected[buttonIndex] = false;
+                                  tempImage = null;
+                                  _fileUploaded = false;
+                                  isFirstIndex = true;
+                                  isSecondIndex = false;
+                                }
+                              }
+                            });
+                          },
+                          splashColor: Colors.transparent,
+                          fillColor: Colors.transparent,
+                          selectedColor: kHighlightedColor,
+                          constraints: BoxConstraints(
+                            minHeight: screenHeight * 0.04,
+                            minWidth: screenWidth * 0.385,
+                            maxHeight: screenHeight * 0.06,
+                            maxWidth: screenWidth * 0.41,
+                          ),
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.11, vertical: 10),
+                              decoration: BoxDecoration(color: isFirstIndex ? const Color(0xFFFFFFFF) : Colors.transparent, borderRadius: BorderRadius.circular(6)),
+                              child: Text(
+                                "Picture",
+                                style: kFont8Black.copyWith(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500,
+                                  color: isFirstIndex ? kHighlightedColor : Colors.black,
+                                ),
+                              ),
                             ),
-                            padding: EdgeInsets.symmetric(
-                                vertical: screenHeight * 0.02),
-                            child: Column(
+
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.12, vertical: 10),
+                              decoration: BoxDecoration(color: isSecondIndex ? const Color(0xFFFFFFFF) : Colors.transparent, borderRadius: BorderRadius.circular(6)),
+                              child: Text(
+                                "Avatar",
+                                style: kFont8Black.copyWith(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w500,
+                                  color: !isFirstIndex ? kHighlightedColor : Colors.black,
+                                ),
+                              ),
+                            ),
+                            // Text('Avatar'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (isPictureSelected[1])
+                      Column(
+                        children: [
+                          SizedBox(height: screenHeight * 0.015),
+                          Text('Choose avatar', style: kFont8Black.copyWith(fontSize: 17, fontWeight: FontWeight.w500)),
+                          SizedBox(height: screenHeight * 0.015),
+                          Center(
+                            child: Stack(
+                              alignment: Alignment.center,
                               children: [
-                                Image.asset(
-                                  'assets/images/upload.png',
-                                  height: 35,
-                                  width: 42,
+                                CircleAvatar(radius: screenHeight * 0.05, backgroundImage: AssetImage(avatarList[selectedAvatarIndex])),
+                                Positioned.fill(
+                                  child: Transform.rotate(
+                                    angle: 3.14 / 2,
+                                    child: const CircularProgressIndicator(
+                                      backgroundColor: Colors.white,
+                                      value: 0.5,
+                                      color: kPurple,
+                                      strokeWidth: 7,
+                                    ),
+                                  ),
                                 ),
-                                SizedBox(height: screenHeight * 0.008),
-                                Text(
-                                  'Upload your files here',
-                                  style: kFont12.copyWith(color: Colors.black),
-                                ),
-                                SizedBox(height: screenHeight * 0.005),
-                                GestureDetector(
-                                    onTap: () async {
-                                      final pickedFile = await ImagePicker()
-                                          .pickImage(
-                                              source: ImageSource.gallery);
-                                      if (pickedFile != null) {
-                                        final file = File(pickedFile.path);
-                                        int fileSizeBytes = await file.length();
-                                        double fileSizeKB =
-                                            fileSizeBytes / 1024;
-                                        state(() {
-                                          _fileUploaded = true;
-                                          tempImage = pickedFile;
-                                          _fileName = pickedFile.name;
-                                          _fileSize =
-                                              '${fileSizeKB.toStringAsFixed(2)} KB';
-                                        });
-                                        for (int i = 0; i <= 100; i += 10) {
-                                          await Future.delayed(const Duration(
-                                              milliseconds: 100));
-                                          state(() {
-                                            _progress = i / 100;
-                                            _timeRemaining =
-                                                '${(10 - i ~/ 10)} sec';
-                                          });
-                                        }
-                                      } else {
-                                        print("Image picking canceled");
-                                      }
-                                    },
-                                    child: Text(
-                                      'Browse',
-                                      style: kFont8Black.copyWith(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        color: kPurple,
-                                        decoration: TextDecoration.underline,
-                                        decorationColor: kPurple,
-                                        decorationThickness: 2.0,
-                                      ),
-                                    )),
                               ],
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 3.0,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: _fileUploaded
-                            ? GestureDetector(
-                                onTap: () {
-                                  state(() {
-                                    tempImage = null;
-                                    _fileUploaded = false;
-                                  });
-                                },
-                                child:
-                                    const Icon(Icons.cancel_outlined, size: 14),
-                              )
-                            : const Text(
-                                'JPG or PNG',
-                                style: kFont8Black,
+                          SizedBox(height: screenHeight * 0.01),
+                          Row(
+                            children: [
+                              Text('Select avatar', style: kFont8Black.copyWith(fontSize: 14)),
+                            ],
+                          ),
+                          const Divider(),
+                          SizedBox(height: screenHeight * 0.01),
+                          SizedBox(
+                            height: screenHeight * 0.17,
+                            width: screenWidth * 0.75,
+                            child: GridView.builder(
+                              scrollDirection: Axis.horizontal,
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 8.0,
+                                mainAxisSpacing: 8.0,
                               ),
-                      ),
-                      Visibility(
-                        visible: _fileUploaded,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _fileName,
-                              style: kFont10.copyWith(color: Colors.black),
+                              itemCount: avatarList.length - 1,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    state(() {
+                                      selectedAvatarIndex = index + 1;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: AssetImage(avatarList[index + 1]),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
-                            Text(
-                              _fileSize,
-                              style: kFont8.copyWith(color: Colors.black),
-                            ),
-                            const SizedBox(height: 2),
-                            LinearProgressIndicator(
-                              minHeight: 1.5,
-                              value: _progress,
-                              backgroundColor: kPurple,
-                              valueColor: const AlwaysStoppedAnimation<Color>(
-                                  kHighlightedColor),
-                            ),
-                            const SizedBox(height: 2.0),
-                            Text(
-                              'Time remaining: $_timeRemaining',
-                              style: kFont7.copyWith(
-                                  color: const Color(0xFF4E4949)),
-                            ),
-                            const SizedBox(height: 15),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                SizedBox(height: screenHeight * 0.009),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () async {
-                          setState(() {
-                            tempImage = null;
-                            _fileUploaded = false;
-                            selectedAvatarIndex = 0;
-                          });
-                          Navigator.pop(context);
-                        },
-                        style: kElevatedButtonWhiteOpacityBG,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Cancel',
-                            style: kFont12.copyWith(color: Colors.black),
                           ),
-                        ),
+                        ],
                       ),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          _fileUploaded = false;
-                          if (tempImage != null) {
-                            print("Avatar Deleted");
-                          } else {
-                            print(" Image Deleted");
-                          }
-                          setState(() {
-                            _isEditProfile = true;
-                            _isMyProfile = false;
-                          });
-                          Get.back();
-                        },
-                        style: kElevatedButtonPrimaryBG,
-                        child: const Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            'Submit',
-                            style: kFont12,
+                    if (isPictureSelected[0])
+                      Column(
+                        children: [
+                          SizedBox(height: screenHeight * 0.015),
+                          Text(
+                            'Upload picture',
+                            style: kFont8Black.copyWith(fontSize: 18, fontWeight: FontWeight.w500),
                           ),
-                        ),
+                          SizedBox(height: screenHeight * 0.015),
+                          DottedBorder(
+                            color: kPurple,
+                            borderType: BorderType.RRect,
+                            radius: const Radius.circular(8),
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(8),
+                              ),
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: EdgeInsets.symmetric(vertical: screenHeight * 0.02),
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/upload.png',
+                                      height: 35,
+                                      width: 42,
+                                    ),
+                                    SizedBox(height: screenHeight * 0.008),
+                                    Text(
+                                      'Upload your files here',
+                                      style: kFont12.copyWith(color: Colors.black),
+                                    ),
+                                    SizedBox(height: screenHeight * 0.005),
+                                    GestureDetector(
+                                        onTap: () async {
+                                          final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+                                          if (pickedFile != null) {
+                                            final file = File(pickedFile.path);
+                                            int fileSizeBytes = await file.length();
+                                            double fileSizeKB = fileSizeBytes / 1024;
+                                            state(() {
+                                              _fileUploaded = true;
+                                              tempImage = pickedFile;
+                                              _fileName = pickedFile.name;
+                                              _fileSize = '${fileSizeKB.toStringAsFixed(2)} KB';
+                                            });
+                                            for (int i = 0; i <= 100; i += 10) {
+                                              await Future.delayed(const Duration(milliseconds: 100));
+                                              state(() {
+                                                _progress = i / 100;
+                                                _timeRemaining = '${(10 - i ~/ 10)} sec';
+                                              });
+                                            }
+                                          } else {
+                                            print("Image picking canceled");
+                                          }
+                                        },
+                                        child: Text(
+                                          'Browse',
+                                          style: kFont8Black.copyWith(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500,
+                                            color: kPurple,
+                                            decoration: TextDecoration.underline,
+                                            decorationColor: kPurple,
+                                            decorationThickness: 2.0,
+                                          ),
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 3.0,
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: _fileUploaded
+                                ? GestureDetector(
+                                    onTap: () {
+                                      state(() {
+                                        tempImage = null;
+                                        _fileUploaded = false;
+                                      });
+                                    },
+                                    child: const Icon(Icons.cancel_outlined, size: 14),
+                                  )
+                                : const Text(
+                                    'JPG or PNG',
+                                    style: kFont8Black,
+                                  ),
+                          ),
+                          Visibility(
+                            visible: _fileUploaded,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _fileName,
+                                  style: kFont10.copyWith(color: Colors.black),
+                                ),
+                                Text(
+                                  _fileSize,
+                                  style: kFont8.copyWith(color: Colors.black),
+                                ),
+                                const SizedBox(height: 2),
+                                LinearProgressIndicator(
+                                  minHeight: 1.5,
+                                  value: _progress,
+                                  backgroundColor: kPurple,
+                                  valueColor: const AlwaysStoppedAnimation<Color>(kHighlightedColor),
+                                ),
+                                const SizedBox(height: 2.0),
+                                Text(
+                                  'Time remaining: $_timeRemaining',
+                                  style: kFont7.copyWith(color: const Color(0xFF4E4949)),
+                                ),
+                                const SizedBox(height: 15),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: screenHeight * 0.015,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
+                    SizedBox(height: screenHeight * 0.009),
+                    Align(
+                        alignment: Alignment.centerRight,
+                        child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              setState(() {
+                                tempImage = null;
+                                _fileUploaded = false;
+                                selectedAvatarIndex = 0;
+                              });
+                              Navigator.pop(context);
+                            },
+                            style: kElevatedButtonWhiteOpacityBG,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Cancel',
+                                style: kFont12.copyWith(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                _fileUploaded = false;
+                                if (tempImage != null) {
+                                  print("Avatar Deleted");
+                                } else {
+                                  print(" Image Deleted");
+                                }
+                                setState(() {
+                                  _isEditProfile = true;
+                                  _isMyProfile = false;
+                                });
+                                Get.back();
+                              },
+                              style: kElevatedButtonPrimaryBG,
+                              child: const Align(alignment: Alignment.center, child: Text('Submit', style: kFont12)))
+                        ])),
+                    SizedBox(height: screenHeight * 0.015)
+                  ])));
+        });
   }
 }
