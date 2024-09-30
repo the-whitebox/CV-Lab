@@ -598,11 +598,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       _fileUploaded = true;
                                                                     });
 
-                                                                    ///todo
+
                                                                     if (await isInternetConnected()) {
                                                                       await _callUploadCVApi();
                                                                       state(() {
-                                                                        _firstApiCalled = true;
+                                                                        ///todo
+                                                                        // _firstApiCalled = true;
                                                                         _isSubmitPressed = false;
                                                                       });
                                                                       if (cvObj.isNotEmpty) {
@@ -1525,10 +1526,12 @@ class _HomeScreenState extends State<HomeScreen> {
           String resultMessage = jsonResponse['result'];
           if (resultMessage.contains("not relevent to job description")) {
             changeDescriptionDialog(context);
+            _firstApiCalled = false;
             return null;
           }
+          _firstApiCalled = false;
+          return null;
         }
-
     else{
           setState(() {
             _firstApiCalled = true;
