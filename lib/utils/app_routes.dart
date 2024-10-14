@@ -1,5 +1,5 @@
 import 'package:crewdog_cv_lab/screens/payment_screen.dart';
-import 'package:crewdog_cv_lab/screens/saved_cv.dart';
+import 'package:crewdog_cv_lab/screens/templates/saved_cv.dart';
 import 'package:crewdog_cv_lab/screens/splash_screen.dart';
 import 'package:crewdog_cv_lab/screens/welcome_screen.dart';
 import 'package:get/get.dart';

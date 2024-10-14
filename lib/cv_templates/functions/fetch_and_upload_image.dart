@@ -1,9 +1,9 @@
-import 'package:crewdog_cv_lab/cv_templates/controllers/upload_data_and_image.dart';
+import 'package:crewdog_cv_lab/cv_templates/functions/upload_data_and_image.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import '../../utils/app_functions.dart';
 import '../../utils/consts/api_consts.dart';
-import '../../utils/consts/constants.dart';
 
 
 Future<String> fetchAndUploadImage(
@@ -27,7 +27,7 @@ Future<String> fetchAndUploadImage(
     cvImagePathAfterUpload='/media/$cvImagePathAfterUpload';
     return cvImagePathAfterUpload;
   } else {
-    print('Failed to fetch image');
+    customLog('Failed to fetch image');
     return '';
   }
 }
