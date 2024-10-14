@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -86,5 +87,30 @@ Future<bool> isInternetConnected() async {
     return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
   } on SocketException catch (_) {
     return false;
+  }
+}
+
+void customLog(message){
+  if(kDebugMode){print(message);}
+}
+
+String formatFileSize(int bytes) {
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  int i = 0;
+  double fileSize = bytes.toDouble();
+
+  while (fileSize > 1024) {
+    fileSize /= 1024;
+    i++;
+  }
+
+  return '${fileSize.toStringAsFixed(2)} ${sizes[i]}';
+}
+
+bool checkScreenSize(screenHeight) {
+  if (screenHeight < 600) {
+    return false;
+  } else {
+    return true;
   }
 }

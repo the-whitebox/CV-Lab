@@ -8,8 +8,18 @@ const Color kLightOrange = Color(0xFFFFEFEE);
 const Color kLightPurple = Color(0xFFF8F5FE);
 const Color kLightGrey = Color(0xFF95969D);
 const Color kBlue = Color(0xFF06A3F5);
+const Color kBackgroundColor = Colors.white;
+const Color kBlackColor = Colors.black;
+const Color kErrorColor = Colors.red;
+const Color kWhiteF1 = Color(0xFFF1F1F1);
 
 // Text Styles
+const TextStyle kFont12Black = TextStyle(
+  fontSize: 12,
+  color: Colors.black,
+);
+const TextStyle kFont10Black = TextStyle(fontSize: 10, color: Colors.black);
+const TextStyle kFont11Black = TextStyle(fontSize: 11, color: Colors.black);
 const TextStyle kHeadingTextStyle = TextStyle(
   color: Colors.black,
   fontSize: 24.0,
@@ -107,15 +117,13 @@ const TextStyle kFont12GreySmallScreen = TextStyle(
   fontSize: 10,
   color: Color(0xFF95969D),
 );
-const TextStyle kFont13black500 =
-TextStyle(fontSize: 13, color: Colors.black, fontWeight: FontWeight.w500);
+const TextStyle kFont13black500 = TextStyle(fontSize: 13, color: Colors.black, fontWeight: FontWeight.w500);
 
 const TextStyle kFont14 = TextStyle(
   fontSize: 14,
   color: Colors.white,
 );
-const TextStyle kFont14black600 =
-TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.w600);
+const TextStyle kFont14black600 = TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.w600);
 const TextStyle kFont24Username = TextStyle(
   fontSize: 24,
   color: kHighlightedColor,
@@ -323,7 +331,6 @@ ButtonStyle kApplyLeave = ElevatedButton.styleFrom(
     side: const BorderSide(color: Colors.black),
   ),
 );
-
 
 final OutlineInputBorder customBorderHome = OutlineInputBorder(
   borderRadius: BorderRadius.circular(10.0),

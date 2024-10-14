@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../home/home_screen.dart';
-import '../profile_screen.dart';
-import '../saved_cv.dart';
+import '../profile/profile_screen.dart';
+import '../templates/saved_cv.dart';
 
 class BottomBarController extends GetxController {
   var currentIndex = 0.obs;

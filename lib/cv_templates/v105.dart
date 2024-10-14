@@ -3,22 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:printing/printing.dart';
-import '../../custom_widgets/custom_editable_text.dart';
 import 'package:pdf/widgets.dart' as pw;
-import '../../pdf_custom_widgets/pdf_skill_widget.dart';
-import '../../pdf_custom_widgets/pw_assets.dart';
 import '../utils/consts/api_consts.dart';
 import '../utils/consts/constants.dart';
 import '../../utils/app_functions.dart';
 import 'controllers/templates_controller.dart';
-import '../../custom_widgets/custom_button_row.dart';
-import '../../custom_widgets/cv_add_button.dart';
-import '../../custom_widgets/project_history_widget.dart';
-import '../../custom_widgets/reference_widget.dart';
-import '../../custom_widgets/skill_custom_widget.dart';
-import '../../pdf_custom_widgets/pdf_project_widget.dart';
-import '../../pdf_custom_widgets/pdf_reference_widget.dart';
-import 'controllers/upload_data_and_image.dart';
+import '../custom_widgets/custom_widgets.dart';
+import '../pdf_custom_widgets/pdf_custom_widgets.dart';
+import 'functions/upload_data_and_image.dart';
+import 'package:crewdog_cv_lab/models/models.dart';
 
 class V105 extends StatefulWidget {
   const V105({super.key});
