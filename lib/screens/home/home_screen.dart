@@ -79,14 +79,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   controller.selectButton = 'Select';
                                   controller.jobDescriptionControllerForSavedCV.clear();
                                   controller.tappedIndex = null;
-                                  // cvList = await fetchMyCVsData(token);
                                   showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (BuildContext context) {
-                                      return UseSavedCvDialog(context: context, onStateUpdate: () => setState(() {}));
-                                    },
-                                  );
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        return UseSavedCvDialog(context: context, onStateUpdate: () => setState(() {}));
+                                      });
                                 })
                           ])
                         ]))
@@ -198,8 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             contentPadding: const EdgeInsets.symmetric(horizontal: 10),
                                             border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
                                             enabledBorder: const OutlineInputBorder(
-                                                borderSide: BorderSide(color: kWhiteF1, width: 1.0),
-                                                borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                                                borderSide: BorderSide(color: kWhiteF1, width: 1.0), borderRadius: BorderRadius.all(Radius.circular(5.0))),
                                             focusedBorder: const OutlineInputBorder(
                                               borderSide: BorderSide(color: kWhiteF1, width: 1.0),
                                               borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -207,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             suffixIcon: GestureDetector(
                                                 onTap: () {
                                                   controller.newMessage = true;
-                                                  if (controller.cvObj.isNotEmpty || controller.chatCvObj.isNotEmpty) {
+                                                  if (controller.chatCvObj.isNotEmpty) {
                                                     String message = controller.messageController.text;
                                                     controller.secondApiCalled = true;
                                                     controller.messageController.text.isNotEmpty
@@ -223,10 +220,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         controller.messages.add(message);
                                                         controller.messageController.clear();
                                                       });
-                                                      controller.scrollController.animateTo(
-                                                          controller.scrollController.position.maxScrollExtent,
-                                                          duration: const Duration(milliseconds: 300),
-                                                          curve: Curves.easeOut);
+                                                      controller.scrollController.animateTo(controller.scrollController.position.maxScrollExtent,
+                                                          duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
                                                       controller.focusNode.unfocus();
                                                     }
                                                   }
@@ -256,9 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 color: Colors.white,
-                                                boxShadow: controller.speechToText.isListening
-                                                    ? [const BoxShadow(color: kPurple, spreadRadius: 5, blurRadius: 10)]
-                                                    : []),
+                                                boxShadow: controller.speechToText.isListening ? [const BoxShadow(color: kPurple, spreadRadius: 5, blurRadius: 10)] : []),
                                             child: Padding(
                                                 padding: const EdgeInsets.all(8.0),
                                                 child: controller.speechToText.isListening

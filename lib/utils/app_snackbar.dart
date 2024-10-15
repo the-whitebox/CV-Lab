@@ -4,6 +4,7 @@ import 'consts/constants.dart';
 
 appSnackBar (String? title, String message){
   return Get.snackbar(
+      duration: const Duration(seconds: 1),
       snackPosition: SnackPosition.BOTTOM,
       padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
       margin: const EdgeInsets.only(bottom: 5,left: 5,right: 5),
@@ -17,6 +18,7 @@ appSnackBar (String? title, String message){
 
 appSuccessSnackBar (String? title, String message){
   return Get.snackbar(
+    duration: const Duration(seconds: 1),
       snackPosition: SnackPosition.BOTTOM,
     padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 5),
     margin: const EdgeInsets.only(bottom: 5,left: 5,right: 5),

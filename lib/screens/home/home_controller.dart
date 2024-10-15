@@ -15,7 +15,6 @@ class HomeController extends GetxController {
   bool newMessage = false;
   bool errorInChatApi = false;
   String errorApiMessage = 'Oops! Something went wrong on our end. Please give us a moment to fix it. Feel free to try again.';
-  Map<String, dynamic> cvObj = {};
   Map<String, dynamic> chatCvObj = {};
   bool firstApiCalled = false;
   bool secondApiCalled = true;
@@ -81,7 +80,6 @@ class HomeController extends GetxController {
     messages.clear();
     messagesFromAPI.clear();
     allMessages.clear();
-    cvObj.clear();
     chatCvObj.clear();
     messageController.clear();
     focusNode.unfocus();
@@ -101,7 +99,7 @@ class HomeController extends GetxController {
   }
 
   void startListening({required VoidCallback stateUpdate}) async {
-    if (cvObj.isNotEmpty || chatCvObj.isNotEmpty) {
+    if ( chatCvObj.isNotEmpty) {
       await speechToText.listen(onResult: (result) {
         messageController.text = result.recognizedWords;
         stateUpdate();

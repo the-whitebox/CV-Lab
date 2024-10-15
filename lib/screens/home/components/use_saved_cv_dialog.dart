@@ -26,6 +26,7 @@ class _UseSavedCvDialogState extends State<UseSavedCvDialog> {
   final TempController tempController = Get.put(TempController());
   bool isLoading = false;
   List cvList = [];
+  int? selectedCv;
 
   @override
   void initState() {
@@ -47,6 +48,7 @@ class _UseSavedCvDialogState extends State<UseSavedCvDialog> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    // int? cvId;
 
     return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0), side: const BorderSide(color: Colors.transparent, width: 1.0)),
@@ -89,11 +91,16 @@ class _UseSavedCvDialogState extends State<UseSavedCvDialog> {
                                                   setState(() {
                                                     controller.selectButton = 'Select';
                                                     controller.tappedIndex = index;
+                                                    selectedCv = cvId;
                                                   });
                                                 },
                                                 child: Stack(children: [
                                                   Container(
-                                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)), child: Image.asset(pdfImages[templateIndex])),
+                                                      margin: const EdgeInsets.only(left: 3, right: 3, bottom: 3),
+                                                      decoration: BoxDecoration(boxShadow: [
+                                                        BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 2, blurRadius: 5, offset: const Offset(-1, 1))
+                                                      ], borderRadius: BorderRadius.circular(8.0)),
+                                                      child: Image.asset(pdfImages[templateIndex])),
                                                   if (controller.tappedIndex == index)
                                                     Center(
                                                         child: Column(children: [
@@ -105,7 +112,6 @@ class _UseSavedCvDialogState extends State<UseSavedCvDialog> {
                                                               controller.isCVSelected = true;
                                                               controller.cvNotSelected = false;
                                                             });
-                                                            controller.chatCvObj = (await tempController.fetchCvObjectFromBackend(cvId, templateName))!;
                                                           },
                                                           style: kElevatedButtonPrimaryBG,
                                                           child: Text(controller.selectButton, style: const TextStyle(color: kBackgroundColor)))
@@ -177,16 +183,30 @@ class _UseSavedCvDialogState extends State<UseSavedCvDialog> {
                                         controller.isSubmitPressed = true;
                                         controller.isLoading = true;
                                         if (await isInternetConnected()) {
-                                          await chatApi(
-                                              cvObj: controller.chatCvObj,
-                                              jobDescription: controller.jobDescriptionControllerForSavedCV.text,
-                                              userQuery: '',
-                                              token: token,
-                                              onStateUpdate: () => widget.onStateUpdate());
-
-                                          controller.isSubmitPressed = false;
-                                          Get.back();
-                                          widget.onStateUpdate();
+                                         await tempController.fetchCvObjectFromBackend(
+                                              selectedCv.toString(), controller.jobDescriptionControllerForSavedCV.text, context);
+                                          if (controller.chatCvObj.isNotEmpty && controller.chatCvObj['result'] == null) {
+                                            controller.firstApiCalled = true;
+                                            widget.onStateUpdate();
+                                            Get.back();
+                                            await chatApi(
+                                                cvObj: controller.chatCvObj,
+                                                jobDescription: controller.jobDescriptionControllerForSavedCV.text,
+                                                userQuery: '',
+                                                token: token,
+                                                onStateUpdate: () => widget.onStateUpdate());
+                                          } else  if(controller.chatCvObj['result'] != null){
+                                            controller.chatCvObj.clear();
+                                            setState(() {
+                                              controller.isLoading = false;
+                                              controller.isSubmitPressed = false;
+                                            });
+                                          }else{
+                                            setState(() {
+                                              controller.isLoading = false;
+                                              controller.isSubmitPressed = false;
+                                            });
+                                          }
                                         } else {
                                           appSnackBar("Error", "No internet connectivity");
                                         }
@@ -197,9 +217,9 @@ class _UseSavedCvDialogState extends State<UseSavedCvDialog> {
                                           }
                                         });
                                       }
-                                      setState(() {
-                                        controller.isLoading = false;
-                                      });
+                                      // setState(() {
+                                      //   controller.isLoading = false;
+                                      // });
                                     },
                                     style: kElevatedButtonPrimaryBG,
                                     child: Align(

@@ -112,7 +112,7 @@ Future<void> removeFromFavorites(int templateId, String token) async {
 }
 
 Future<List<Map<String, dynamic>>> fetchMyCVsData(String token) async {
-  const String apiEndpoint = '$baseUrl/api/mycvs/?name=' '';
+  const String apiEndpoint = '$baseUrl/api/mycvs/';
 
   try {
     final response = await http.get(
