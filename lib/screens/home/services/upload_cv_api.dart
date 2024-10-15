@@ -25,20 +25,21 @@ Future callUploadCVApi({required VoidCallback onStateUpdate, required BuildConte
       Map<String, dynamic> jsonResponse = json.decode(apiResponse);
       if ( jsonResponse['result'] != null) {
         String resultMessage = jsonResponse['result'];
-        if (resultMessage.contains("not relevent to job description")) {
+        if (resultMessage.contains("relevant")) {
           changeDescriptionDialog(context);
           controller.firstApiCalled = false;
+          onStateUpdate();
           return null;
         }
         controller.firstApiCalled = false;
+        onStateUpdate();
         return null;
       }
       else{
         controller.firstApiCalled = true;
         onStateUpdate();
-        controller.cvObj = jsonResponse['cv_obj'];
-        print("This is CV Obj ${controller.cvObj}");
-        return controller.cvObj;}
+        controller.chatCvObj = jsonResponse['cv_obj'];
+        return controller.chatCvObj;}
     } else {
       customLog('Upload Cv API failed with status code ${response.statusCode}');
       return null;

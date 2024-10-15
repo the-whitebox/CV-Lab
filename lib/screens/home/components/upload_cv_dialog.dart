@@ -171,20 +171,19 @@ Widget uploadCvDialog({required BuildContext context, required VoidCallback upda
                             if (await isInternetConnected()) {
                               await callUploadCVApi(onStateUpdate: () =>state(() {}),context: context);
                               state(() {
-                                controller.firstApiCalled = true;
                                 controller.isSubmitPressed = false;
                               });
-                              if (controller.cvObj.isNotEmpty) {
-                                controller.firstApiCalled = true;
-                                updateState();
-                                Get.back();
-                                chatApi(
-                                    cvObj: controller.cvObj,
-                                    jobDescription: controller.jobDescription,
-                                    userQuery: '',
-                                    token: token,
-                                    onStateUpdate: () =>updateState());
-                              }
+                              if (controller.chatCvObj.isNotEmpty && controller.chatCvObj['result'] == null){
+                                  controller.firstApiCalled = true;
+                                  updateState();
+                                  Get.back();
+                                  chatApi(
+                                      cvObj: controller.chatCvObj,
+                                      jobDescription: controller.jobDescriptionControllerForUploadCV.text,
+                                      userQuery: '',
+                                      token: token,
+                                      onStateUpdate: () =>updateState());
+                                }
                             } else {
                               appSnackBar("Error", "No internet connectivity");
                             }

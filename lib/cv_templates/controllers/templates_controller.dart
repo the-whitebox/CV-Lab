@@ -7,6 +7,7 @@ import 'package:crewdog_cv_lab/utils/local_db.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+import '../../screens/home/components/change_description_dialog.dart';
 import '../../utils/app_functions.dart';
 import '../../utils/consts/api_consts.dart';
 import 'package:crewdog_cv_lab/models/models.dart';
@@ -197,7 +198,7 @@ class TempController extends GetxController {
 
   Future<void> updateCv(String templateId, int savedCvId) async {
     try {
-      if (isAuthImage) {
+      if (isAuthImage&& imageAvailable) {
         String imageFetchedByUrl = await fetchAndUploadImage(token: token, templateId: templateId, userId: userId, cvImagePath: cvImagePath);
         cvImagePath = imageFetchedByUrl;
         customLog("CV IMage Updated in Upadte CV $cvImagePath");
@@ -245,26 +246,42 @@ class TempController extends GetxController {
     }
   }
 
-  Future<Map<String, dynamic>?> fetchCvObjectFromBackend(int cvId, String templateId) async {
+  Future<Map<String, dynamic>?> fetchCvObjectFromBackend(String cvId, String jobDescription, BuildContext context) async {
+    final HomeController controller = Get.find();
     try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/api/getCv/?cv_id=$cvId&template_id=$templateId'),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
+      final payload = {
+        "cv_id": cvId,
+        "job_description": jobDescription,
+      };
+      final response = await http.post(
+        Uri.parse('$baseUrl/api/getCv/'),
+        body: payload,
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200) {
-        isChatData = false;
-        refreshController();
         final Map<String, dynamic> responseData = jsonDecode(response.body);
-        final Map<String, dynamic> cvData = responseData['cv']['cv'];
-        customLog('CV Object updated with data from backend');
-        return cvData;
+
+        if ( responseData['result'] != null) {
+          String resultMessage = responseData['result'];
+          if (resultMessage.contains("not relevent to job description")) {
+            changeDescriptionDialog(context);
+            isChatData = false;
+            return null;
+          }
+          isChatData = false;
+          return null;
+        }
+       else{
+          isChatData = false;
+          refreshController();
+          final Map<String, dynamic> cvData = responseData['cv_obj']['cv']['cv'];
+          customLog('CV Object updated with data from backend');
+          controller.chatCvObj = cvData;
+          return cvData;
+        }
       } else {
-        customLog('Failed to fetch data. Status code: ${response.statusCode}');
-        customLog('Response: ${response.body}');
+        customLog('Status code: ${response.statusCode} Response: ${response.body}');
         return null;
       }
     } catch (e) {
@@ -274,7 +291,6 @@ class TempController extends GetxController {
   }
 
   Future<void> fillControllerFromCvObject(Map<String, dynamic> cvData) async {
-    customLog("Filling from CV Object $cvData");
     final Map<String, dynamic> personalData = cvData['personal_information'];
     nameController.text = personalData['name'] ?? '';
     mailController.text = personalData['email'] ?? '';
@@ -384,8 +400,6 @@ class TempController extends GetxController {
 
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         final Map<String, dynamic> cvData = responseData['cv']['cv'];
-        customLog("hERE ============= $cvData");
-
         final Map<String, dynamic> personalData = cvData['personal_information'];
         nameController.text = personalData['name'] ?? '';
         mailController.text = personalData['email'] ?? '';
@@ -492,8 +506,9 @@ class TempController extends GetxController {
   }
 
   void refreshController() {
-    HomeController homeController = HomeController();
+    HomeController homeController = Get.find();
     if (homeController.chatCvObj.isNotEmpty) {
+      print("Filling from CV Object which is not empty");
       fillControllerFromCvObject(homeController.chatCvObj);
     } else {
       customLog("Controller Refreshed");

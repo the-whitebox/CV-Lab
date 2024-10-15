@@ -23,14 +23,16 @@ Future chatApi(
         body: jsonEncode({'cv': cvObj, 'job_description': jobDescription, 'user_query': userQuery}));
     if (chatResponse.statusCode == 200) {
       onStateUpdate();
+      controller.isLoading=false;
       controller.firstApiCalled = false;
       controller.secondApiCalled = false;
-      customLog('Chat API successful');
+      controller.isSubmitPressed = false;
       String responseBody = chatResponse.body;
       Map<String, dynamic>? jsonResponse = json.decode(responseBody);
       if (jsonResponse != null) {
         controller.chatCvObj = jsonResponse;
         onStateUpdate();
+
         String summary = jsonResponse['personal_information']?['summary'] ?? 'Summary not found';
         controller.imageFromApi = jsonResponse['personal_information']?['profile_pic'] ?? "";
 
